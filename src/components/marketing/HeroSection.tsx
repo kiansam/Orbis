@@ -26,9 +26,20 @@ const itemVariants: Variants = {
 export function HeroSection() {
   return (
     <section
-      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 bg-[#070C16]"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 bg-[#06091A]"
       id="top"
     >
+      {/* Grid overlay */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(30,45,74,0.35) 1px, transparent 1px), linear-gradient(90deg, rgba(30,45,74,0.35) 1px, transparent 1px)',
+          backgroundSize: '60px 60px',
+          maskImage: 'radial-gradient(ellipse 90% 80% at 50% 0%, black 30%, transparent 80%)',
+          WebkitMaskImage: 'radial-gradient(ellipse 90% 80% at 50% 0%, black 30%, transparent 80%)',
+        }}
+      />
       <div className="absolute inset-0 o-hero-wash-dark pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 text-center">

@@ -47,7 +47,7 @@ export default function HomePage() {
       <HeroSection />
 
       {/* Social Proof band */}
-      <section className="py-12 border-y border-[#1E2D4A] bg-[#0D1526]">
+      <section className="py-12 border-y border-[#1E2D4A] bg-[#08101E]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="t-label text-[#4F617A] text-center mb-8">
             Trusted by leading enterprises worldwide
@@ -74,7 +74,7 @@ export default function HomePage() {
       <FeaturesSection />
 
       {/* Process */}
-      <section className="py-16 lg:py-24 bg-[#070C16] border-t border-[#1E2D4A]">
+      <section className="py-16 lg:py-24 bg-[#06091A] border-t border-[#1E2D4A]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <span className="t-label text-[#4169FF]">Process</span>
@@ -116,7 +116,7 @@ export default function HomePage() {
       <FAQSection />
 
       {/* Final CTA */}
-      <section className="py-16 lg:py-24 relative overflow-hidden bg-[#0D1526] border-t border-[#1E2D4A]">
+      <section className="py-16 lg:py-24 relative overflow-hidden bg-[#06091A] border-t border-[#1E2D4A]">
         <div className="absolute inset-0 o-hero-wash-dark pointer-events-none" />
 
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
