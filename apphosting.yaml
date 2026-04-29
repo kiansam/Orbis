@@ -1,0 +1,67 @@
+# Settings for Backend (on Cloud Run).
+# See https://firebase.google.com/docs/app-hosting/configure#cloud-run
+runConfig:
+  minInstances: 0
+  # maxInstances: 100
+  # concurrency: 80
+  # cpu: 1
+  # memoryMiB: 512
+
+env:
+  # ── Public vars (safe to commit) ──────────────────────────────────────────
+  - variable: NEXT_PUBLIC_SUPABASE_URL
+    value: https://dnmqvufzdycxtftbeabj.supabase.co
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: NEXT_PUBLIC_SUPABASE_ANON_KEY
+    value: sb_publishable_Mtu3oq1qlXFfBB6Cld0cEQ_8QOfDJzC
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY
+    value: sb_publishable_Mtu3oq1qlXFfBB6Cld0cEQ_8QOfDJzC
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: NEXT_PUBLIC_APP_URL
+    value: https://orbissolutions--orbissolutions-f4142.us-central1.hosted.app
+    availability:
+      - BUILD
+      - RUNTIME
+
+  # ── Secret vars (stored in Firebase Secret Manager) ───────────────────────
+  # The `secret:` field is the SECRET NAME in Secret Manager, not the value.
+  # Create each secret by running (paste the actual value when prompted):
+  #   firebase apphosting:secrets:set SUPABASE_SERVICE_ROLE_KEY
+  #   firebase apphosting:secrets:set STRIPE_SECRET_KEY
+  #   firebase apphosting:secrets:set STRIPE_WEBHOOK_SECRET
+  #   firebase apphosting:secrets:set RESEND_API_KEY
+  #
+  - variable: SUPABASE_SERVICE_ROLE_KEY
+    secret: SUPABASE_SERVICE_ROLE_KEY
+
+  - variable: STRIPE_SECRET_KEY
+    secret: STRIPE_SECRET_KEY
+
+  - variable: STRIPE_WEBHOOK_SECRET
+    secret: STRIPE_WEBHOOK_SECRET
+
+  - variable: RESEND_API_KEY
+    secret: RESEND_API_KEY
+
+  # ── Stripe price IDs (non-secret, replace with real IDs when ready) ───────
+  - variable: STRIPE_STARTER_PRICE_ID
+    value: price_placeholder_starter
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: STRIPE_PRO_PRICE_ID
+    value: price_placeholder_pro
+    availability:
+      - BUILD
+      - RUNTIME

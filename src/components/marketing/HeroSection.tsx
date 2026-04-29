@@ -2,8 +2,7 @@
 
 import { motion, type Variants } from 'framer-motion'
 import Link from 'next/link'
-import { ArrowRight, Sparkles, TrendingUp, Users, Zap } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { ArrowRight, TrendingUp, Users, Zap } from 'lucide-react'
 
 const metrics = [
   { icon: TrendingUp, value: '3.2x', label: 'Avg. ROI improvement' },
@@ -15,116 +14,91 @@ const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.15, delayChildren: 0.2 },
+    transition: { staggerChildren: 0.1, delayChildren: 0.15 },
   },
 }
 
 const itemVariants: Variants = {
-  hidden: { y: 20, opacity: 0 },
-  visible: { y: 0, opacity: 1, transition: { duration: 0.6 } },
+  hidden: { y: 16, opacity: 0 },
+  visible: { y: 0, opacity: 1, transition: { duration: 0.5, ease: 'easeOut' } },
 }
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-      {/* Gradient mesh background */}
-      <div className="absolute inset-0 gradient-mesh" />
+    <section
+      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 bg-[#070C16]"
+      id="top"
+    >
+      <div className="absolute inset-0 o-hero-wash-dark pointer-events-none" />
 
-      {/* Grid pattern overlay */}
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-          backgroundSize: '50px 50px',
-        }}
-      />
-
-      {/* Glow orbs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-accent/10 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-purple-500/10 blur-[120px] pointer-events-none" />
-
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 text-center">
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
           className="flex flex-col items-center"
         >
-          {/* Badge */}
-          <motion.div variants={itemVariants} className="mb-8">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent-muted border border-accent/20 text-accent text-sm font-medium">
-              <Sparkles className="w-4 h-4" />
-              AI-Powered Consulting Platform
-            </span>
+          {/* Eyebrow */}
+          <motion.div variants={itemVariants} className="mb-6">
+            <span className="badge">AI-Powered Consulting Platform</span>
           </motion.div>
 
           {/* Headline */}
           <motion.h1
             variants={itemVariants}
-            className="text-5xl sm:text-6xl lg:text-7xl font-bold text-foreground leading-tight mb-6 max-w-4xl"
+            className="t-display text-white mb-6 max-w-4xl"
           >
             Transform Your Business with{' '}
-            <span className="gradient-text">AI-Powered Intelligence</span>
+            <span className="text-[#4169FF]">AI-Powered Intelligence</span>
           </motion.h1>
 
           {/* Subheading */}
           <motion.p
             variants={itemVariants}
-            className="text-xl text-foreground-muted max-w-2xl mb-10 leading-relaxed"
+            className="t-body-lg text-[#8A97B0] max-w-2xl mb-12"
           >
-            Orbis Solutions delivers enterprise-grade AI consulting that accelerates decision-making,
-            reduces risk, and unlocks new competitive advantages. Built for the modern enterprise.
+            Orbis Solutions delivers enterprise-grade AI consulting that accelerates
+            decision-making, reduces risk, and unlocks new competitive advantages.
+            Built for the modern enterprise.
           </motion.p>
 
-          {/* CTA Buttons */}
-          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 mb-16">
-            <Button
-              size="lg"
-              asChild
-              className="bg-accent hover:bg-accent-hover text-white px-8 h-12 text-base shadow-[0_0_30px_-5px_rgba(99,102,241,0.5)] hover:shadow-[0_0_40px_-5px_rgba(99,102,241,0.7)] transition-all"
-            >
-              <Link href="/signup">
-                Get Started Free
-                <ArrowRight className="ml-2 w-4 h-4" />
-              </Link>
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              asChild
-              className="border-border-strong hover:bg-white/5 text-foreground h-12 text-base"
-            >
-              <Link href="/contact">Schedule a Demo</Link>
-            </Button>
+          {/* CTA buttons */}
+          <motion.div
+            variants={itemVariants}
+            className="flex flex-col sm:flex-row gap-4 mb-16 mt-0"
+          >
+            <Link href="/signup" className="btn-primary">
+              Get Started Free
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link href="/contact" className="btn-ghost">
+              Schedule a Demo
+            </Link>
           </motion.div>
 
-          {/* Metrics floating cards */}
+          {/* Metrics */}
           <motion.div
             variants={containerVariants}
             className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl"
           >
-            {metrics.map((metric, i) => (
+            {metrics.map((metric) => (
               <motion.div
-                key={i}
+                key={metric.label}
                 variants={itemVariants}
-                whileHover={{ y: -4, scale: 1.02 }}
-                className="glass rounded-xl p-4 flex items-center gap-3"
+                className="rounded-lg p-4 flex items-center gap-3 bg-[#0D1526] border border-[#1E2D4A] hover:border-[#141E33] transition-colors duration-200"
               >
-                <div className="w-10 h-10 rounded-lg bg-accent-muted flex items-center justify-center flex-shrink-0">
-                  <metric.icon className="w-5 h-5 text-accent" />
+                <div className="w-10 h-10 rounded-lg bg-[rgba(65,105,255,0.12)] flex items-center justify-center flex-shrink-0">
+                  <metric.icon className="w-5 h-5 text-[#4169FF]" />
                 </div>
                 <div className="text-left">
-                  <div className="text-xl font-bold text-foreground">{metric.value}</div>
-                  <div className="text-xs text-foreground-muted">{metric.label}</div>
+                  <div className="t-mono text-xl font-semibold text-white">{metric.value}</div>
+                  <div className="t-body-sm text-[#4F617A]">{metric.label}</div>
                 </div>
               </motion.div>
             ))}
           </motion.div>
         </motion.div>
       </div>
-
-      {/* Bottom fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
     </section>
   )
 }

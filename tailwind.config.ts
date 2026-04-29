@@ -9,7 +9,11 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-inter)', 'Inter', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'sans-serif'],
+      },
       colors: {
+        // ── Dashboard / admin (dark indigo) ───────────────────────────
         background: '#09090b',
         'background-secondary': '#0f0f11',
         'background-card': '#111113',
@@ -20,6 +24,25 @@ const config: Config = {
         accent: '#6366f1',
         'accent-hover': '#4f46e5',
         'accent-muted': 'rgba(99,102,241,0.12)',
+        // ── Marketing fintech palette ──────────────────────────────────
+        'mkt-base':     '#070C16',
+        'mkt-surface':  '#0D1526',
+        'mkt-elevated': '#141E33',
+        'mkt-border':   '#1E2D4A',
+        'mkt-border-subtle': '#162038',
+        'brand':        '#4169FF',
+        'brand-hover':  '#5578FF',
+        'brand-muted':  'rgba(65,105,255,0.12)',
+        'txt-primary':  '#FFFFFF',
+        'txt-secondary':'#8A97B0',
+        'txt-tertiary': '#4F617A',
+        'semantic-green': '#00C896',
+        'semantic-red':   '#FF4D6A',
+        'semantic-yellow':'#F5A623',
+      },
+      letterSpacing: {
+        tightest: '-0.035em',
+        tighter: '-0.02em',
       },
       keyframes: {
         'gradient-shift': {
@@ -31,14 +54,14 @@ const config: Config = {
           '100%': { opacity: '1' },
         },
         'slide-up': {
-          '0%': { transform: 'translateY(20px)', opacity: '0' },
+          '0%': { transform: 'translateY(16px)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' },
         },
       },
       animation: {
         'gradient-shift': 'gradient-shift 6s ease infinite',
-        'fade-in': 'fade-in 0.5s ease forwards',
-        'slide-up': 'slide-up 0.5s ease forwards',
+        'fade-in': 'fade-in 0.5s ease-out forwards',
+        'slide-up': 'slide-up 0.5s ease-out forwards',
       },
     },
   },

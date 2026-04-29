@@ -1,9 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
 
+// Public marketing routes — skip Supabase auth entirely for instant load
+function isPublicPath(pathname: string): boolean {
+  const exact = ['/', '/about', '/blog', '/contact']
+  if (exact.includes(pathname)) return true
+  if (pathname.startsWith('/blog/')) return true
+  if (pathname.startsWith('/api/contact')) return true
+  return false
+}
+
 export async function proxy(request: NextRequest) {
-  const { supabaseResponse, user, supabase } = await updateSession(request)
   const pathname = request.nextUrl.pathname
+
+  // Fast-path: no Supabase call for public pages — avoids DNS hang
+  if (isPublicPath(pathname)) {
+    return NextResponse.next()
+  }
+
+  const { supabaseResponse, user, supabase } = await updateSession(request)
 
   const isProtected = pathname.startsWith('/dashboard') || pathname.startsWith('/admin')
   const isAdminRoute = pathname.startsWith('/admin')
@@ -36,10 +51,4 @@ export async function proxy(request: NextRequest) {
   }
 
   return supabaseResponse
-}
-
-export const config = {
-  matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
-  ],
 }

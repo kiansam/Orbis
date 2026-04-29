@@ -6,15 +6,10 @@
   .text-balance {
     text-wrap: balance;
   }
-  .glass {
-    @apply bg-white/5 backdrop-blur-sm border border-white/10;
-  }
-  .accent-glow {
-    box-shadow: 0 0 30px -5px rgba(99, 102, 241, 0.3);
-  }
 }
 
 @layer base {
+  /* ─── shadcn/ui tokens (dashboard / admin) ─── */
   :root {
     --background: 9 9 11;
     --foreground: 250 250 250;
@@ -36,67 +31,278 @@
     --input: 31 31 35;
     --ring: 99 102 241;
     --radius: 0.75rem;
+
+    /* ─── Marketing design tokens ─── */
+    --mkt-bg-base:      #070C16;
+    --mkt-bg-surface:   #0D1526;
+    --mkt-bg-elevated:  #141E33;
+    --mkt-border:       #1E2D4A;
+    --mkt-border-subtle:#162038;
+    --mkt-brand:        #4169FF;
+    --mkt-brand-hover:  #5578FF;
+    --mkt-brand-muted:  rgba(65, 105, 255, 0.12);
+    --mkt-brand-border: rgba(65, 105, 255, 0.25);
+    --mkt-text-primary: #FFFFFF;
+    --mkt-text-secondary: #8A97B0;
+    --mkt-text-tertiary: #4F617A;
+    --mkt-green:        #00C896;
+    --mkt-red:          #FF4D6A;
+    --mkt-yellow:       #F5A623;
   }
 
   * {
     border-color: rgb(31 31 35);
   }
 
+  html {
+    scroll-behavior: smooth;
+    background-color: #09090b;
+  }
+
   body {
     background-color: #09090b;
     color: #fafafa;
-    font-family: var(--font-inter), system-ui, sans-serif;
+    font-family: var(--font-inter), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
 
-  html {
-    scroll-behavior: smooth;
-  }
-
+  /* ─── Scrollbar ─── */
   ::-webkit-scrollbar {
     width: 6px;
+    height: 6px;
   }
-
   ::-webkit-scrollbar-track {
-    background: #09090b;
+    background: var(--mkt-border);
   }
-
   ::-webkit-scrollbar-thumb {
-    background: #2a2a2e;
+    background: var(--mkt-text-tertiary);
     border-radius: 3px;
   }
-
   ::-webkit-scrollbar-thumb:hover {
-    background: #6366f1;
+    background: var(--mkt-text-secondary);
+  }
+
+  ::selection {
+    background: rgba(65, 105, 255, 0.25);
+    color: #ffffff;
   }
 }
 
-/* Gradient mesh background */
-.gradient-mesh {
-  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.15), transparent),
-    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(139, 92, 246, 0.1), transparent),
-    radial-gradient(ellipse 60% 40% at 20% 60%, rgba(59, 130, 246, 0.08), transparent);
+/* ─── Type scale ─── */
+.t-display {
+  font-size: clamp(56px, 6vw, 72px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
+.t-h1 {
+  font-size: clamp(40px, 4vw, 48px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+.t-h2 {
+  font-size: clamp(24px, 2.5vw, 32px);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+.t-h3 {
+  font-size: clamp(18px, 1.5vw, 22px);
+  font-weight: 600;
+  line-height: 1.3;
+}
+.t-body-lg {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+.t-body {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+.t-body-sm {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+.t-label {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.t-mono {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  font-feature-settings: "tnum";
 }
 
-/* Animated gradient text */
-.gradient-text {
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: gradient-shift 4s ease infinite;
+/* ─── Marketing scope ─── */
+.marketing {
+  background-color: var(--mkt-bg-base);
+  color: var(--mkt-text-primary);
 }
 
+/* ─── Hero radial glow ─── */
+.o-hero-wash-dark {
+  background: radial-gradient(
+    ellipse 80% 60% at 50% 0%,
+    rgba(65, 105, 255, 0.08) 0%,
+    transparent 70%
+  );
+}
+
+/* ─── Card ─── */
+.o-card {
+  background: var(--mkt-bg-surface);
+  border: 1px solid var(--mkt-border);
+  border-radius: 12px;
+  transition: border-color 0.2s ease;
+}
+.o-card:hover {
+  border-color: var(--mkt-bg-elevated);
+}
+
+/* ─── Buttons ─── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--mkt-brand);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  transition: background 150ms ease, transform 150ms ease;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.btn-primary:hover {
+  background: var(--mkt-brand-hover);
+  transform: translateY(-1px);
+}
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid var(--mkt-border);
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  transition: border-color 150ms ease, background 150ms ease, transform 150ms ease;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.btn-ghost:hover {
+  border-color: var(--mkt-brand);
+  background: var(--mkt-brand-muted);
+  transform: translateY(-1px);
+}
+.btn-ghost:active {
+  transform: translateY(0);
+}
+
+/* ─── Badge / tag ─── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  background: var(--mkt-brand-muted);
+  color: var(--mkt-brand);
+  border: 1px solid var(--mkt-brand-border);
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ─── Price change pills ─── */
+.pill-positive {
+  color: var(--mkt-green);
+  background: rgba(0, 200, 150, 0.1);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 13px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.pill-negative {
+  color: var(--mkt-red);
+  background: rgba(255, 77, 106, 0.1);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 13px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Input styles (marketing scope) ─── */
+.marketing input,
+.marketing textarea,
+.marketing select {
+  background: var(--mkt-bg-surface);
+  border: 1px solid var(--mkt-border);
+  border-radius: 8px;
+  color: var(--mkt-text-primary);
+  font-family: inherit;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+.marketing input:focus,
+.marketing textarea:focus,
+.marketing select:focus {
+  outline: none;
+  border-color: var(--mkt-brand);
+  box-shadow: 0 0 0 3px rgba(65, 105, 255, 0.15);
+}
+.marketing input::placeholder,
+.marketing textarea::placeholder {
+  color: var(--mkt-text-tertiary);
+}
+
+/* ─── Gradient animations (dashboard) ─── */
 @keyframes gradient-shift {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
 }
 
-/* Prose styles for blog */
+/* ─── Legacy (dashboard) ─── */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gradient-mesh {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.15), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(139, 92, 246, 0.1), transparent),
+    radial-gradient(ellipse 60% 40% at 20% 60%, rgba(59, 130, 246, 0.08), transparent);
+}
+
+/* ─── Prose styles for blog ─── */
 .prose-dark {
   color: #d4d4d8;
 }
-
 .prose-dark h1,
 .prose-dark h2,
 .prose-dark h3,
@@ -105,29 +311,24 @@
   margin-top: 2rem;
   margin-bottom: 1rem;
 }
-
 .prose-dark p {
   line-height: 1.75;
   margin-bottom: 1.25rem;
 }
-
 .prose-dark ul,
 .prose-dark ol {
   padding-left: 1.5rem;
   margin-bottom: 1.25rem;
 }
-
 .prose-dark li {
   margin-bottom: 0.5rem;
 }
-
 .prose-dark code {
   background: #1f1f23;
   padding: 0.2rem 0.4rem;
   border-radius: 0.25rem;
   font-size: 0.875rem;
 }
-
 .prose-dark pre {
   background: #0f0f11;
   border: 1px solid #1f1f23;
@@ -136,14 +337,12 @@
   overflow-x: auto;
   margin-bottom: 1.5rem;
 }
-
 .prose-dark blockquote {
   border-left: 3px solid #6366f1;
   padding-left: 1rem;
   color: #a1a1aa;
   margin-bottom: 1.25rem;
 }
-
 .prose-dark a {
   color: #6366f1;
   text-decoration: underline;

@@ -13,14 +13,18 @@ export const metadata: Metadata = {
 export const revalidate = 60
 
 export default async function BlogPage() {
-  const supabase = await createClient()
-  const { data: posts } = await supabase
-    .from('posts')
-    .select('*')
-    .eq('is_published', true)
-    .order('published_at', { ascending: false })
-
-  const typedPosts = (posts || []) as Post[]
+  let typedPosts: Post[] = []
+  try {
+    const supabase = await createClient()
+    const { data: posts } = await supabase
+      .from('posts')
+      .select('*')
+      .eq('is_published', true)
+      .order('published_at', { ascending: false })
+    typedPosts = (posts || []) as Post[]
+  } catch {
+    // Supabase unavailable — render empty state
+  }
 
   return (
     <div className="pt-24">

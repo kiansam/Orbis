@@ -3,7 +3,15 @@ import { createClient } from '@/lib/supabase/server'
 import { contactSchema } from '@/lib/validations'
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+let _resend: Resend | null = null
+function getResend(): Resend {
+  if (!_resend) {
+    const key = process.env.RESEND_API_KEY
+    if (!key) throw new Error('RESEND_API_KEY is not set')
+    _resend = new Resend(key)
+  }
+  return _resend
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -32,7 +40,7 @@ export async function POST(request: NextRequest) {
 
     // Send notification email (wrapped in try-catch so DB insert still succeeds even if email fails)
     try {
-      await resend.emails.send({
+      await getResend().emails.send({
         from: 'Orbis Solutions <noreply@orbissolutions.ca>',
         to: ['hello@orbissolutions.ca'],
         subject: `New contact from ${name}${company ? ` (${company})` : ''}`,
@@ -47,7 +55,7 @@ export async function POST(request: NextRequest) {
       })
 
       // Send confirmation to user
-      await resend.emails.send({
+      await getResend().emails.send({
         from: 'Orbis Solutions <noreply@orbissolutions.ca>',
         to: [email],
         subject: 'We received your message — Orbis Solutions',

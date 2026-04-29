@@ -21,9 +21,6 @@ const nextConfig = {
       },
     ],
   },
-  turbopack: {
-    root: import.meta.dirname,
-  },
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
 };
 
