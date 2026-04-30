@@ -45,7 +45,7 @@ export function PricingSectionClient({ stripePrices }: PricingSectionClientProps
   }
 
   return (
-    <section id="pricing" className="py-16 lg:py-24 bg-[#0D1526] border-t border-[#1E2D4A]">
+    <section id="pricing" className="py-16 lg:py-24 bg-[#070C16] border-t border-[#1E2D4A]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ y: 16, opacity: 0 }}
@@ -80,9 +80,10 @@ export function PricingSectionClient({ stripePrices }: PricingSectionClientProps
                 className={cn(
                   'relative rounded-xl p-6 border transition-colors duration-200',
                   isPro
-                    ? 'bg-[#0D1526] border-[rgba(65,105,255,0.5)] md:scale-105'
-                    : 'bg-[#0D1526] border-[#1E2D4A] hover:border-[#141E33]'
+                    ? 'bg-[#0D1526] border-[#4169FF] md:scale-105'
+                    : 'bg-[#0D1526] border-[#1E2D4A] hover:border-[#2A3F6A]'
                 )}
+                style={isPro ? { boxShadow: '0 0 0 1px #4169FF' } : undefined}
               >
                 {isPro && (
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2">

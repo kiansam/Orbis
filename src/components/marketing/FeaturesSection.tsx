@@ -75,9 +75,9 @@ export function FeaturesSection() {
             <motion.div
               key={feature.title}
               variants={itemVariants}
-              className="bg-[#0D1526] border border-[#1E2D4A] rounded-xl p-6 hover:border-[#141E33] transition-colors duration-200"
+              className="bg-[#0D1526] border border-[#1E2D4A] rounded-xl p-6 hover:border-[#2A3F6A] transition-colors duration-200"
             >
-              <div className="w-10 h-10 rounded-lg bg-[#141E33] flex items-center justify-center mb-4">
+              <div className="w-10 h-10 rounded-lg bg-[rgba(65,105,255,0.12)] flex items-center justify-center mb-4">
                 <feature.icon className="w-5 h-5 text-[#4169FF]" />
               </div>
               <h3 className="t-h3 text-white mb-3">{feature.title}</h3>

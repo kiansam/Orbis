@@ -31,7 +31,7 @@ const testimonials = [
 
 export function TestimonialsSection() {
   return (
-    <section className="py-16 lg:py-24 bg-[#0D1526] border-t border-[#1E2D4A]">
+    <section className="py-16 lg:py-24 bg-[#070C16] border-t border-[#1E2D4A]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ y: 16, opacity: 0 }}
@@ -55,7 +55,7 @@ export function TestimonialsSection() {
               whileInView={{ y: 0, opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.08, ease: 'easeOut' }}
-              className="bg-[#070C16] border border-[#1E2D4A] rounded-xl p-6 flex flex-col gap-6 hover:border-[#141E33] transition-colors duration-200"
+              className="bg-[#0D1526] border border-[#1E2D4A] rounded-xl p-6 flex flex-col gap-6 hover:border-[#2A3F6A] transition-colors duration-200"
             >
               <span className="text-4xl leading-none text-[#4169FF]/30 font-serif select-none">
                 &ldquo;

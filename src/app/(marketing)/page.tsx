@@ -47,7 +47,7 @@ export default function HomePage() {
       <HeroSection />
 
       {/* Social Proof band */}
-      <section className="py-12 border-y border-[#1E2D4A] bg-[#08101E]">
+      <section className="py-12 border-y border-[#1E2D4A] bg-[#070C16]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="t-label text-[#4F617A] text-center mb-8">
             Trusted by leading enterprises worldwide
@@ -74,7 +74,7 @@ export default function HomePage() {
       <FeaturesSection />
 
       {/* Process */}
-      <section className="py-16 lg:py-24 bg-[#06091A] border-t border-[#1E2D4A]">
+      <section className="py-16 lg:py-24 bg-[#070C16] border-t border-[#1E2D4A]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <span className="t-label text-[#4169FF]">Process</span>
@@ -88,9 +88,9 @@ export default function HomePage() {
             {steps.map((step, i) => (
               <div
                 key={step.number}
-                className="relative bg-[#0D1526] border border-[#1E2D4A] rounded-xl p-6 hover:border-[#141E33] transition-colors duration-200"
+                className="relative bg-[#0D1526] border border-[#1E2D4A] rounded-xl p-6 hover:border-[#2A3F6A] transition-colors duration-200"
               >
-                <div className="text-4xl font-semibold text-[rgba(65,105,255,0.2)] mb-4 tracking-[-0.03em]">
+                <div className="text-4xl font-semibold text-[#4169FF] mb-4 tracking-[-0.03em] opacity-60">
                   {step.number}
                 </div>
                 <h3 className="t-h3 text-white mb-3">{step.title}</h3>
@@ -116,10 +116,10 @@ export default function HomePage() {
       <FAQSection />
 
       {/* Final CTA */}
-      <section className="py-16 lg:py-24 relative overflow-hidden bg-[#06091A] border-t border-[#1E2D4A]">
+      <section className="py-16 lg:py-24 relative overflow-hidden bg-[#070C16] border-t border-[#1E2D4A]">
         <div className="absolute inset-0 o-hero-wash-dark pointer-events-none" />
 
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center bg-[#0D1526] border border-[#1E2D4A] rounded-2xl py-16">
           <h2 className="t-h1 text-white mb-6">
             Ready to transform your enterprise with AI?
           </h2>
@@ -140,7 +140,7 @@ export default function HomePage() {
 
           <div className="flex flex-wrap justify-center gap-6">
             {['No credit card required', '14-day free trial', 'Cancel anytime'].map((item) => (
-              <div key={item} className="flex items-center gap-2 text-[#4F617A] text-sm">
+              <div key={item} className="flex items-center gap-2 text-[#8A97B0] text-sm">
                 <CheckCircle2 className="w-4 h-4 text-[#4169FF]" />
                 {item}
               </div>

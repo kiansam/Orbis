@@ -26,7 +26,7 @@ const itemVariants: Variants = {
 export function HeroSection() {
   return (
     <section
-      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 bg-[#06091A]"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 bg-[#070C16]"
       id="top"
     >
       {/* Grid overlay */}
@@ -96,7 +96,7 @@ export function HeroSection() {
               <motion.div
                 key={metric.label}
                 variants={itemVariants}
-                className="rounded-lg p-4 flex items-center gap-3 bg-[#0D1526] border border-[#1E2D4A] hover:border-[#141E33] transition-colors duration-200"
+                className="rounded-lg p-4 flex items-center gap-3 bg-[#0D1526] border border-[#1E2D4A] hover:border-[#2A3F6A] transition-colors duration-200"
               >
                 <div className="w-10 h-10 rounded-lg bg-[rgba(65,105,255,0.12)] flex items-center justify-center flex-shrink-0">
                   <metric.icon className="w-5 h-5 text-[#4169FF]" />
