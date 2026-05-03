@@ -9,27 +9,17 @@ import {
   BarChart3,
   Settings,
   LogOut,
-  Brain,
   ChevronLeft,
   ChevronRight,
   Menu,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { createClient } from '@/lib/supabase/client'
 
 interface DashboardSidebarProps {
-  user: {
-    id: string
-    email?: string
-  }
-  profile: {
-    full_name: string | null
-    avatar_url: string | null
-  } | null
+  user: { id: string; email?: string }
+  profile: { full_name: string | null; avatar_url: string | null } | null
   plan: string
 }
 
@@ -66,89 +56,240 @@ function SidebarContent({
     .slice(0, 2)
 
   return (
-    <div className="flex flex-col h-full">
-      {/* Logo + Collapse */}
-      <div className="flex items-center justify-between p-4 mb-2">
-        <Link href="/dashboard" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center flex-shrink-0">
-            <Brain className="w-5 h-5 text-white" />
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        background: 'var(--bg-surface)',
+      }}
+    >
+      {/* Logo area */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '20px 16px',
+          borderBottom: '1px solid var(--border-subtle)',
+          flexShrink: 0,
+        }}
+      >
+        <Link
+          href="/dashboard"
+          style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}
+        >
+          <div
+            style={{
+              width: '28px',
+              height: '28px',
+              borderRadius: 'var(--r-md)',
+              background: 'linear-gradient(135deg, var(--accent-hex) 0%, #FF8355 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}
+          >
+            <span style={{ color: 'white', fontSize: '13px', fontWeight: 800 }}>O</span>
           </div>
           {!collapsed && (
-            <span className="text-lg font-bold text-foreground">
-              Orbis<span className="text-accent"> Solutions</span>
+            <span
+              style={{
+                fontSize: '15px',
+                fontWeight: 700,
+                color: 'var(--text-primary)',
+                letterSpacing: '-0.02em',
+              }}
+            >
+              Orbis
             </span>
           )}
         </Link>
         {onToggle && (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="hidden lg:flex h-8 w-8 text-foreground-muted hover:text-foreground"
+          <button
             onClick={onToggle}
+            style={{
+              width: '28px',
+              height: '28px',
+              display: collapsed ? 'none' : 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              color: 'var(--text-muted)',
+              borderRadius: 'var(--r-sm)',
+            }}
+            className="hidden lg:flex"
           >
-            {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
-          </Button>
+            {collapsed ? <ChevronRight style={{ width: '14px', height: '14px' }} /> : <ChevronLeft style={{ width: '14px', height: '14px' }} />}
+          </button>
         )}
       </div>
 
-      {/* Nav */}
-      <nav className="flex-1 px-3 space-y-1">
+      {/* Nav label */}
+      {!collapsed && (
+        <div style={{ padding: '16px 16px 6px' }}>
+          <span className="t-caption">NAVIGATION</span>
+        </div>
+      )}
+
+      {/* Nav items */}
+      <nav style={{ flex: 1, padding: '4px 10px', overflowY: 'auto' }}>
         {navItems.map((item) => {
-          const isActive = item.exact
-            ? pathname === item.href
-            : pathname.startsWith(item.href)
+          const isActive = item.exact ? pathname === item.href : pathname.startsWith(item.href)
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={cn(
-                'flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-sm font-medium',
-                isActive
-                  ? 'bg-accent text-white shadow-[0_0_15px_rgba(99,102,241,0.3)]'
-                  : 'text-foreground-muted hover:text-foreground hover:bg-white/5'
-              )}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                padding: collapsed ? '10px' : '9px 12px',
+                borderRadius: 'var(--r-md)',
+                marginBottom: '2px',
+                fontSize: '13px',
+                fontWeight: 500,
+                color: isActive ? 'var(--accent-hex)' : 'var(--text-secondary)',
+                background: isActive ? 'var(--accent-muted)' : 'transparent',
+                border: isActive ? '1px solid var(--accent-border)' : '1px solid transparent',
+                textDecoration: 'none',
+                transition: 'all var(--t-fast)',
+                justifyContent: collapsed ? 'center' : 'flex-start',
+              }}
+              onMouseEnter={e => {
+                if (!isActive) {
+                  const el = e.currentTarget as HTMLAnchorElement
+                  el.style.background = 'var(--color-brand-muted)'
+                  el.style.color = 'var(--color-text-primary)'
+                }
+              }}
+              onMouseLeave={e => {
+                if (!isActive) {
+                  const el = e.currentTarget as HTMLAnchorElement
+                  el.style.background = 'transparent'
+                  el.style.color = 'var(--color-text-muted)'
+                }
+              }}
             >
-              <item.icon className="w-4 h-4 flex-shrink-0" />
+              <item.icon style={{ width: '16px', height: '16px', flexShrink: 0 }} />
               {!collapsed && <span>{item.label}</span>}
             </Link>
           )
         })}
       </nav>
 
-      {/* User */}
-      <div className="p-3 border-t border-border">
-        <div className={cn(
-          'flex items-center gap-3 p-3 rounded-lg bg-background-secondary mb-2',
-          collapsed && 'justify-center'
-        )}>
-          <Avatar className="w-8 h-8 flex-shrink-0">
-            <AvatarImage src={profile?.avatar_url || undefined} />
-            <AvatarFallback className="bg-accent text-white text-xs">{initials}</AvatarFallback>
-          </Avatar>
-          {!collapsed && (
-            <div className="flex-1 min-w-0">
-              <div className="text-sm font-medium text-foreground truncate">{displayName}</div>
-              <Badge
-                variant="outline"
-                className="text-[10px] border-accent/30 text-accent px-1.5 py-0 h-4 capitalize"
-              >
-                {plan}
-              </Badge>
+      {/* User block */}
+      <div
+        style={{
+          borderTop: '1px solid var(--border-subtle)',
+          padding: '12px',
+          flexShrink: 0,
+        }}
+      >
+        {!collapsed ? (
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              padding: '10px 12px',
+              borderRadius: 'var(--r-md)',
+              background: 'var(--bg-elevated)',
+              border: '1px solid var(--border-base)',
+              marginBottom: '8px',
+            }}
+          >
+            {/* Avatar */}
+            <div
+              style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, var(--accent-hex) 0%, #A78BFA 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '12px',
+                fontWeight: 700,
+                color: 'white',
+                flexShrink: 0,
+              }}
+            >
+              {initials}
             </div>
-          )}
-        </div>
-        <Button
-          variant="ghost"
-          size="sm"
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div
+                style={{
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  color: 'var(--text-primary)',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {displayName}
+              </div>
+              <span className="badge-accent" style={{ marginTop: '2px', display: 'inline-flex', padding: '1px 6px', textTransform: 'capitalize' }}>
+                {plan}
+              </span>
+            </div>
+          </div>
+        ) : (
+          <div
+            style={{
+              width: '32px',
+              height: '32px',
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, var(--accent-hex) 0%, #A78BFA 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '12px',
+              fontWeight: 700,
+              color: 'white',
+              margin: '0 auto 8px',
+            }}
+          >
+            {initials}
+          </div>
+        )}
+
+        <button
           onClick={handleSignOut}
-          className={cn(
-            'w-full text-foreground-muted hover:text-foreground hover:bg-white/5 text-sm',
-            collapsed && 'justify-center px-2'
-          )}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            width: '100%',
+            padding: '8px 12px',
+            borderRadius: 'var(--r-md)',
+            fontSize: '13px',
+            fontWeight: 500,
+            color: 'var(--text-muted)',
+            background: 'transparent',
+            border: 'none',
+            cursor: 'pointer',
+            justifyContent: collapsed ? 'center' : 'flex-start',
+            transition: 'color var(--t-fast), background var(--t-fast)',
+          }}
+          onMouseEnter={e => {
+            const el = e.currentTarget as HTMLButtonElement
+            el.style.color = 'var(--color-text-primary)'
+            el.style.background = 'var(--color-brand-muted)'
+          }}
+          onMouseLeave={e => {
+            const el = e.currentTarget as HTMLButtonElement
+            el.style.color = 'var(--color-text-muted)'
+            el.style.background = 'transparent'
+          }}
         >
-          <LogOut className="w-4 h-4 flex-shrink-0" />
-          {!collapsed && <span className="ml-2">Sign Out</span>}
-        </Button>
+          <LogOut style={{ width: '14px', height: '14px', flexShrink: 0 }} />
+          {!collapsed && <span>Sign Out</span>}
+        </button>
       </div>
     </div>
   )
@@ -156,19 +297,34 @@ function SidebarContent({
 
 export function DashboardSidebar(props: DashboardSidebarProps) {
   const [collapsed, setCollapsed] = useState(false)
-  const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
     <>
       {/* Mobile trigger */}
       <div className="lg:hidden fixed top-4 left-4 z-50">
-        <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+        <Sheet>
           <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="border-border bg-background-card">
-              <Menu className="w-4 h-4" />
-            </Button>
+            <button
+              style={{
+                width: '36px',
+                height: '36px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'var(--bg-surface)',
+                border: '1px solid var(--border-base)',
+                borderRadius: 'var(--r-md)',
+                cursor: 'pointer',
+                color: 'var(--text-secondary)',
+              }}
+            >
+              <Menu style={{ width: '16px', height: '16px' }} />
+            </button>
           </SheetTrigger>
-          <SheetContent side="left" className="bg-background-secondary border-border p-0 w-64">
+          <SheetContent
+            side="left"
+            style={{ background: 'var(--bg-surface)', borderRight: '1px solid var(--border-base)', padding: 0, width: '240px' }}
+          >
             <SidebarContent {...props} />
           </SheetContent>
         </Sheet>
@@ -176,10 +332,15 @@ export function DashboardSidebar(props: DashboardSidebarProps) {
 
       {/* Desktop sidebar */}
       <div
-        className={cn(
-          'hidden lg:flex flex-col bg-background-secondary border-r border-border h-screen sticky top-0 transition-all duration-300',
-          collapsed ? 'w-16' : 'w-64'
-        )}
+        className="hidden lg:flex flex-col h-screen sticky top-0"
+        style={{
+          width: collapsed ? '64px' : '240px',
+          borderRight: '1px solid var(--border-base)',
+          transition: 'width 300ms ease',
+          background: 'var(--bg-surface)',
+          overflow: 'hidden',
+          flexShrink: 0,
+        }}
       >
         <SidebarContent
           {...props}

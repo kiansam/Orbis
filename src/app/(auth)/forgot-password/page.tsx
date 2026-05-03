@@ -5,9 +5,6 @@ import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Mail, CheckCircle, ArrowLeft } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { forgotPasswordSchema, ForgotPasswordFormData } from '@/lib/validations'
 import { createClient } from '@/lib/supabase/client'
 import { useToast } from '@/hooks/use-toast'
@@ -20,9 +17,7 @@ export default function ForgotPasswordPage() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<ForgotPasswordFormData>({
-    resolver: zodResolver(forgotPasswordSchema),
-  })
+  } = useForm<ForgotPasswordFormData>({ resolver: zodResolver(forgotPasswordSchema) })
 
   const supabase = createClient()
 
@@ -30,34 +25,57 @@ export default function ForgotPasswordPage() {
     const { error } = await supabase.auth.resetPasswordForEmail(data.email, {
       redirectTo: `${window.location.origin}/reset-password`,
     })
-
     if (error) {
-      toast({
-        title: 'Error',
-        description: error.message,
-        variant: 'destructive',
-      })
+      toast({ title: 'Error', description: error.message, variant: 'destructive' })
       return
     }
-
     setSubmitted(true)
   }
 
   if (submitted) {
     return (
-      <div className="bg-background-card border border-border rounded-2xl p-8 shadow-2xl text-center">
-        <div className="w-16 h-16 rounded-full bg-accent-muted flex items-center justify-center mx-auto mb-6">
-          <CheckCircle className="w-8 h-8 text-accent" />
+      <div
+        style={{
+          background: 'var(--bg-surface)',
+          border: '1px solid var(--border-base)',
+          borderRadius: 'var(--r-xl)',
+          padding: '40px',
+          textAlign: 'center',
+        }}
+      >
+        <div
+          style={{
+            width: '64px',
+            height: '64px',
+            borderRadius: '50%',
+            background: 'var(--success-bg)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto 24px',
+          }}
+        >
+          <CheckCircle style={{ width: '28px', height: '28px', color: 'var(--success)' }} />
         </div>
-        <h2 className="text-2xl font-bold text-foreground mb-3">Check your inbox</h2>
-        <p className="text-foreground-muted mb-6">
+        <h2 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '12px' }}>
+          Check your inbox
+        </h2>
+        <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginBottom: '24px', lineHeight: 1.6 }}>
           We sent a password reset link to your email. Follow the instructions to reset your password.
         </p>
         <Link
           href="/login"
-          className="inline-flex items-center gap-2 text-accent hover:text-accent-hover transition-colors text-sm font-medium"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            fontSize: '14px',
+            fontWeight: 600,
+            color: 'var(--accent-hex)',
+            textDecoration: 'none',
+          }}
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft style={{ width: '16px', height: '16px' }} />
           Back to sign in
         </Link>
       </div>
@@ -65,51 +83,82 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="bg-background-card border border-border rounded-2xl p-8 shadow-2xl">
-      <div className="text-center mb-8">
-        <div className="w-14 h-14 rounded-2xl bg-accent-muted flex items-center justify-center mx-auto mb-4">
-          <Mail className="w-7 h-7 text-accent" />
+    <div
+      style={{
+        background: 'var(--bg-surface)',
+        border: '1px solid var(--border-base)',
+        borderRadius: 'var(--r-xl)',
+        padding: '40px',
+      }}
+    >
+      <div style={{ textAlign: 'center', marginBottom: '28px' }}>
+        <div className="icon-box-lg" style={{ margin: '0 auto 16px' }}>
+          <Mail style={{ width: '22px', height: '22px' }} />
         </div>
-        <h1 className="text-2xl font-bold text-foreground mb-2">Forgot your password?</h1>
-        <p className="text-foreground-muted text-sm">
+        <h1 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.02em', marginBottom: '6px' }}>
+          Forgot your password?
+        </h1>
+        <p style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>
           Enter your email and we&apos;ll send you a reset link.
         </p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="email">Email Address</Label>
-          <Input
+      <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div>
+          <label htmlFor="email" style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '6px' }}>
+            Email Address
+          </label>
+          <input
             id="email"
             type="email"
             placeholder="you@company.com"
-            className="bg-background-secondary border-border focus:border-accent"
+            style={{
+              width: '100%',
+              background: 'var(--bg-elevated)',
+              border: errors.email ? '1px solid var(--error)' : '1px solid var(--border-base)',
+              borderRadius: 'var(--r-md)',
+              color: 'var(--text-primary)',
+              fontSize: '14px',
+              padding: '10px 14px',
+              outline: 'none',
+              transition: 'border-color var(--t-fast), box-shadow var(--t-fast)',
+              boxSizing: 'border-box',
+            }}
+            onFocus={e => { e.currentTarget.style.borderColor = 'var(--accent-hex)'; e.currentTarget.style.boxShadow = '0 0 0 3px var(--accent-muted)' }}
             {...register('email')}
           />
-          {errors.email && (
-            <p className="text-red-400 text-xs">{errors.email.message}</p>
-          )}
+          {errors.email && <p style={{ color: 'var(--error)', fontSize: '12px', marginTop: '4px' }}>{errors.email.message}</p>}
         </div>
 
-        <Button
+        <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-accent hover:bg-accent-hover text-white h-11"
+          className="btn-primary"
+          style={{ justifyContent: 'center', width: '100%', padding: '12px' }}
         >
           {isSubmitting ? (
-            <span className="flex items-center gap-2">
-              <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span
+                style={{
+                  width: '16px',
+                  height: '16px',
+                  border: '2px solid rgba(255,255,255,0.3)',
+                  borderTopColor: 'white',
+                  borderRadius: '50%',
+                  animation: 'spin 0.7s linear infinite',
+                }}
+              />
               Sending...
             </span>
           ) : (
             'Send Reset Link'
           )}
-        </Button>
+        </button>
       </form>
 
-      <p className="text-center text-foreground-muted text-sm mt-6">
+      <p style={{ textAlign: 'center', marginTop: '20px', fontSize: '14px', color: 'var(--text-secondary)' }}>
         Remember your password?{' '}
-        <Link href="/login" className="text-accent hover:text-accent-hover transition-colors font-medium">
+        <Link href="/login" style={{ fontWeight: 600, color: 'var(--accent-hex)', textDecoration: 'none' }}>
           Sign in
         </Link>
       </p>

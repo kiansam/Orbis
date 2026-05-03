@@ -1,7 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { StatCard } from '@/components/dashboard/StatCard'
-import { Badge } from '@/components/ui/badge'
 import {
   FolderKanban,
   Zap,
@@ -11,6 +10,7 @@ import {
   Clock,
   Star,
   FileText,
+  ArrowUpRight,
 } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
 
@@ -24,34 +24,45 @@ const mockStats = [
 const mockActivities = [
   {
     icon: CheckCircle2,
-    color: 'text-emerald-400',
+    color: 'var(--success)',
+    bg: 'var(--success-bg)',
     text: 'AI Strategy Report generated successfully',
     time: '2 hours ago',
   },
   {
     icon: Zap,
-    color: 'text-accent',
+    color: 'var(--accent-hex)',
+    bg: 'var(--accent-muted)',
     text: 'New API integration connected: Salesforce CRM',
     time: '5 hours ago',
   },
   {
     icon: Users,
-    color: 'text-blue-400',
+    color: 'var(--accent2-hex)',
+    bg: 'var(--accent2-muted)',
     text: 'Team member Sarah Chen added to workspace',
     time: '1 day ago',
   },
   {
     icon: Star,
-    color: 'text-amber-400',
+    color: 'var(--warning)',
+    bg: 'var(--warning-bg)',
     text: 'Quarterly Business Review analysis completed',
     time: '2 days ago',
   },
   {
     icon: FileText,
-    color: 'text-purple-400',
+    color: '#A78BFA',
+    bg: 'rgba(167,139,250,0.12)',
     text: 'Data pipeline report exported to PDF',
     time: '3 days ago',
   },
+]
+
+const quickActions = [
+  { title: 'Create New Project', description: 'Start a new AI consulting project', icon: FolderKanban, href: '/dashboard/projects' },
+  { title: 'View Analytics', description: 'See insights and performance metrics', icon: Zap, href: '/dashboard/analytics' },
+  { title: 'Invite Team', description: 'Collaborate with your colleagues', icon: Users, href: '/dashboard/settings' },
 ]
 
 export default async function DashboardPage() {
@@ -70,90 +81,139 @@ export default async function DashboardPage() {
   const planCapitalized = planName.charAt(0).toUpperCase() + planName.slice(1)
 
   return (
-    <div className="space-y-8">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+
       {/* Welcome */}
-      <div className="flex items-center justify-between">
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <h1 className="text-2xl font-bold text-foreground">
-            Welcome back, {displayName} 👋
+          <h1 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+            Welcome back, {displayName}
           </h1>
-          <p className="text-foreground-muted mt-1">
+          <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '4px' }}>
             Here&apos;s what&apos;s happening with your AI projects.
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <Badge
-            className={
-              planName === 'pro'
-                ? 'bg-accent text-white border-0'
-                : planName === 'enterprise'
-                ? 'bg-purple-600 text-white border-0'
-                : 'bg-background-card border-border text-foreground-muted'
-            }
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span
+            className={planName === 'pro' || planName === 'enterprise' ? 'badge-accent' : 'badge-neutral'}
+            style={{ textTransform: 'capitalize' }}
           >
             {planCapitalized} Plan
-          </Badge>
+          </span>
           {subscription?.current_period_end && (
-            <span className="text-foreground-muted text-xs hidden sm:block">
+            <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
               Renews {formatDate(subscription.current_period_end)}
             </span>
           )}
         </div>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Stats grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }} className="stats-grid">
         {mockStats.map((stat, i) => (
           <StatCard key={i} {...stat} />
         ))}
       </div>
 
-      {/* Recent Activity */}
-      <div className="bg-background-card border border-border rounded-xl p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-semibold text-foreground">Recent Activity</h2>
-          <span className="text-foreground-muted text-sm">Last 7 days</span>
-        </div>
-        <div className="space-y-4">
-          {mockActivities.map((activity, i) => (
-            <div key={i} className="flex items-start gap-4">
-              <div className="w-8 h-8 rounded-lg bg-background-secondary flex items-center justify-center flex-shrink-0 mt-0.5">
-                <activity.icon className={`w-4 h-4 ${activity.color}`} />
-              </div>
-              <div className="flex-1">
-                <p className="text-foreground text-sm">{activity.text}</p>
-                <div className="flex items-center gap-1 mt-1">
-                  <Clock className="w-3 h-3 text-foreground-muted" />
-                  <span className="text-foreground-muted text-xs">{activity.time}</span>
+      {/* Activity + Quick Actions */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }} className="dashboard-cols">
+
+        {/* Recent Activity */}
+        <div
+          style={{
+            background: 'var(--bg-surface)',
+            border: '1px solid var(--border-base)',
+            borderRadius: 'var(--r-lg)',
+            padding: '24px',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+            <h2 style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text-primary)' }}>Recent Activity</h2>
+            <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Last 7 days</span>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {mockActivities.map((activity, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                <div
+                  style={{
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: 'var(--r-md)',
+                    background: activity.bg,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                  }}
+                >
+                  <activity.icon style={{ width: '14px', height: '14px', color: activity.color }} />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <p style={{ fontSize: '13px', color: 'var(--text-primary)', lineHeight: 1.4 }}>{activity.text}</p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '4px' }}>
+                    <Clock style={{ width: '10px', height: '10px', color: 'var(--text-muted)' }} />
+                    <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{activity.time}</span>
+                  </div>
                 </div>
               </div>
-            </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <h2 style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text-primary)' }}>Quick Actions</h2>
+          {quickActions.map((action, i) => (
+            <a
+              key={i}
+              href={action.href}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '14px',
+                background: 'var(--bg-surface)',
+                border: '1px solid var(--border-base)',
+                borderRadius: 'var(--r-lg)',
+                padding: '18px 20px',
+                textDecoration: 'none',
+                transition: 'border-color var(--t-base), background var(--t-base), transform var(--t-fast)',
+                cursor: 'pointer',
+              }}
+              onMouseEnter={e => {
+                const el = e.currentTarget as HTMLAnchorElement
+                el.style.borderColor = 'var(--accent-border)'
+                el.style.background = 'var(--bg-elevated)'
+                el.style.transform = 'translateY(-1px)'
+              }}
+              onMouseLeave={e => {
+                const el = e.currentTarget as HTMLAnchorElement
+                el.style.borderColor = 'var(--border-base)'
+                el.style.background = 'var(--bg-surface)'
+                el.style.transform = 'translateY(0)'
+              }}
+            >
+              <div className="icon-box" style={{ flexShrink: 0 }}>
+                <action.icon style={{ width: '18px', height: '18px' }} />
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)' }}>{action.title}</div>
+                <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>{action.description}</div>
+              </div>
+              <ArrowUpRight style={{ width: '14px', height: '14px', color: 'var(--text-muted)' }} />
+            </a>
           ))}
         </div>
       </div>
 
-      {/* Quick Actions */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {[
-          { title: 'Create New Project', description: 'Start a new AI consulting project', icon: FolderKanban, href: '/dashboard/projects' },
-          { title: 'View Analytics', description: 'See insights and performance metrics', icon: Zap, href: '/dashboard/analytics' },
-          { title: 'Invite Team', description: 'Collaborate with your colleagues', icon: Users, href: '/dashboard/settings' },
-        ].map((action, i) => (
-          <a
-            key={i}
-            href={action.href}
-            className="bg-background-card border border-border rounded-xl p-5 hover:border-accent/30 transition-all hover:shadow-[0_0_20px_-10px_rgba(99,102,241,0.4)] group"
-          >
-            <div className="w-10 h-10 rounded-lg bg-accent-muted flex items-center justify-center mb-3">
-              <action.icon className="w-5 h-5 text-accent" />
-            </div>
-            <h3 className="text-foreground font-medium text-sm group-hover:text-accent transition-colors">
-              {action.title}
-            </h3>
-            <p className="text-foreground-muted text-xs mt-1">{action.description}</p>
-          </a>
-        ))}
-      </div>
+      <style>{`
+        @media (max-width: 1024px) {
+          .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .dashboard-cols { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 640px) {
+          .stats-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </div>
   )
 }

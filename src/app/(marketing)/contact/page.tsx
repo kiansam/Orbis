@@ -3,34 +3,13 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { motion } from 'framer-motion'
-import { Send, Mail, MapPin, Clock, CheckCircle } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
+import { Send, Mail, Clock, CheckCircle } from 'lucide-react'
 import { contactSchema, ContactFormData } from '@/lib/validations'
 import { useToast } from '@/hooks/use-toast'
 
 const contactInfo = [
-  {
-    icon: Mail,
-    title: 'Email Us',
-    value: 'hello@orbissolutions.ca',
-    sub: 'We respond within 24 hours',
-  },
-  {
-    icon: MapPin,
-    title: 'Headquarters',
-    value: 'San Francisco, CA',
-    sub: 'Also in New York, London, Singapore',
-  },
-  {
-    icon: Clock,
-    title: 'Business Hours',
-    value: 'Mon–Fri, 9am–6pm PST',
-    sub: 'Enterprise support 24/7',
-  },
+  { icon: Mail, title: 'Email Us', value: 'hello@orbissolutions.ca', sub: 'We respond within 24 hours' },
+  { icon: Clock, title: 'Business Hours', value: 'Mon–Fri, 9am–6pm PST', sub: 'We will follow up the same day' },
 ]
 
 export default function ContactPage() {
@@ -42,9 +21,7 @@ export default function ContactPage() {
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<ContactFormData>({
-    resolver: zodResolver(contactSchema),
-  })
+  } = useForm<ContactFormData>({ resolver: zodResolver(contactSchema) })
 
   const onSubmit = async (data: ContactFormData) => {
     try {
@@ -53,12 +30,10 @@ export default function ContactPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       })
-
       if (!res.ok) {
         const err = await res.json()
         throw new Error(err.error || 'Failed to send message')
       }
-
       setSubmitted(true)
       reset()
     } catch (error) {
@@ -70,137 +45,183 @@ export default function ContactPage() {
     }
   }
 
+  const inputStyle = {
+    width: '100%',
+    background: 'var(--bg-elevated)',
+    border: '1px solid var(--border-base)',
+    borderRadius: 'var(--r-md)',
+    color: 'var(--text-primary)',
+    fontSize: '14px',
+    padding: '10px 14px',
+    outline: 'none',
+    boxSizing: 'border-box' as const,
+    transition: 'border-color var(--t-fast)',
+  }
+
   return (
-    <div className="pt-24">
+    <div style={{ background: 'var(--bg-base)', paddingTop: '40px' }}>
+
       {/* Hero */}
-      <section className="py-16 relative overflow-hidden">
-        <div className="absolute inset-0 gradient-mesh" />
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="text-accent text-sm font-semibold tracking-wider uppercase">Contact</span>
-          <h1 className="text-5xl font-bold text-foreground mt-4 mb-4">
-            Let&apos;s start a conversation
+      <section style={{ padding: '80px 0 64px', textAlign: 'center' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 24px' }}>
+          <span className="badge-accent" style={{ display: 'inline-flex', marginBottom: '20px' }}>Contact</span>
+          <h1 className="t-h1" style={{ color: 'var(--text-primary)', marginBottom: '16px' }}>
+            Let&apos;s start a <span className="text-gradient">conversation</span>
           </h1>
-          <p className="text-xl text-foreground-muted">
-            Tell us about your business challenges and we&apos;ll show you how AI can help.
+          <p className="t-body-lg" style={{ color: 'var(--text-secondary)' }}>
+            Tell us about your business and we&apos;ll show you what an Orbis agent could do for you.
           </p>
         </div>
       </section>
 
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <section style={{ padding: '0 0 96px' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '32px' }} className="contact-grid">
+
             {/* Contact info */}
-            <div className="space-y-6">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {contactInfo.map((item, i) => (
-                <div key={i} className="bg-background-card border border-border rounded-2xl p-6">
-                  <div className="w-10 h-10 rounded-lg bg-accent-muted flex items-center justify-center mb-4">
-                    <item.icon className="w-5 h-5 text-accent" />
+                <div
+                  key={i}
+                  style={{
+                    background: 'var(--bg-surface)',
+                    border: '1px solid var(--border-base)',
+                    borderRadius: 'var(--r-lg)',
+                    padding: '24px',
+                  }}
+                >
+                  <div className="icon-box" style={{ marginBottom: '14px' }}>
+                    <item.icon style={{ width: '18px', height: '18px' }} />
                   </div>
-                  <div className="text-foreground font-semibold mb-1">{item.title}</div>
-                  <div className="text-foreground text-sm mb-1">{item.value}</div>
-                  <div className="text-foreground-muted text-xs">{item.sub}</div>
+                  <div style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '14px', marginBottom: '4px' }}>
+                    {item.title}
+                  </div>
+                  <div style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '2px' }}>{item.value}</div>
+                  <div style={{ color: 'var(--text-muted)', fontSize: '12px' }}>{item.sub}</div>
                 </div>
               ))}
             </div>
 
-            {/* Contact form */}
-            <div className="lg:col-span-2">
+            {/* Form */}
+            <div>
               {submitted ? (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="bg-background-card border border-border rounded-2xl p-12 text-center h-full flex flex-col items-center justify-center gap-6"
+                <div
+                  style={{
+                    background: 'var(--bg-surface)',
+                    border: '1px solid var(--border-base)',
+                    borderRadius: 'var(--r-xl)',
+                    padding: '48px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                    gap: '20px',
+                    minHeight: '320px',
+                  }}
                 >
-                  <div className="w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center">
-                    <CheckCircle className="w-8 h-8 text-emerald-400" />
+                  <div
+                    style={{
+                      width: '64px',
+                      height: '64px',
+                      borderRadius: '50%',
+                      background: 'var(--success-bg)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <CheckCircle style={{ width: '28px', height: '28px', color: 'var(--success)' }} />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-foreground mb-2">Message Sent!</h3>
-                    <p className="text-foreground-muted">
-                      Thank you for reaching out. Our team will get back to you within 24 hours.
+                    <h3 style={{ fontSize: '20px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '8px' }}>
+                      Message Sent!
+                    </h3>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '15px' }}>
+                      Thank you for reaching out. We&apos;ll get back to you within 24 hours.
                     </p>
                   </div>
-                  <Button
-                    onClick={() => setSubmitted(false)}
-                    variant="outline"
-                    className="border-border-strong"
-                  >
+                  <button onClick={() => setSubmitted(false)} className="btn-ghost">
                     Send Another Message
-                  </Button>
-                </motion.div>
+                  </button>
+                </div>
               ) : (
-                <div className="bg-background-card border border-border rounded-2xl p-8">
-                  <h2 className="text-2xl font-bold text-foreground mb-6">Send us a message</h2>
-                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                      <div className="space-y-2">
-                        <Label htmlFor="name">Full Name *</Label>
-                        <Input
-                          id="name"
-                          placeholder="John Smith"
-                          className="bg-background-secondary border-border focus:border-accent"
-                          {...register('name')}
-                        />
-                        {errors.name && (
-                          <p className="text-red-400 text-xs">{errors.name.message}</p>
-                        )}
+                <div
+                  style={{
+                    background: 'var(--bg-surface)',
+                    border: '1px solid var(--border-base)',
+                    borderRadius: 'var(--r-xl)',
+                    padding: '36px',
+                  }}
+                >
+                  <h2 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '24px' }}>
+                    Send us a message
+                  </h2>
+                  <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }} className="form-row">
+                      <div>
+                        <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '6px' }}>
+                          Full Name *
+                        </label>
+                        <input placeholder="John Smith" style={inputStyle} {...register('name')} />
+                        {errors.name && <p style={{ color: 'var(--error)', fontSize: '12px', marginTop: '4px' }}>{errors.name.message}</p>}
                       </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="email">Email Address *</Label>
-                        <Input
-                          id="email"
-                          type="email"
-                          placeholder="john@company.com"
-                          className="bg-background-secondary border-border focus:border-accent"
-                          {...register('email')}
-                        />
-                        {errors.email && (
-                          <p className="text-red-400 text-xs">{errors.email.message}</p>
-                        )}
+                      <div>
+                        <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '6px' }}>
+                          Email *
+                        </label>
+                        <input type="email" placeholder="john@company.com" style={inputStyle} {...register('email')} />
+                        {errors.email && <p style={{ color: 'var(--error)', fontSize: '12px', marginTop: '4px' }}>{errors.email.message}</p>}
                       </div>
                     </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="company">Company</Label>
-                      <Input
-                        id="company"
-                        placeholder="Acme Corporation"
-                        className="bg-background-secondary border-border focus:border-accent"
-                        {...register('company')}
-                      />
+                    <div>
+                      <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '6px' }}>
+                        Company
+                      </label>
+                      <input placeholder="Your Business Name" style={inputStyle} {...register('company')} />
                     </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="message">Message *</Label>
-                      <Textarea
-                        id="message"
-                        placeholder="Tell us about your AI consulting needs, challenges, or goals..."
+                    <div>
+                      <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '6px' }}>
+                        Message *
+                      </label>
+                      <textarea
+                        placeholder="Tell us about your business and what you'd like an AI agent to handle..."
                         rows={6}
-                        className="bg-background-secondary border-border focus:border-accent resize-none"
+                        style={{ ...inputStyle, resize: 'none', lineHeight: 1.6 }}
                         {...register('message')}
                       />
-                      {errors.message && (
-                        <p className="text-red-400 text-xs">{errors.message.message}</p>
-                      )}
+                      {errors.message && <p style={{ color: 'var(--error)', fontSize: '12px', marginTop: '4px' }}>{errors.message.message}</p>}
                     </div>
 
-                    <Button
+                    <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full bg-accent hover:bg-accent-hover text-white h-11 shadow-[0_0_20px_rgba(99,102,241,0.3)]"
+                      className="btn-primary"
+                      style={{ justifyContent: 'center', width: '100%', padding: '13px', fontSize: '15px', gap: '8px' }}
                     >
                       {isSubmitting ? (
-                        <span className="flex items-center gap-2">
-                          <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        <>
+                          <span
+                            style={{
+                              width: '16px',
+                              height: '16px',
+                              border: '2px solid rgba(255,255,255,0.3)',
+                              borderTopColor: 'white',
+                              borderRadius: '50%',
+                              animation: 'spin 0.7s linear infinite',
+                            }}
+                          />
                           Sending...
-                        </span>
+                        </>
                       ) : (
-                        <span className="flex items-center gap-2">
-                          <Send className="w-4 h-4" />
+                        <>
+                          <Send style={{ width: '16px', height: '16px' }} />
                           Send Message
-                        </span>
+                        </>
                       )}
-                    </Button>
+                    </button>
                   </form>
                 </div>
               )}
@@ -208,6 +229,13 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .contact-grid { grid-template-columns: 1fr !important; }
+          .form-row { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </div>
   )
 }

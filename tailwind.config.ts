@@ -1,7 +1,6 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  darkMode: 'class',
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -10,58 +9,78 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-inter)', 'Inter', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'sans-serif'],
+        sans: ['var(--font-sans)', 'Plus Jakarta Sans', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'sans-serif'],
       },
       colors: {
-        // ── Dashboard / admin (dark indigo) ───────────────────────────
-        background: '#09090b',
-        'background-secondary': '#0f0f11',
-        'background-card': '#111113',
-        border: '#1f1f23',
-        'border-strong': '#2a2a2e',
-        foreground: '#fafafa',
-        'foreground-muted': '#a1a1aa',
-        accent: '#6366f1',
-        'accent-hover': '#4f46e5',
-        'accent-muted': 'rgba(99,102,241,0.12)',
-        // ── Marketing fintech palette ──────────────────────────────────
-        'mkt-base':     '#070C16',
-        'mkt-surface':  '#0D1526',
-        'mkt-elevated': '#141E33',
-        'mkt-border':   '#1E2D4A',
-        'mkt-border-subtle': '#162038',
-        'brand':        '#4169FF',
-        'brand-hover':  '#5578FF',
-        'brand-muted':  'rgba(65,105,255,0.12)',
-        'txt-primary':  '#FFFFFF',
-        'txt-secondary':'#8A97B0',
-        'txt-tertiary': '#4F617A',
-        'semantic-green': '#00C896',
-        'semantic-red':   '#FF4D6A',
-        'semantic-yellow':'#F5A623',
+        bg: {
+          DEFAULT: 'var(--color-bg)',
+          subtle: 'var(--color-bg-subtle)',
+          elevated: 'var(--color-bg-elevated)',
+        },
+        brand: {
+          DEFAULT: 'var(--color-brand)',
+          hover: 'var(--color-brand-hover)',
+          muted: 'var(--color-brand-muted)',
+        },
+        text: {
+          primary: 'var(--color-text-primary)',
+          body: 'var(--color-text-body)',
+          muted: 'var(--color-text-muted)',
+          faint: 'var(--color-text-faint)',
+        },
+        border: {
+          DEFAULT: 'var(--color-border)',
+          subtle: 'var(--color-border-subtle)',
+        },
+        positive: 'var(--color-positive)',
+        /* Legacy aliases */
+        'bg-base':     'var(--bg-base)',
+        'bg-surface':  'var(--bg-surface)',
+        'bg-elevated': 'var(--bg-elevated)',
+        'border-base': 'var(--border-base)',
+        accent:        'var(--accent-hex)',
+        'text-primary':   'var(--text-primary)',
+        'text-secondary': 'var(--text-secondary)',
+        'text-muted':     'var(--text-muted)',
+        /* shadcn */
+        background:             'hsl(var(--background))',
+        foreground:             'hsl(var(--foreground))',
+        card:                   'hsl(var(--card))',
+        'card-foreground':      'hsl(var(--card-foreground))',
+        primary:                'hsl(var(--primary))',
+        'primary-foreground':   'hsl(var(--primary-foreground))',
+        secondary:              'hsl(var(--secondary))',
+        'secondary-foreground': 'hsl(var(--secondary-foreground))',
+        muted:                  'hsl(var(--muted))',
+        'muted-foreground':     'hsl(var(--muted-foreground))',
+        destructive:            'hsl(var(--destructive))',
+        'destructive-foreground': 'hsl(var(--destructive-foreground))',
+        popover:                'hsl(var(--popover))',
+        'popover-foreground':   'hsl(var(--popover-foreground))',
       },
-      letterSpacing: {
-        tightest: '-0.035em',
-        tighter: '-0.02em',
+      maxWidth: {
+        container: '1200px',
+      },
+      borderRadius: {
+        sm:   'var(--radius-sm)',
+        md:   'var(--radius-md)',
+        lg:   'var(--radius-lg)',
+        xl:   'var(--radius-xl)',
+        pill: 'var(--radius-pill)',
       },
       keyframes: {
-        'gradient-shift': {
-          '0%, 100%': { backgroundPosition: '0% 50%' },
-          '50%': { backgroundPosition: '100% 50%' },
-        },
-        'fade-in': {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
-        },
-        'slide-up': {
-          '0%': { transform: 'translateY(16px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
-        },
+        'accordion-down': { from: { height: '0' }, to: { height: 'var(--radix-accordion-content-height)' } },
+        'accordion-up':   { from: { height: 'var(--radix-accordion-content-height)' }, to: { height: '0' } },
+        marquee:   { from: { transform: 'translateX(0)' }, to: { transform: 'translateX(-50%)' } },
+        'fade-in': { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+        'slide-up':{ '0%': { transform: 'translateY(16px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
       },
       animation: {
-        'gradient-shift': 'gradient-shift 6s ease infinite',
-        'fade-in': 'fade-in 0.5s ease-out forwards',
-        'slide-up': 'slide-up 0.5s ease-out forwards',
+        'accordion-down': 'accordion-down 300ms ease',
+        'accordion-up':   'accordion-up 300ms ease',
+        marquee:          'marquee 24s linear infinite',
+        'fade-in':        'fade-in 0.4s ease-out forwards',
+        'slide-up':       'slide-up 0.4s cubic-bezier(0.16,1,0.3,1) forwards',
       },
     },
   },

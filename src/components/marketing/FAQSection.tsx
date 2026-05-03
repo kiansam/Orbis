@@ -1,109 +1,93 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import Link from 'next/link'
+import { ChevronDown, Mail, Calendar, MessageSquare } from 'lucide-react'
 
 const faqs = [
   {
-    question: 'What types of enterprises does Orbis Solutions work with?',
-    answer:
-      'Orbis Solutions works with mid-market and enterprise organizations across all industries, including financial services, healthcare, manufacturing, technology, retail, and professional services. Our AI consulting methodology is designed to be industry-agnostic while being tailored to the specific regulatory, competitive, and operational context of each client.',
+    q: 'Do I need to change my current software or systems?',
+    a: 'Not at all. Your Orbis agent integrates with the tools you already use.',
+    icons: true,
   },
   {
-    question: 'How long does a typical engagement take to show results?',
-    answer:
-      'Most clients begin seeing measurable results within 60–90 days of engagement start. Quick wins in process automation and analytics can often be demonstrated within the first 30 days. Strategic AI roadmaps and larger transformation initiatives typically show full ROI within 6–12 months.',
+    q: 'What is the difference between this and a regular chatbot?',
+    a: 'A standard chatbot responds to questions. An Orbis agent acts on them. It does not just reply — it books appointments, logs leads, sends confirmations, and completes entire workflows from start to finish, without any human involvement. It is the difference between a tool that informs and one that executes.',
   },
   {
-    question: 'Do I need existing AI infrastructure to work with Orbis Solutions?',
-    answer:
-      'No. Orbis Solutions works with clients at every stage of AI maturity — from organizations just beginning their AI journey to those looking to optimize mature AI programs. We assess your current data estate, technology stack, and organizational capabilities to build a roadmap that meets you where you are.',
+    q: 'What is the agent actually capable of?',
+    a: 'Your agent can answer customer questions from your knowledge base, qualify inbound leads, book and confirm appointments directly into your calendar, send follow-up messages, and log activity automatically. It handles the full customer interaction from first message to confirmed booking — across any hour of the day.',
   },
   {
-    question: 'How does Orbis Solutions protect our sensitive data during engagements?',
-    answer:
-      'Data security is foundational to everything we do. We operate under strict data governance policies including NDA agreements, SOC 2 Type II compliance, end-to-end encryption for all data transfers, and role-based access controls. We can also support on-premise or private cloud deployments for clients with strict data residency requirements.',
+    q: 'How long before I see results?',
+    a: 'Most clients are live within two to four weeks. After that, results show up quickly — within the first weeks we typically see meaningful increases in booked appointments, response rates, and leads that would have otherwise gone cold overnight.',
   },
   {
-    question: 'What is included in the Starter and Pro plans?',
-    answer:
-      'Starter includes up to 5 AI projects, 10 GB of storage, email support, basic analytics, and API access. Pro includes everything in Starter plus unlimited AI projects, 100 GB storage, priority support, advanced analytics, custom integrations, and team collaboration features. Both plans include a 14-day free trial.',
-  },
-  {
-    question: 'Can Orbis Solutions integrate with our existing technology stack?',
-    answer:
-      'Yes. We have pre-built connectors for major enterprise platforms including Salesforce, SAP, Microsoft Azure, AWS, Google Cloud, Snowflake, Databricks, and dozens of other systems. Custom integrations are available on the Pro and Enterprise plans.',
+    q: 'What does it cost?',
+    a: 'Pricing depends on the scope of your setup and how your business operates. What we can say is that a fully managed AI agent costs a fraction of what a full-time hire would run you — with none of the overhead. Reach out and we will put together a straightforward proposal based on your actual needs.',
+    link: true,
   },
 ]
 
+const integrations = [
+  { Icon: Mail, label: 'Gmail' },
+  { Icon: Mail, label: 'Outlook' },
+  { Icon: Calendar, label: 'Calendar' },
+  { Icon: MessageSquare, label: 'Slack' },
+]
+
 export function FAQSection() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null)
+  const [open, setOpen] = useState<number | null>(null)
 
   return (
-    <section id="faq" className="py-16 lg:py-24 bg-[#070C16] border-t border-[#1E2D4A]">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ y: 16, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
-          className="text-center mb-12"
-        >
-          <span className="t-label text-[#4169FF]">FAQ</span>
-          <h2 className="t-h1 text-white mt-3 mb-4">Frequently asked questions</h2>
-          <p className="t-body-lg text-[#8A97B0] max-w-2xl mx-auto">
-            Everything you need to know about Orbis Solutions and our services.
-          </p>
-        </motion.div>
+    <section style={{ background: 'var(--color-bg-subtle)', padding: '96px 0' }}>
+      <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px' }}>
 
-        <motion.div
-          initial={{ y: 16, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1, ease: 'easeOut' }}
-          className="space-y-2"
-        >
-          {faqs.map((faq, i) => {
-            const isOpen = openIndex === i
-            return (
-              <div
-                key={i}
-                className={cn(
-                  'bg-[#0D1526] border rounded-lg px-6 transition-colors duration-200',
-                  isOpen ? 'border-[rgba(65,105,255,0.35)]' : 'border-[#1E2D4A]'
-                )}
+        <div style={{ textAlign: 'center', marginBottom: '56px' }}>
+          <p className="eyebrow" style={{ marginBottom: '12px' }}>FAQ</p>
+          <h2 style={{ fontSize: 'clamp(26px, 3vw, 40px)', fontWeight: 700, color: 'var(--color-text-primary)', letterSpacing: '-0.02em', lineHeight: 1.14 }}>
+            Everything you probably want to know.
+          </h2>
+        </div>
+
+        <div>
+          {faqs.map((faq, i) => (
+            <div key={i} style={{ borderBottom: '1px solid var(--color-border)' }}>
+              <button
+                onClick={() => setOpen(open === i ? null : i)}
+                style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', padding: '20px 0', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}
               >
-                <button
-                  onClick={() => setOpenIndex(isOpen ? null : i)}
-                  className="w-full flex items-center justify-between py-4 text-left gap-4"
-                >
-                  <span
-                    className={cn(
-                      'text-[15px] font-medium transition-colors duration-200',
-                      isOpen ? 'text-[#4169FF]' : 'text-white'
-                    )}
-                  >
-                    {faq.question}
-                  </span>
-                  <ChevronDown
-                    className={cn(
-                      'w-4 h-4 flex-shrink-0 text-[#4169FF] transition-transform duration-200',
-                      isOpen && 'rotate-180'
-                    )}
-                  />
-                </button>
-                {isOpen && (
-                  <div className="t-body text-[#8A97B0] pb-4">
-                    {faq.answer}
-                  </div>
-                )}
-              </div>
-            )
-          })}
-        </motion.div>
+                <span style={{ fontSize: '16px', fontWeight: 500, color: 'var(--color-text-primary)', lineHeight: 1.4 }}>
+                  {faq.q}
+                </span>
+                <ChevronDown style={{ width: '18px', height: '18px', color: 'var(--color-brand)', flexShrink: 0, transition: 'transform 300ms ease', transform: open === i ? 'rotate(180deg)' : 'rotate(0)' }} />
+              </button>
+
+              {open === i && (
+                <div style={{ paddingBottom: '20px', fontSize: '15px', color: 'var(--color-text-body)', lineHeight: 1.7 }}>
+                  <p style={{ margin: 0 }}>{faq.a}</p>
+                  {faq.icons && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '14px' }}>
+                      {integrations.map(({ Icon, label }) => (
+                        <Icon key={label} style={{ width: '20px', height: '20px', color: 'var(--color-text-faint)' }} aria-label={label} />
+                      ))}
+                    </div>
+                  )}
+                  {faq.link && (
+                    <span> <Link href="/contact" style={{ color: 'var(--color-brand)', textDecoration: 'none', fontWeight: 500 }}>Get in touch →</Link></span>
+                  )}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
+
+      <style>{`
+        @media (max-width: 640px) {
+          section > div { padding: 0 24px !important; }
+        }
+      `}</style>
     </section>
   )
 }

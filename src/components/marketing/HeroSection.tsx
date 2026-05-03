@@ -1,115 +1,116 @@
 'use client'
 
-import { motion, type Variants } from 'framer-motion'
 import Link from 'next/link'
-import { ArrowRight, TrendingUp, Users, Zap } from 'lucide-react'
 
-const metrics = [
-  { icon: TrendingUp, value: '3.2x', label: 'Avg. ROI improvement' },
-  { icon: Users, value: '500+', label: 'Enterprise clients' },
-  { icon: Zap, value: '94%', label: 'Faster insights' },
+const stats = [
+  { value: '62%', label: 'of calls go unanswered after hours' },
+  { value: '3x', label: 'more leads closed with fast response' },
+  { value: '24/7', label: 'availability, zero extra headcount' },
 ]
-
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.15 },
-  },
-}
-
-const itemVariants: Variants = {
-  hidden: { y: 16, opacity: 0 },
-  visible: { y: 0, opacity: 1, transition: { duration: 0.5, ease: 'easeOut' } },
-}
 
 export function HeroSection() {
   return (
-    <section
-      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 bg-[#070C16]"
-      id="top"
-    >
-      {/* Grid overlay */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage:
-            'linear-gradient(rgba(30,45,74,0.35) 1px, transparent 1px), linear-gradient(90deg, rgba(30,45,74,0.35) 1px, transparent 1px)',
-          backgroundSize: '60px 60px',
-          maskImage: 'radial-gradient(ellipse 90% 80% at 50% 0%, black 30%, transparent 80%)',
-          WebkitMaskImage: 'radial-gradient(ellipse 90% 80% at 50% 0%, black 30%, transparent 80%)',
-        }}
-      />
-      <div className="absolute inset-0 o-hero-wash-dark pointer-events-none" />
+    <section style={{ background: '#ffffff', padding: '140px 0 100px', textAlign: 'center' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 48px' }}>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 text-center">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="flex flex-col items-center"
-        >
-          {/* Eyebrow */}
-          <motion.div variants={itemVariants} className="mb-6">
-            <span className="badge">AI-Powered Consulting Platform</span>
-          </motion.div>
+        {/* Badge */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '28px' }}>
+          <span style={{
+            background: 'var(--color-brand-muted)',
+            color: 'var(--color-brand)',
+            border: '1px solid var(--color-brand-border)',
+            borderRadius: 'var(--radius-pill)',
+            fontSize: '12px',
+            fontWeight: 600,
+            padding: '4px 14px',
+            letterSpacing: '0.04em',
+          }}>
+            AI-powered · Done for you
+          </span>
+        </div>
 
-          {/* Headline */}
-          <motion.h1
-            variants={itemVariants}
-            className="t-display text-white mb-6 max-w-4xl"
-          >
-            Transform Your Business with{' '}
-            <span className="text-[#4169FF]">AI-Powered Intelligence</span>
-          </motion.h1>
+        {/* Headline */}
+        <h1 style={{
+          fontSize: 'clamp(44px, 5.5vw, 64px)',
+          fontWeight: 700,
+          color: 'var(--color-text-primary)',
+          lineHeight: 1.08,
+          letterSpacing: '-0.03em',
+          maxWidth: '720px',
+          margin: '0 auto 20px',
+        }}>
+          Your business, running itself after hours.
+        </h1>
 
-          {/* Subheading */}
-          <motion.p
-            variants={itemVariants}
-            className="t-body-lg text-[#8A97B0] max-w-2xl mb-12"
-          >
-            Orbis Solutions delivers enterprise-grade AI consulting that accelerates
-            decision-making, reduces risk, and unlocks new competitive advantages.
-            Built for the modern enterprise.
-          </motion.p>
+        {/* Sub-line */}
+        <p style={{
+          fontSize: '18px',
+          color: 'var(--color-text-muted)',
+          lineHeight: 1.6,
+          maxWidth: '540px',
+          margin: '0 auto 40px',
+        }}>
+          We build custom AI agents that answer calls, book jobs, and handle customer questions — trained on your business, managed by our team.
+        </p>
 
-          {/* CTA buttons */}
-          <motion.div
-            variants={itemVariants}
-            className="flex flex-col sm:flex-row gap-4 mb-16 mt-0"
-          >
-            <Link href="/signup" className="btn-primary">
-              Get Started Free
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link href="/contact" className="btn-ghost">
-              Schedule a Demo
-            </Link>
-          </motion.div>
+        {/* CTAs */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
+          <Link href="/contact" className="btn-primary" style={{ padding: '14px 32px', fontSize: '15px' }}>
+            Get Started
+          </Link>
+          <Link href="/contact" className="btn-ghost" style={{ padding: '13px 31px', fontSize: '15px' }}>
+            Book a Demo
+          </Link>
+        </div>
 
-          {/* Metrics */}
-          <motion.div
-            variants={containerVariants}
-            className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl"
-          >
-            {metrics.map((metric) => (
-              <motion.div
-                key={metric.label}
-                variants={itemVariants}
-                className="rounded-lg p-4 flex items-center gap-3 bg-[#0D1526] border border-[#1E2D4A] hover:border-[#2A3F6A] transition-colors duration-200"
-              >
-                <div className="w-10 h-10 rounded-lg bg-[rgba(65,105,255,0.12)] flex items-center justify-center flex-shrink-0">
-                  <metric.icon className="w-5 h-5 text-[#4169FF]" />
+        {/* Stats */}
+        <div className="hero-stats">
+          {stats.map((stat, i) => (
+            <div key={stat.value} style={{ display: 'contents' }}>
+              {i > 0 && <div className="hero-stat-divider" />}
+              <div style={{ textAlign: 'center' }}>
+                <div style={{
+                  fontSize: '28px',
+                  fontWeight: 700,
+                  color: 'var(--color-text-primary)',
+                  fontVariantNumeric: 'tabular-nums',
+                  lineHeight: 1,
+                  marginBottom: '6px',
+                }}>
+                  {stat.value}
                 </div>
-                <div className="text-left">
-                  <div className="t-mono text-xl font-semibold text-white">{metric.value}</div>
-                  <div className="t-body-sm text-[#4F617A]">{metric.label}</div>
+                <div style={{ fontSize: '13px', color: 'var(--color-text-muted)', maxWidth: '160px' }}>
+                  {stat.label}
                 </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </motion.div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
+
+      <style>{`
+        .hero-stats {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-top: 56px;
+          flex-wrap: wrap;
+          gap: 0;
+        }
+        .hero-stat-divider {
+          width: 1px;
+          height: 40px;
+          background: var(--color-border);
+          margin: 0 40px;
+          flex-shrink: 0;
+        }
+        @media (max-width: 640px) {
+          section { padding: 80px 0 60px !important; }
+          section > div { padding: 0 24px !important; }
+          .hero-stats { flex-direction: column; gap: 28px; margin-top: 40px; }
+          .hero-stat-divider { display: none; }
+        }
+      `}</style>
     </section>
   )
 }

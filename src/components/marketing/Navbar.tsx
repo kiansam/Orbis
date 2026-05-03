@@ -1,179 +1,176 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
+import { Menu, X } from "lucide-react";
 
-const navLinks = [
-  { href: '/#features', label: 'Features' },
-  { href: '/about', label: 'About' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/#pricing', label: 'Pricing' },
-  { href: '/contact', label: 'Contact' },
-]
-
-function OrbisLogo({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-      <path d="M30 7A17 17 0 1 0 30 41" stroke="#4169FF" strokeWidth="4.5" strokeLinecap="round" />
-      <path
-        d="M30 7C39 7 43 12 43 19C43 26 36 26 30 26C24 26 17 26 17 33C17 38 21 41 30 41"
-        stroke="#2E4FCC"
-        strokeWidth="4.5"
-        strokeLinecap="round"
-      />
-    </svg>
-  )
-}
+const links = [
+  { href: "/about", label: "About" },
+  { href: "/blog", label: "Blog" },
+  { href: "/contact", label: "Contact" },
+];
 
 export function Navbar() {
-  const [mobileOpen, setMobileOpen] = useState(false)
-  const pathname = usePathname()
+  const pathname = usePathname();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    document.body.style.overflow = mobileOpen ? 'hidden' : ''
-    return () => { document.body.style.overflow = '' }
-  }, [mobileOpen])
+    const handler = () => setScrolled(window.scrollY > 8);
+    window.addEventListener("scroll", handler, { passive: true });
+    return () => window.removeEventListener("scroll", handler);
+  }, []);
 
   return (
     <>
-      <motion.header
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.4, ease: 'easeOut' }}
+      <header
         style={{
-          background: 'rgba(7, 12, 22, 0.85)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
-          borderBottom: '1px solid #1E2D4A',
+          position: "sticky",
+          top: 0,
+          zIndex: 1000,
+          height: "64px",
+          background: scrolled ? "rgba(255,255,255,0.85)" : "#ffffff",
+          backdropFilter: scrolled ? "blur(16px)" : "none",
+          WebkitBackdropFilter: scrolled ? "blur(16px)" : "none",
+          borderBottom: "1px solid var(--color-border-subtle)",
+          transition: "background 150ms ease",
         }}
-        className="fixed top-0 left-0 right-0 z-50 h-16"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
-          <div className="flex items-center justify-between h-full">
-
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
-              <OrbisLogo className="w-8 h-8" />
-              <span className="text-[15px] font-semibold tracking-tight text-white">
-                Orbis Solutions
-              </span>
-            </Link>
-
-            {/* Desktop nav */}
-            <nav className="hidden md:flex items-center gap-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    'px-3 py-2 rounded-md text-[14px] font-medium transition-colors duration-150',
-                    pathname === link.href
-                      ? 'text-white'
-                      : 'text-[#8A97B0] hover:text-white'
-                  )}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-
-            {/* Desktop CTAs */}
-            <div className="hidden md:flex items-center gap-3">
-              <Link href="/login" className="btn-ghost" style={{ padding: '8px 16px', fontSize: '14px' }}>
-                Sign In
-              </Link>
-              <Link href="/signup" className="btn-primary" style={{ padding: '8px 16px', fontSize: '14px' }}>
-                Get Started
-              </Link>
-            </div>
-
-            {/* Mobile toggle */}
-            <button
-              className="md:hidden w-9 h-9 flex items-center justify-center rounded-md text-[#8A97B0] hover:text-white transition-colors"
-              onClick={() => setMobileOpen((v) => !v)}
-              aria-label="Toggle menu"
+        <div className="nav-inner">
+          <Link href="/" className="nav-logo">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="711 891 18458 18458"
+              fill="none"
+              style={{
+                color: "#717480",
+              }}
             >
-              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
+              <g transform="translate(0,20000) scale(1,-1)">
+                <path
+                  d="M12920 16975 c85 -9 200 -24 255 -35 55 -11 161 -31 235 -45 74 -14 173 -37 220 -52 47 -14 114 -34 150 -44 63 -17 101 -30 245 -84 39 -15 84 -30 100 -34 37 -10 166 -60 180 -71 6 -4 21 -11 35 -15 45 -13 494 -241 545 -276 28 -20 77 -50 110 -68 86 -47 173 -101 225 -138 25 -19 83 -59 130 -90 47 -31 114 -82 150 -113 36 -31 106 -85 155 -120 50 -34 119 -88 155 -119 36 -31 88 -74 115 -96 136 -107 649 -623 724 -728 19 -26 38 -47 42 -47 4 0 33 -33 65 -72 33 -40 70 -84 84 -98 14 -14 59 -67 100 -119 41 -51 98 -120 125 -153 28 -33 70 -90 95 -127 25 -36 78 -108 118 -159 39 -51 86 -119 104 -150 17 -31 53 -87 80 -124 26 -37 54 -82 62 -100 8 -18 28 -51 45 -73 38 -52 141 -221 141 -232 0 -5 21 -42 46 -83 25 -41 73 -131 105 -200 33 -69 69 -143 81 -164 11 -22 33 -74 48 -115 15 -42 42 -110 58 -151 97 -236 132 -349 132 -420 0 -38 -53 -74 -271 -180 -90 -44 -182 -90 -204 -101 -132 -68 -501 -252 -560 -279 -38 -18 -82 -41 -96 -51 -15 -10 -64 -33 -108 -50 -45 -17 -96 -43 -113 -57 -31 -26 -31 -26 -25 -127 5 -90 29 -247 57 -375 5 -25 17 -155 25 -290 8 -135 20 -278 25 -318 13 -93 12 -576 0 -792 -6 -91 -14 -244 -19 -340 -9 -163 -49 -486 -70 -569 -6 -20 -13 -76 -17 -126 -3 -49 -12 -104 -19 -120 -7 -17 -15 -53 -19 -80 -4 -28 -14 -73 -22 -102 -8 -28 -19 -73 -24 -100 -4 -26 -22 -99 -39 -162 -17 -62 -31 -121 -31 -130 0 -24 -86 -287 -143 -436 -27 -71 -67 -177 -87 -235 -20 -58 -51 -134 -68 -170 -66 -141 -95 -206 -107 -240 -7 -19 -26 -57 -42 -85 -16 -27 -39 -75 -52 -105 -12 -30 -37 -80 -56 -110 -19 -30 -53 -91 -76 -135 -23 -44 -55 -100 -72 -125 -17 -25 -39 -57 -49 -72 -10 -15 -18 -30 -18 -32 0 -3 -24 -41 -53 -83 -30 -43 -77 -116 -105 -163 -28 -47 -61 -95 -73 -105 -11 -11 -40 -49 -64 -85 -23 -36 -68 -94 -100 -130 -32 -36 -84 -101 -116 -144 -134 -180 -598 -643 -810 -806 -32 -25 -116 -90 -186 -146 -70 -55 -150 -116 -177 -135 -27 -19 -74 -51 -104 -73 -30 -21 -72 -48 -92 -60 -66 -37 -133 -77 -190 -115 -30 -19 -75 -46 -100 -60 -25 -13 -74 -40 -110 -61 -36 -20 -78 -44 -95 -52 -41 -20 -155 -81 -180 -95 -11 -6 -67 -33 -125 -58 -58 -26 -136 -62 -175 -81 -87 -41 -238 -102 -285 -115 -19 -6 -73 -25 -120 -44 -101 -39 -284 -101 -356 -119 -28 -8 -80 -25 -115 -39 -35 -14 -86 -28 -114 -32 -27 -4 -81 -15 -120 -26 -163 -44 -194 -51 -281 -63 -50 -8 -100 -18 -111 -25 -12 -6 -60 -15 -107 -20 -48 -6 -91 -13 -97 -16 -5 -4 -62 -13 -127 -20 -64 -8 -191 -23 -282 -34 -318 -38 -416 -43 -875 -45 -460 -2 -460 -2 -565 -45 -58 -23 -139 -58 -180 -77 -42 -18 -85 -34 -96 -34 -11 0 -74 -18 -140 -39 -65 -21 -139 -42 -164 -46 -102 -15 -217 -38 -255 -51 -44 -15 -246 -40 -450 -56 -148 -11 -600 -4 -690 11 -33 6 -114 15 -180 21 -123 11 -221 28 -310 54 -27 8 -79 20 -115 26 -36 7 -110 27 -165 45 -55 19 -125 39 -155 44 -78 15 -160 39 -174 50 -6 5 -36 18 -66 29 -105 37 -243 97 -451 196 -42 20 -81 36 -86 36 -6 0 -27 13 -48 30 -21 16 -56 35 -79 41 -22 6 -87 37 -143 70 -56 32 -104 59 -107 59 -4 0 -43 24 -89 53 -45 29 -108 66 -140 81 -32 16 -61 35 -64 42 -3 8 -19 22 -36 31 -82 42 -415 287 -582 428 -55 47 -143 120 -195 164 -81 67 -407 360 -449 404 -7 8 -68 70 -135 139 -66 68 -148 157 -181 198 -33 41 -94 111 -135 155 -98 107 -194 223 -338 410 -12 17 -55 72 -95 124 -39 52 -97 133 -129 180 -31 47 -76 112 -100 144 -23 32 -65 94 -93 138 -27 44 -96 150 -151 237 -56 86 -108 171 -116 187 -32 62 -151 281 -170 313 -22 35 -108 209 -153 307 -15 33 -51 108 -80 166 -30 59 -58 125 -65 147 -6 23 -23 70 -39 104 -15 35 -46 122 -68 193 -23 72 -57 181 -77 244 -41 129 -47 209 -18 233 9 8 51 32 92 53 41 20 87 48 101 61 14 14 62 39 106 58 45 19 94 42 110 53 15 11 60 36 99 56 40 20 102 55 140 78 38 23 86 48 108 55 22 8 54 25 71 38 17 13 60 38 96 55 35 16 80 39 99 50 100 58 255 143 336 185 141 72 130 34 114 399 -20 470 -23 783 -11 972 6 94 15 256 21 362 5 105 16 220 24 255 8 35 20 104 26 153 12 98 32 236 50 355 6 41 18 95 26 120 9 25 20 64 25 88 47 218 96 402 141 527 5 17 15 48 20 70 6 22 24 76 40 120 17 44 36 100 43 125 7 25 29 82 49 127 20 45 36 85 36 90 0 32 263 594 296 634 8 8 39 64 69 125 31 60 81 145 111 189 30 44 64 96 74 115 10 20 55 87 99 150 45 63 96 136 114 163 140 205 321 420 542 644 66 67 147 150 179 185 33 35 82 83 110 106 28 24 78 70 111 101 81 77 303 257 390 315 39 26 124 85 190 131 66 46 147 100 181 119 33 19 89 56 124 82 35 25 77 53 94 61 17 7 67 34 111 58 210 115 575 296 675 334 47 18 139 52 205 75 66 23 134 50 152 59 18 9 56 22 85 28 29 6 67 19 83 29 17 10 62 25 100 35 93 21 123 29 230 60 50 14 133 34 185 45 52 10 128 28 169 39 41 12 120 27 175 35 56 8 144 22 196 30 238 40 285 46 435 55 88 6 250 18 360 27 159 13 275 15 560 10 198 -3 404 -10 457 -16 54 -5 169 -14 255 -20 87 -6 198 -15 246 -21 101 -12 158 -5 322 43 55 17 147 41 205 54 58 14 143 34 190 45 269 62 779 82 1160 44z M8750 14919 c-58 -16 -132 -36 -165 -43 -63 -15 -159 -47 -191 -64 -10 -6 -50 -20 -89 -32 -38 -12 -88 -30 -110 -40 -22 -11 -98 -44 -170 -75 -71 -30 -142 -64 -156 -74 -14 -11 -75 -44 -135 -74 -60 -30 -136 -75 -169 -99 -33 -24 -90 -61 -127 -81 -36 -21 -72 -45 -79 -53 -7 -9 -38 -32 -68 -51 -30 -20 -85 -61 -121 -93 -36 -32 -119 -105 -185 -163 -154 -134 -332 -318 -444 -460 -34 -42 -65 -77 -70 -77 -4 0 -28 -30 -53 -67 -25 -38 -54 -79 -66 -93 -35 -41 -225 -330 -267 -405 -54 -98 -96 -184 -275 -560 -21 -44 -41 -96 -45 -115 -4 -19 -11 -39 -15 -45 -22 -28 -130 -357 -170 -515 -12 -47 -27 -103 -32 -125 -6 -22 -19 -76 -28 -120 -10 -44 -30 -134 -44 -200 -15 -66 -31 -176 -37 -244 -5 -68 -12 -128 -15 -133 -3 -5 -15 -79 -26 -166 -15 -124 -21 -239 -25 -544 -5 -406 -2 -465 52 -913 8 -66 17 -149 20 -185 6 -63 45 -262 64 -327 5 -18 12 -63 16 -100 3 -37 13 -84 20 -103 8 -19 26 -82 40 -140 14 -58 39 -145 56 -195 16 -49 35 -108 40 -129 18 -71 51 -161 64 -176 8 -9 19 -36 24 -62 12 -52 56 -157 136 -323 69 -143 95 -202 95 -213 0 -9 124 -218 144 -242 7 -8 34 -53 61 -100 46 -80 62 -104 158 -229 20 -27 37 -54 37 -60 0 -6 35 -51 78 -99 42 -48 95 -109 117 -137 69 -87 400 -411 482 -471 43 -31 101 -76 128 -99 61 -51 234 -171 295 -206 25 -14 88 -53 140 -86 52 -33 106 -64 119 -68 13 -4 47 -21 74 -37 112 -66 292 -149 377 -173 14 -4 57 -22 95 -40 39 -18 104 -43 145 -54 41 -12 125 -37 185 -56 120 -38 204 -51 257 -41 32 6 98 55 239 176 113 97 441 433 477 489 18 29 49 70 67 90 137 153 345 609 389 851 9 47 23 126 33 175 26 137 30 568 8 790 -9 94 -25 202 -36 240 -10 39 -19 79 -19 90 0 11 -7 45 -15 75 -8 30 -22 90 -30 133 -8 43 -17 82 -20 88 -4 5 -24 78 -45 162 -20 84 -53 193 -73 242 -19 50 -43 115 -52 145 -9 30 -22 69 -30 85 -42 91 -75 175 -75 189 0 9 -24 76 -54 149 -29 72 -57 143 -60 157 -4 14 -29 72 -56 130 -27 58 -61 137 -76 175 -15 39 -32 77 -40 85 -7 8 -27 51 -44 95 -18 44 -36 85 -41 90 -4 6 -28 60 -52 120 -25 61 -70 166 -102 235 -31 69 -72 168 -91 220 -20 52 -42 113 -50 135 -8 22 -21 54 -28 70 -30 65 -46 113 -62 185 -9 41 -30 99 -45 129 -16 30 -29 62 -29 73 0 10 -12 51 -26 91 -15 39 -37 108 -49 152 -21 72 -34 120 -95 335 -10 36 -21 85 -25 110 -3 25 -13 65 -20 90 -7 25 -16 65 -20 90 -3 25 -12 74 -20 110 -39 180 -56 292 -65 427 -6 81 -15 192 -20 247 -13 131 -13 539 1 668 30 289 47 400 80 523 10 39 26 106 35 150 9 44 27 106 40 137 13 32 24 67 24 79 0 12 20 67 44 123 24 55 60 142 80 192 20 51 57 131 81 178 25 48 45 98 45 111 0 24 -3 25 -57 24 -32 0 -105 -14 -163 -30zz M11504 14727 c-22 -23 -76 -73 -119 -112 -140 -124 -291 -288 -368 -401 -23 -33 -62 -85 -86 -115 -24 -29 -48 -65 -53 -79 -5 -14 -36 -72 -68 -130 -32 -58 -68 -134 -79 -170 -12 -36 -28 -77 -36 -91 -17 -32 -55 -165 -55 -199 -1 -14 -7 -43 -16 -65 -8 -22 -24 -103 -35 -180 -18 -120 -20 -170 -16 -350 6 -256 24 -471 43 -506 7 -14 17 -69 23 -121 5 -52 25 -150 44 -219 20 -68 40 -155 47 -194 6 -38 22 -93 35 -121 12 -29 26 -67 30 -85 4 -18 25 -79 46 -136 22 -57 39 -110 39 -118 0 -8 21 -67 46 -132 52 -134 90 -235 129 -343 24 -67 56 -142 185 -445 21 -49 51 -121 65 -160 15 -38 31 -74 35 -80 4 -5 11 -21 15 -35 4 -14 23 -56 41 -95 36 -78 93 -213 161 -385 25 -63 51 -128 59 -145 36 -81 105 -263 142 -380 22 -71 68 -215 102 -318 33 -103 60 -195 60 -205 0 -9 16 -60 34 -113 19 -53 37 -120 41 -150 7 -56 49 -228 65 -266 5 -13 14 -62 20 -110 6 -49 17 -117 25 -153 54 -243 80 -690 65 -1095 -5 -137 -12 -272 -15 -300 -9 -70 -46 -265 -57 -294 -4 -13 -15 -70 -23 -126 -8 -57 -24 -130 -36 -162 -12 -32 -38 -108 -59 -169 -20 -60 -58 -154 -83 -207 -25 -53 -47 -113 -49 -134 -6 -67 19 -60 325 93 26 13 73 40 105 60 31 20 73 47 92 59 195 123 341 229 415 303 22 22 58 50 80 63 86 50 509 456 573 551 8 12 36 46 61 74 66 74 219 274 266 348 22 35 49 76 59 92 62 92 126 194 145 231 11 23 31 57 43 75 13 18 52 92 87 163 146 299 199 415 216 475 7 25 26 79 42 120 29 70 76 205 109 310 8 25 21 65 30 90 27 80 44 143 55 210 5 36 18 94 28 130 31 110 50 202 56 275 3 39 12 108 20 155 45 262 56 433 56 803 0 370 -16 603 -55 794 -7 37 -17 110 -20 162 -7 91 -34 227 -61 306 -8 22 -17 58 -20 80 -4 22 -16 67 -27 100 -11 33 -31 101 -43 150 -29 110 -95 296 -150 420 -7 17 -16 40 -20 53 -4 13 -22 54 -39 90 -18 37 -36 79 -39 93 -4 14 -22 52 -42 84 -19 33 -35 64 -35 70 0 17 -113 237 -142 276 -14 19 -42 63 -63 99 -118 202 -329 497 -470 659 -23 25 -53 65 -68 89 -15 23 -32 42 -38 42 -6 0 -74 64 -152 143 -138 139 -330 307 -432 377 -27 19 -63 46 -80 61 -16 15 -66 51 -111 80 -44 30 -98 66 -120 80 -117 78 -195 126 -249 155 -203 106 -488 244 -505 244 -4 0 -32 11 -62 25 -79 37 -114 33 -164 -18zz"
+                  fill="currentColor"
+                  fillRule="evenodd"
+                />
+              </g>
+            </svg>
+
+            <span
+              style={{
+                fontSize: "12px",
+                fontWeight: 700,
+                color: "#717480",
+                letterSpacing: "-0.02em",
+              }}
+            >
+              Orbis Solutions
+            </span>
+          </Link>
+
+          <nav className="nav-links">
+            {links.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="nav-link"
+                style={{
+                  color:
+                    pathname === link.href
+                      ? "var(--color-text-primary)"
+                      : "var(--color-text-muted)",
+                }}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="nav-actions">
+            <Link href="/login" className="nav-signin">
+              Sign In
+            </Link>
+            <Link
+              href="/contact"
+              className="btn-primary"
+              style={{ padding: "9px 20px", fontSize: "14px" }}
+            >
+              Get a Demo
+            </Link>
+          </div>
+
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="nav-hamburger"
+            aria-label="Toggle menu"
+          >
+            {mobileOpen ? (
+              <X style={{ width: "16px", height: "16px" }} />
+            ) : (
+              <Menu style={{ width: "16px", height: "16px" }} />
+            )}
+          </button>
+        </div>
+      </header>
+
+      {mobileOpen && (
+        <div className="nav-drawer">
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={() => setMobileOpen(false)}
+              className="nav-drawer-link"
+            >
+              {link.label}
+            </Link>
+          ))}
+          <div
+            style={{
+              marginTop: "20px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
+            }}
+          >
+            <Link
+              href="/login"
+              onClick={() => setMobileOpen(false)}
+              className="btn-ghost"
+              style={{ justifyContent: "center" }}
+            >
+              Sign In
+            </Link>
+            <Link
+              href="/contact"
+              onClick={() => setMobileOpen(false)}
+              className="btn-primary"
+              style={{ justifyContent: "center" }}
+            >
+              Get a Demo
+            </Link>
           </div>
         </div>
-      </motion.header>
+      )}
 
-      {/* Mobile drawer */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-40 md:hidden bg-black/50 backdrop-blur-sm"
-              onClick={() => setMobileOpen(false)}
-            />
-            <motion.div
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ duration: 0.25, ease: 'easeOut' }}
-              className="fixed top-0 right-0 bottom-0 z-40 w-72 md:hidden flex flex-col"
-              style={{ background: '#0D1526', borderLeft: '1px solid #1E2D4A' }}
-            >
-              <div
-                className="flex items-center justify-between px-6 h-16"
-                style={{ borderBottom: '1px solid #1E2D4A' }}
-              >
-                <Link href="/" onClick={() => setMobileOpen(false)} className="flex items-center gap-2.5">
-                  <OrbisLogo className="w-7 h-7" />
-                  <span className="text-[15px] font-semibold text-white">Orbis Solutions</span>
-                </Link>
-                <button
-                  onClick={() => setMobileOpen(false)}
-                  className="w-8 h-8 flex items-center justify-center text-[#4F617A] hover:text-white rounded-md transition-colors"
-                  style={{ background: 'transparent' }}
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-
-              <nav className="flex-1 flex flex-col gap-1 p-4">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setMobileOpen(false)}
-                    className="px-4 py-3 rounded-md text-[14px] font-medium text-[#8A97B0] hover:text-white transition-colors"
-                    style={{ transition: 'color 150ms ease' }}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </nav>
-
-              <div className="p-4 flex flex-col gap-3" style={{ borderTop: '1px solid #1E2D4A' }}>
-                <Link
-                  href="/login"
-                  onClick={() => setMobileOpen(false)}
-                  className="btn-ghost w-full justify-center"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  href="/signup"
-                  onClick={() => setMobileOpen(false)}
-                  className="btn-primary w-full justify-center"
-                >
-                  Get Started
-                </Link>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+      <style>{`
+        .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 48px; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+        .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+        .nav-links { display: flex; align-items: center; gap: 32px; }
+        .nav-link { font-size: 14px; font-weight: 500; text-decoration: none; transition: color 150ms ease; }
+        .nav-link:hover { color: var(--color-text-primary) !important; }
+        .nav-actions { display: flex; align-items: center; gap: 8px; }
+        .nav-signin { font-size: 14px; font-weight: 500; color: var(--color-text-muted); text-decoration: none; padding: 8px 14px; transition: color 150ms ease; }
+        .nav-signin:hover { color: var(--color-text-primary); }
+        .nav-hamburger { display: none; width: 36px; height: 36px; align-items: center; justify-content: center; background: transparent; border: 1px solid var(--color-border); border-radius: var(--radius-md); cursor: pointer; color: var(--color-text-muted); }
+        .nav-drawer { position: fixed; top: 64px; left: 0; right: 0; bottom: 0; background: #fff; z-index: 999; padding: 24px; display: flex; flex-direction: column; gap: 4px; }
+        .nav-drawer-link { display: block; padding: 14px 16px; font-size: 16px; font-weight: 500; color: var(--color-text-primary); text-decoration: none; border-bottom: 1px solid var(--color-border-subtle); }
+        @media (max-width: 768px) {
+          .nav-inner { padding: 0 24px; }
+          .nav-links, .nav-actions { display: none; }
+          .nav-hamburger { display: flex; }
+        }
+      `}</style>
     </>
-  )
+  );
 }

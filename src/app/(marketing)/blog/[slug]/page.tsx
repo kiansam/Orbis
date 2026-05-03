@@ -56,7 +56,6 @@ function extractTOC(markdown: string) {
   return items
 }
 
-// Custom MDX components that add id attributes to headings
 function makeHeadingComponents() {
   const H2 = ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => {
     const text = typeof children === 'string' ? children : ''
@@ -86,7 +85,6 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   const typedPost = post as Post
 
-  // Fetch related posts (same tags)
   const { data: relatedPosts } = await supabase
     .from('posts')
     .select('id, title, slug, excerpt, published_at, tags')
@@ -99,30 +97,54 @@ export default async function BlogPostPage({ params }: PageProps) {
   const mdxComponents = makeHeadingComponents()
 
   return (
-    <div className="pt-24">
-      <article className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex gap-16 justify-center">
+    <div style={{ background: 'var(--bg-base)', paddingTop: '64px' }}>
+      <article style={{ padding: '64px 0 80px' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+          <div style={{ display: 'flex', gap: '64px', justifyContent: 'center' }}>
+
             {/* Main content */}
-            <div className="min-w-0 max-w-3xl flex-1">
-              {/* Back link */}
+            <div style={{ minWidth: 0, flex: 1, maxWidth: '680px' }}>
+
+              {/* Back */}
               <Link
                 href="/blog"
-                className="inline-flex items-center gap-2 text-foreground-muted hover:text-accent transition-colors mb-8 text-sm"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  marginBottom: '32px',
+                  fontSize: '14px',
+                  color: 'var(--text-secondary)',
+                  textDecoration: 'none',
+                  transition: 'color var(--t-fast)',
+                }}
+                onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.color = 'var(--accent-hex)')}
+                onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-secondary)')}
               >
-                <ArrowLeft className="w-4 h-4" />
+                <ArrowLeft style={{ width: '16px', height: '16px' }} />
                 Back to Blog
               </Link>
 
               {/* Tags */}
               {typedPost.tags && typedPost.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-6">
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
                   {typedPost.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-accent-muted text-accent text-xs font-medium"
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        padding: '2px 10px',
+                        borderRadius: '999px',
+                        background: 'var(--accent-muted)',
+                        border: '1px solid var(--accent-border)',
+                        color: 'var(--accent-hex)',
+                        fontSize: '12px',
+                        fontWeight: 500,
+                      }}
                     >
-                      <Tag className="w-3 h-3" />
+                      <Tag style={{ width: '11px', height: '11px' }} />
                       {tag}
                     </span>
                   ))}
@@ -130,20 +152,40 @@ export default async function BlogPostPage({ params }: PageProps) {
               )}
 
               {/* Title */}
-              <h1 className="text-4xl sm:text-5xl font-bold text-foreground leading-tight mb-6">
+              <h1
+                style={{
+                  fontSize: 'clamp(28px, 3.5vw, 40px)',
+                  fontWeight: 700,
+                  color: 'var(--text-primary)',
+                  letterSpacing: '-0.02em',
+                  lineHeight: 1.2,
+                  marginBottom: '20px',
+                }}
+              >
                 {typedPost.title}
               </h1>
 
               {/* Meta */}
-              <div className="flex items-center gap-4 text-foreground-muted text-sm mb-8 pb-8 border-b border-border">
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '16px',
+                  marginBottom: '40px',
+                  paddingBottom: '32px',
+                  borderBottom: '1px solid var(--border-subtle)',
+                  color: 'var(--text-muted)',
+                  fontSize: '13px',
+                }}
+              >
                 {typedPost.published_at && (
-                  <span className="flex items-center gap-1">
-                    <Calendar className="w-4 h-4" />
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <Calendar style={{ width: '13px', height: '13px' }} />
                     {formatDate(typedPost.published_at)}
                   </span>
                 )}
-                <span className="flex items-center gap-1">
-                  <Clock className="w-4 h-4" />
+                <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Clock style={{ width: '13px', height: '13px' }} />
                   {readingTime} min read
                 </span>
               </div>
@@ -154,9 +196,9 @@ export default async function BlogPostPage({ params }: PageProps) {
               </div>
             </div>
 
-            {/* TOC Sidebar */}
+            {/* TOC */}
             {tocItems.length > 0 && (
-              <aside className="hidden xl:block w-56 shrink-0">
+              <aside className="hidden xl:block" style={{ width: '224px', flexShrink: 0 }}>
                 <BlogTOC items={tocItems} />
               </aside>
             )}
@@ -164,29 +206,87 @@ export default async function BlogPostPage({ params }: PageProps) {
         </div>
       </article>
 
-      {/* Related Posts */}
+      {/* Related */}
       {relatedPosts && relatedPosts.length > 0 && (
-        <section className="py-16 bg-background-secondary">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-foreground mb-8">More from Orbis Solutions</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <section
+          style={{
+            padding: '64px 0',
+            background: 'var(--bg-page)',
+            borderTop: '1px solid var(--border-subtle)',
+          }}
+        >
+          <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 24px' }}>
+            <h2
+              style={{
+                fontSize: '22px',
+                fontWeight: 700,
+                color: 'var(--text-primary)',
+                marginBottom: '24px',
+              }}
+            >
+              More from Orbis Solutions
+            </h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }} className="related-grid">
               {relatedPosts.map((related) => (
-                <Link key={related.id} href={`/blog/${related.slug}`} className="group block">
-                  <div className="bg-background-card border border-border rounded-xl p-5 hover:border-accent/30 transition-all h-full">
+                <Link key={related.id} href={`/blog/${related.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
+                  <div
+                    style={{
+                      padding: '20px',
+                      height: '100%',
+                      background: 'var(--bg-surface)',
+                      border: '1px solid var(--border-base)',
+                      borderRadius: 'var(--r-lg)',
+                      transition: 'border-color var(--t-base)',
+                    }}
+                    onMouseEnter={e => ((e.currentTarget as HTMLElement).style.borderColor = 'var(--border-bright)')}
+                    onMouseLeave={e => ((e.currentTarget as HTMLElement).style.borderColor = 'var(--border-base)')}
+                  >
                     {related.tags && related.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mb-3">
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '12px' }}>
                         {related.tags.slice(0, 2).map((tag: string) => (
-                          <span key={tag} className="px-2 py-0.5 rounded-full bg-accent-muted text-accent text-xs">
+                          <span
+                            key={tag}
+                            style={{
+                              padding: '2px 8px',
+                              borderRadius: '999px',
+                              background: 'var(--accent-muted)',
+                              color: 'var(--accent-hex)',
+                              fontSize: '11px',
+                            }}
+                          >
                             {tag}
                           </span>
                         ))}
                       </div>
                     )}
-                    <h3 className="text-foreground font-semibold text-sm group-hover:text-accent transition-colors mb-2 line-clamp-2">
+                    <h3
+                      style={{
+                        fontWeight: 600,
+                        fontSize: '14px',
+                        marginBottom: '8px',
+                        color: 'var(--text-primary)',
+                        lineHeight: 1.4,
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical' as const,
+                        overflow: 'hidden',
+                      }}
+                    >
                       {related.title}
                     </h3>
                     {related.excerpt && (
-                      <p className="text-foreground-muted text-xs line-clamp-2">{related.excerpt}</p>
+                      <p
+                        style={{
+                          color: 'var(--text-secondary)',
+                          fontSize: '13px',
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: 'vertical' as const,
+                          overflow: 'hidden',
+                        }}
+                      >
+                        {related.excerpt}
+                      </p>
                     )}
                   </div>
                 </Link>
@@ -195,6 +295,12 @@ export default async function BlogPostPage({ params }: PageProps) {
           </div>
         </section>
       )}
+
+      <style>{`
+        @media (max-width: 600px) {
+          .related-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </div>
   )
 }

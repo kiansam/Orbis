@@ -38,29 +38,45 @@ export function BlogTOC({ items }: BlogTOCProps) {
   if (!items.length) return null
 
   return (
-    <nav className="sticky top-28 space-y-1">
-      <p className="text-foreground text-xs font-semibold uppercase tracking-wider mb-3">
+    <nav style={{ position: 'sticky', top: '112px' }}>
+      <p style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '12px' }}>
         On this page
       </p>
-      {items.map((item) => (
-        <a
-          key={item.id}
-          href={`#${item.id}`}
-          onClick={(e) => {
-            e.preventDefault()
-            document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' })
-          }}
-          className={`block text-sm py-1 transition-colors border-l-2 pl-3 ${
-            item.level === 3 ? 'ml-3' : ''
-          } ${
-            activeId === item.id
-              ? 'border-accent text-accent'
-              : 'border-transparent text-foreground-muted hover:text-foreground hover:border-border-strong'
-          }`}
-        >
-          {item.text}
-        </a>
-      ))}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+        {items.map((item) => (
+          <a
+            key={item.id}
+            href={`#${item.id}`}
+            onClick={(e) => {
+              e.preventDefault()
+              document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' })
+            }}
+            style={{
+              display: 'block',
+              fontSize: '13px',
+              padding: '4px 12px',
+              paddingLeft: item.level === 3 ? '24px' : '12px',
+              borderLeft: `2px solid ${activeId === item.id ? 'var(--accent-hex)' : 'var(--border-subtle)'}`,
+              color: activeId === item.id ? 'var(--accent-hex)' : 'var(--text-muted)',
+              textDecoration: 'none',
+              transition: 'color var(--t-fast), border-color var(--t-fast)',
+              lineHeight: 1.5,
+            }}
+            onMouseEnter={e => {
+              if (activeId !== item.id) {
+                (e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-secondary)'
+              }
+            }}
+            onMouseLeave={e => {
+              if (activeId !== item.id) {
+                (e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-muted)'
+              }
+            }}
+          >
+            {item.text}
+          </a>
+        ))}
+      </div>
     </nav>
   )
 }

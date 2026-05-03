@@ -1,5 +1,4 @@
 import { LucideIcon } from 'lucide-react'
-import { cn } from '@/lib/utils'
 
 interface StatCardProps {
   icon: LucideIcon
@@ -7,34 +6,62 @@ interface StatCardProps {
   value: string | number
   change?: number
   changeLabel?: string
-  className?: string
 }
 
-export function StatCard({ icon: Icon, label, value, change, changeLabel, className }: StatCardProps) {
+export function StatCard({ icon: Icon, label, value, change, changeLabel }: StatCardProps) {
+  const isPositive = (change ?? 0) >= 0
+
   return (
-    <div className={cn(
-      'bg-background-card border border-border rounded-xl p-6 hover:border-border-strong transition-colors',
-      className
-    )}>
-      <div className="flex items-center justify-between mb-4">
-        <div className="w-10 h-10 rounded-lg bg-accent-muted flex items-center justify-center">
-          <Icon className="w-5 h-5 text-accent" />
+    <div
+      style={{
+        background: 'var(--bg-surface)',
+        border: '1px solid var(--border-base)',
+        borderRadius: 'var(--r-lg)',
+        padding: '20px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '0',
+        transition: 'border-color var(--t-base)',
+        cursor: 'default',
+      }}
+      onMouseEnter={e => ((e.currentTarget as HTMLDivElement).style.borderColor = 'var(--border-bright)')}
+      onMouseLeave={e => ((e.currentTarget as HTMLDivElement).style.borderColor = 'var(--border-base)')}
+    >
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '16px' }}>
+        <div className="icon-box">
+          <Icon style={{ width: '18px', height: '18px' }} />
         </div>
         {change !== undefined && (
-          <span className={cn(
-            'text-xs font-medium px-2 py-0.5 rounded-full',
-            change >= 0
-              ? 'text-emerald-400 bg-emerald-500/10'
-              : 'text-red-400 bg-red-500/10'
-          )}>
+          <span
+            style={{
+              fontSize: '11px',
+              fontWeight: 600,
+              padding: '3px 8px',
+              borderRadius: '999px',
+              color: isPositive ? 'var(--success)' : 'var(--error)',
+              background: isPositive ? 'var(--success-bg)' : 'var(--error-bg)',
+            }}
+          >
             {change >= 0 ? '+' : ''}{change}%
           </span>
         )}
       </div>
-      <div className="text-2xl font-bold text-foreground mb-1">{value}</div>
-      <div className="text-foreground-muted text-sm">{label}</div>
+      <div
+        style={{
+          fontSize: '28px',
+          fontWeight: 700,
+          color: 'var(--text-primary)',
+          fontVariantNumeric: 'tabular-nums',
+          letterSpacing: '-0.02em',
+          lineHeight: 1,
+          marginBottom: '6px',
+        }}
+      >
+        {value}
+      </div>
+      <div style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>{label}</div>
       {changeLabel && (
-        <div className="text-foreground-muted text-xs mt-1">{changeLabel}</div>
+        <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>{changeLabel}</div>
       )}
     </div>
   )
