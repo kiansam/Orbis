@@ -3,7 +3,7 @@ import { updateSession } from '@/lib/supabase/middleware'
 
 // Public marketing routes — skip Supabase auth entirely for instant load
 function isPublicPath(pathname: string): boolean {
-  const exact = ['/', '/about', '/blog', '/contact']
+  const exact = ['/', '/about', '/blog', '/contact', '/privacy', '/terms']
   if (exact.includes(pathname)) return true
   if (pathname.startsWith('/blog/')) return true
   if (pathname.startsWith('/api/contact')) return true
