@@ -33,7 +33,7 @@ export function FadeUp({
     <motion.div
       initial={{ opacity: 0, y: 26 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
+      viewport={{ once: false, margin: "-60px" }}
       transition={{ duration: 0.65, ease: EASE, delay }}
       style={style}
       className={className}
@@ -61,7 +61,7 @@ export function Stagger({
     <motion.div
       initial="hidden"
       whileInView="show"
-      viewport={{ once: true, margin: "-60px" }}
+      viewport={{ once: false, margin: "-60px" }}
       variants={staggerParent(staggerChildren, delayChildren)}
       style={style}
       className={className}

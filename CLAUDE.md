@@ -34,14 +34,14 @@ Secrets managed via Firebase: `SUPABASE_SERVICE_ROLE_KEY`, `STRIPE_SECRET_KEY`, 
 Orbis Solutions is a Next.js 16 App Router SaaS platform with Supabase (auth + PostgreSQL) and Stripe subscriptions. It is deployed on Firebase App Hosting (see `apphosting.yaml`).
 
 ### Route Groups
-- `(marketing)/` — public pages; layout has Navbar + Footer
-- `(auth)/` — login, signup, forgot/reset password; centered auth layout
-- `auth/callback/` — OAuth callback route; exchanges code for session and redirects to `/dashboard`
-- `dashboard/` — protected user portal with sidebar; redirects to `/login` if unauthenticated
-- `admin/` — admin-only (requires `role = 'admin'` on the `profiles` row); redirects non-admins to `/dashboard`
+- `(marketing)/` — public pages; layout has Navbar + Footer + ParticleBackground (tsparticles); content sits at `z-index: 1` above the particle canvas
+- `(auth)/` — login, signup, forgot/reset password; layout is a sticky BrandPanel (left half, desktop only) + centered form area (right half); BrandPanel hidden on mobile
+- `app/auth/callback/` — OAuth callback route (not inside the `(auth)` group); exchanges code for session and redirects to `/dashboard`
+- `dashboard/` — protected user portal; async layout fetches profile + subscription server-side; redirects to `/login` if unauthenticated
+- `admin/` — admin-only (requires `role = 'admin'` on the `profiles` row); layout re-checks admin role server-side; redirects non-admins to `/dashboard`
 
 ### Middleware & Route Protection
-`src/middleware.ts` delegates to `src/proxy.ts`. The proxy fast-paths public routes (no Supabase call) to avoid cold-start latency, then authenticates protected routes and checks admin role before allowing access to `/admin/*`. Auth routes redirect already-logged-in users to `/dashboard`.
+`src/middleware.ts` delegates to `src/proxy.ts`. The proxy skips Supabase entirely for public routes (`/`, `/about`, `/blog`, `/contact`, `/api/contact`, static assets) to avoid cold-start latency on Firebase Cloud Run. Protected routes (`/dashboard/*`, `/admin/*`) require authentication; `/admin/*` additionally requires `profiles.role = 'admin'`. Auth routes (`/login`, `/signup`, `/forgot-password`, `/reset-password`) redirect already-logged-in users to `/dashboard`.
 
 ### Supabase Client Usage
 Three separate clients must be used in the correct context:
@@ -81,7 +81,7 @@ Blog posts are stored in the `posts` table and rendered server-side with `next-m
 - `lib/validations.ts` — Zod schemas for every form (login, signup, contact, profile, blog post, password change)
 - `lib/utils.ts` — `cn()`, `formatDate()`, `formatPrice()`
 - `lib/plans.ts` — client-safe plan definitions (names, prices, features); no Stripe SDK import
-- `lib/stripe.ts` — lazy Stripe singleton via Proxy (avoids build-time init); use `stripe` (server) or `getStripe()` (client)
+- `lib/stripe.ts` — lazy Stripe singleton via ES `Proxy`; the proxy defers instantiation so importing this module at build time doesn't crash (Stripe requires a secret key at init); use `stripe` (server-side) or `getStripe()` (client-side); also re-exports `PLANS` from `lib/plans.ts`
 - `components/ui/` — shadcn/ui primitives; regenerate via `shadcn` CLI, do not edit directly
 
 ### Forms
