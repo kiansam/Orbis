@@ -10,7 +10,7 @@ const stats = [
 
 export function HeroSection() {
   return (
-    <section style={{ background: '#ffffff', padding: '140px 0 100px', textAlign: 'center' }}>
+    <section style={{ background: 'transparent', padding: '140px 0 100px', textAlign: 'center' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 48px' }}>
 
         {/* Badge */}

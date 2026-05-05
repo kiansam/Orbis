@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 export function FinalCTASection() {
   return (
-    <section style={{ background: 'var(--color-bg-subtle)', padding: '120px 0', textAlign: 'center', borderTop: '1px solid var(--color-border-subtle)' }}>
+    <section style={{ background: 'transparent', padding: '120px 0', textAlign: 'center', borderTop: '1px solid var(--color-border-subtle)' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 48px' }}>
         <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 700, color: 'var(--color-text-primary)', letterSpacing: '-0.025em', lineHeight: 1.1, marginBottom: '20px' }}>
           Ready to stop missing jobs after hours?

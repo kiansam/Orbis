@@ -60,7 +60,7 @@ export function WhyOrbisSection() {
   const [active, setActive] = useState<Node | null>(null)
 
   return (
-    <section style={{ background: '#ffffff', padding: '96px 0' }}>
+    <section style={{ background: 'transparent', padding: '96px 0' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 48px' }}>
 
         <div style={{ textAlign: 'center', marginBottom: '64px' }}>

@@ -40,7 +40,7 @@ export function FAQSection() {
   const [open, setOpen] = useState<number | null>(null)
 
   return (
-    <section style={{ background: 'var(--color-bg-subtle)', padding: '96px 0' }}>
+    <section style={{ background: '#ffffff', padding: '96px 0' }}>
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px' }}>
 
         <div style={{ textAlign: 'center', marginBottom: '56px' }}>
