@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { X, TrendingUp, Brain, CalendarCheck, Wrench, Bot, Rocket } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Stagger, StaggerItem, staggerParent, childVariants } from './motion'
 
 interface Node {
   Icon: React.ComponentType<{ style?: React.CSSProperties }>
@@ -63,35 +65,45 @@ export function WhyOrbisSection() {
     <section style={{ background: 'transparent', padding: '96px 0' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 48px' }}>
 
-        <div style={{ textAlign: 'center', marginBottom: '64px' }}>
-          <p className="eyebrow" style={{ marginBottom: '12px' }}>Why Orbis?</p>
-          <h2 style={{ fontSize: 'clamp(26px, 3vw, 40px)', fontWeight: 700, color: 'var(--color-text-primary)', letterSpacing: '-0.02em', maxWidth: '640px', margin: '0 auto', lineHeight: 1.14 }}>
+        {/* Header */}
+        <motion.div
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: '-60px' }}
+          variants={staggerParent(0.12)}
+          style={{ textAlign: 'center', marginBottom: '64px' }}
+        >
+          <motion.p className="eyebrow" style={{ marginBottom: '12px' }} variants={childVariants}>
+            Why Orbis?
+          </motion.p>
+          <motion.h2
+            variants={childVariants}
+            style={{ fontSize: 'clamp(26px, 3vw, 40px)', fontWeight: 700, color: 'var(--color-text-primary)', letterSpacing: '-0.02em', maxWidth: '640px', margin: '0 auto', lineHeight: 1.14 }}
+          >
             Everything your business needs to run smarter — built and managed for you.
-          </h2>
-        </div>
+          </motion.h2>
+        </motion.div>
 
-        <div className="why-grid">
+        {/* Nodes grid */}
+        <Stagger className="why-grid" staggerChildren={0.09}>
           {nodes.map((node, i) => {
             const Icon = node.Icon
             return (
-              <div key={i} style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
+              <StaggerItem key={i} style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--color-brand-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <Icon style={{ width: '20px', height: '20px', color: 'var(--color-brand)' }} />
                 </div>
                 <div>
                   <h3 style={{ fontSize: '17px', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '8px', lineHeight: 1.3 }}>{node.title}</h3>
                   <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', lineHeight: 1.6, marginBottom: '10px' }}>{node.description}</p>
-                  <button
-                    onClick={() => setActive(node)}
-                    className="why-link"
-                  >
+                  <button onClick={() => setActive(node)} className="why-link">
                     {node.linkText}
                   </button>
                 </div>
-              </div>
+              </StaggerItem>
             )
           })}
-        </div>
+        </Stagger>
       </div>
 
       {active && (

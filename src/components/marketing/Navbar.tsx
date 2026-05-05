@@ -43,6 +43,8 @@ export function Navbar() {
               xmlns="http://www.w3.org/2000/svg"
               viewBox="711 891 18458 18458"
               fill="none"
+              width="34"
+              height="34"
             >
               <defs>
                 <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -61,7 +63,7 @@ export function Navbar() {
 
             <span
               style={{
-                fontSize: "12px",
+                fontSize: "17px",
                 fontWeight: 700,
                 letterSpacing: "-0.02em",
                 background: "linear-gradient(135deg, #6B8FFF 0%, #2D55E8 100%)",

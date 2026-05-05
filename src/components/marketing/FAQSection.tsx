@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { ChevronDown, Mail, Calendar, MessageSquare } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Stagger, StaggerItem, staggerParent, childVariants } from './motion'
 
 const faqs = [
   {
@@ -43,16 +45,29 @@ export function FAQSection() {
     <section style={{ background: '#ffffff', padding: '96px 0' }}>
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px' }}>
 
-        <div style={{ textAlign: 'center', marginBottom: '56px' }}>
-          <p className="eyebrow" style={{ marginBottom: '12px' }}>FAQ</p>
-          <h2 style={{ fontSize: 'clamp(26px, 3vw, 40px)', fontWeight: 700, color: 'var(--color-text-primary)', letterSpacing: '-0.02em', lineHeight: 1.14 }}>
+        {/* Header */}
+        <motion.div
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: '-60px' }}
+          variants={staggerParent(0.12)}
+          style={{ textAlign: 'center', marginBottom: '56px' }}
+        >
+          <motion.p className="eyebrow" style={{ marginBottom: '12px' }} variants={childVariants}>
+            FAQ
+          </motion.p>
+          <motion.h2
+            variants={childVariants}
+            style={{ fontSize: 'clamp(26px, 3vw, 40px)', fontWeight: 700, color: 'var(--color-text-primary)', letterSpacing: '-0.02em', lineHeight: 1.14 }}
+          >
             Everything you probably want to know.
-          </h2>
-        </div>
+          </motion.h2>
+        </motion.div>
 
-        <div>
+        {/* FAQ items */}
+        <Stagger staggerChildren={0.07}>
           {faqs.map((faq, i) => (
-            <div key={i} style={{ borderBottom: '1px solid var(--color-border)' }}>
+            <StaggerItem key={i} style={{ borderBottom: '1px solid var(--color-border)' }}>
               <button
                 onClick={() => setOpen(open === i ? null : i)}
                 style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', padding: '20px 0', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}
@@ -78,9 +93,9 @@ export function FAQSection() {
                   )}
                 </div>
               )}
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
       </div>
 
       <style>{`

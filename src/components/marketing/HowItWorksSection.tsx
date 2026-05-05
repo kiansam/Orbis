@@ -2,6 +2,8 @@
 
 import Link from 'next/link'
 import { Search, Wrench, Rocket, TrendingUp } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { FadeUp, Stagger, StaggerItem, staggerParent, childVariants } from './motion'
 
 const steps = [
   { num: '01', Icon: Search,     title: 'We learn your business', body: 'We map your services, pricing, FAQs, and how you like to operate.' },
@@ -23,20 +25,34 @@ export function HowItWorksSection() {
       <div className="how-container">
 
         {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '56px' }}>
-          <p className="eyebrow" style={{ marginBottom: '12px' }}>The Orbis process</p>
-          <h2 style={{ fontSize: 'clamp(28px, 3vw, 40px)', fontWeight: 700, color: 'var(--color-text-primary)', letterSpacing: '-0.02em', maxWidth: '580px', margin: '0 auto 16px', lineHeight: 1.14 }}>
+        <motion.div
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: '-60px' }}
+          variants={staggerParent(0.12)}
+          style={{ textAlign: 'center', marginBottom: '56px' }}
+        >
+          <motion.p className="eyebrow" style={{ marginBottom: '12px' }} variants={childVariants}>
+            The Orbis process
+          </motion.p>
+          <motion.h2
+            variants={childVariants}
+            style={{ fontSize: 'clamp(28px, 3vw, 40px)', fontWeight: 700, color: 'var(--color-text-primary)', letterSpacing: '-0.02em', maxWidth: '580px', margin: '0 auto 16px', lineHeight: 1.14 }}
+          >
             A fully built AI agent, live in your business in weeks.
-          </h2>
-          <p style={{ fontSize: '16px', color: 'var(--color-text-muted)', maxWidth: '500px', margin: '0 auto', lineHeight: 1.6 }}>
+          </motion.h2>
+          <motion.p
+            variants={childVariants}
+            style={{ fontSize: '16px', color: 'var(--color-text-muted)', maxWidth: '500px', margin: '0 auto', lineHeight: 1.6 }}
+          >
             Not a tool you configure yourself. We handle everything — from building your knowledge base to integrating with your calendar.
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
         {/* 4-column steps */}
-        <div className="process-grid">
+        <Stagger className="process-grid" staggerChildren={0.1}>
           {steps.map((step, i) => (
-            <div
+            <StaggerItem
               key={i}
               style={{
                 padding: '32px 24px',
@@ -52,19 +68,25 @@ export function HowItWorksSection() {
               </div>
               <h3 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '10px', lineHeight: 1.3 }}>{step.title}</h3>
               <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>{step.body}</p>
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
 
         {/* Divider */}
-        <div style={{ borderTop: '1px solid var(--color-border)', margin: '64px 0' }} />
+        <FadeUp>
+          <div style={{ borderTop: '1px solid var(--color-border)', margin: '64px 0' }} />
+        </FadeUp>
+
+        {/* Showcase header */}
+        <FadeUp>
+          <p className="eyebrow" style={{ marginBottom: '24px' }}>What we build for you</p>
+        </FadeUp>
 
         {/* Product showcase */}
-        <p className="eyebrow" style={{ marginBottom: '24px' }}>What we build for you</p>
+        <Stagger className="showcase-grid" staggerChildren={0.15}>
 
-        <div className="showcase-grid">
           {/* Left: chat */}
-          <div style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', overflow: 'hidden', background: 'var(--color-bg-subtle)' }}>
+          <StaggerItem style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', overflow: 'hidden', background: 'var(--color-bg-subtle)' }}>
             <div style={{ padding: '14px 18px', borderBottom: '1px solid var(--color-border)', background: '#ffffff', display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'var(--color-brand)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, color: 'white', flexShrink: 0 }}>O</div>
               <div>
@@ -92,10 +114,10 @@ export function HowItWorksSection() {
                 </div>
               ))}
             </div>
-          </div>
+          </StaggerItem>
 
           {/* Right column */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <StaggerItem style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {/* Calendar */}
             <div style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', overflow: 'hidden', background: '#ffffff', flex: 1 }}>
               <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--color-border)', background: 'var(--color-bg-subtle)', display: 'flex', justifyContent: 'space-between' }}>
@@ -137,15 +159,15 @@ export function HowItWorksSection() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+          </StaggerItem>
+        </Stagger>
 
         {/* CTA */}
-        <div style={{ textAlign: 'center', marginTop: '40px' }}>
+        <FadeUp delay={0.1} style={{ textAlign: 'center', marginTop: '40px' }}>
           <Link href="/contact" className="btn-primary" style={{ padding: '14px 36px', fontSize: '15px' }}>
             Request a Demo
           </Link>
-        </div>
+        </FadeUp>
       </div>
 
       <style>{`

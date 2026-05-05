@@ -1,10 +1,42 @@
 'use client'
 
 import Link from 'next/link'
+import { motion } from 'framer-motion'
+import { EASE, useCountUp } from './motion'
+
+const HEADLINE = "Your business, running itself after hours."
+const WORDS = HEADLINE.split(" ")
+const WORD_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1]
+
+function StatItem({ value, label }: { value: string; label: string }) {
+  // Extract leading number and suffix (e.g. "62%" → 62, "%"; "24/7" → 24, "/7")
+  const match = value.match(/^(\d+)(.*)$/)
+  const target = match ? parseInt(match[1]) : 0
+  const suffix = match ? match[2] : value
+  const { ref, value: count } = useCountUp(target, 1.6)
+
+  return (
+    <div ref={ref} style={{ textAlign: 'center' }}>
+      <div style={{
+        fontSize: '28px',
+        fontWeight: 700,
+        color: 'var(--color-text-primary)',
+        fontVariantNumeric: 'tabular-nums',
+        lineHeight: 1,
+        marginBottom: '6px',
+      }}>
+        {match ? `${count}${suffix}` : value}
+      </div>
+      <div style={{ fontSize: '13px', color: 'var(--color-text-muted)', maxWidth: '160px' }}>
+        {label}
+      </div>
+    </div>
+  )
+}
 
 const stats = [
   { value: '62%', label: 'of calls go unanswered after hours' },
-  { value: '3x', label: 'more leads closed with fast response' },
+  { value: '3x',  label: 'more leads closed with fast response' },
   { value: '24/7', label: 'availability, zero extra headcount' },
 ]
 
@@ -14,7 +46,12 @@ export function HeroSection() {
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 48px' }}>
 
         {/* Badge */}
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '28px' }}>
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: EASE }}
+          style={{ display: 'flex', justifyContent: 'center', marginBottom: '28px' }}
+        >
           <span style={{
             background: 'var(--color-brand-muted)',
             color: 'var(--color-brand)',
@@ -27,9 +64,9 @@ export function HeroSection() {
           }}>
             AI-powered · Done for you
           </span>
-        </div>
+        </motion.div>
 
-        {/* Headline */}
+        {/* Headline — word-by-word reveal */}
         <h1 style={{
           fontSize: 'clamp(44px, 5.5vw, 64px)',
           fontWeight: 700,
@@ -39,50 +76,65 @@ export function HeroSection() {
           maxWidth: '720px',
           margin: '0 auto 20px',
         }}>
-          Your business, running itself after hours.
+          {WORDS.map((word, i) => (
+            <span
+              key={i}
+              style={{ display: 'inline-block', overflow: 'hidden', verticalAlign: 'bottom' }}
+            >
+              <motion.span
+                style={{ display: 'inline-block' }}
+                initial={{ y: '110%', opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{
+                  delay: 0.15 + i * 0.08,
+                  duration: 0.7,
+                  ease: WORD_EASE,
+                }}
+              >
+                {word}
+              </motion.span>
+              {i < WORDS.length - 1 && ' '}
+            </span>
+          ))}
         </h1>
 
         {/* Sub-line */}
-        <p style={{
-          fontSize: '18px',
-          color: 'var(--color-text-muted)',
-          lineHeight: 1.6,
-          maxWidth: '540px',
-          margin: '0 auto 40px',
-        }}>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.75, duration: 0.65, ease: EASE }}
+          style={{
+            fontSize: '18px',
+            color: 'var(--color-text-muted)',
+            lineHeight: 1.6,
+            maxWidth: '540px',
+            margin: '0 auto 40px',
+          }}
+        >
           We build custom AI agents that answer calls, book jobs, and handle customer questions — trained on your business, managed by our team.
-        </p>
+        </motion.p>
 
         {/* CTAs */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.9, duration: 0.65, ease: EASE }}
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}
+        >
           <Link href="/contact" className="btn-primary" style={{ padding: '14px 32px', fontSize: '15px' }}>
             Get Started
           </Link>
           <Link href="/contact" className="btn-ghost" style={{ padding: '13px 31px', fontSize: '15px' }}>
             Book a Demo
           </Link>
-        </div>
+        </motion.div>
 
-        {/* Stats */}
+        {/* Stats — count up on scroll into view */}
         <div className="hero-stats">
           {stats.map((stat, i) => (
             <div key={stat.value} style={{ display: 'contents' }}>
               {i > 0 && <div className="hero-stat-divider" />}
-              <div style={{ textAlign: 'center' }}>
-                <div style={{
-                  fontSize: '28px',
-                  fontWeight: 700,
-                  color: 'var(--color-text-primary)',
-                  fontVariantNumeric: 'tabular-nums',
-                  lineHeight: 1,
-                  marginBottom: '6px',
-                }}>
-                  {stat.value}
-                </div>
-                <div style={{ fontSize: '13px', color: 'var(--color-text-muted)', maxWidth: '160px' }}>
-                  {stat.label}
-                </div>
-              </div>
+              <StatItem value={stat.value} label={stat.label} />
             </div>
           ))}
         </div>
