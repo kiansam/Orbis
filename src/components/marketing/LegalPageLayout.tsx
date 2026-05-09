@@ -39,8 +39,8 @@ export default function LegalPageLayout({ title, badgeText, lastUpdated, childre
         <div style={{ maxWidth: '720px', margin: '0 auto', padding: '0 24px' }}>
           <p style={{ color: 'var(--color-text-muted)', fontSize: '15px', lineHeight: '1.7', marginBottom: '8px' }}>
             Questions about this policy? Contact us at{' '}
-            <a href="mailto:info@orbissolutions.ca" style={{ color: 'var(--color-brand)', textDecoration: 'underline' }}>
-              info@orbissolutions.ca
+            <a href="mailto:orbissolutions.ai@gmail.com" style={{ color: 'var(--color-brand)', textDecoration: 'underline' }}>
+              orbissolutions.ai@gmail.com
             </a>
           </p>
           <p style={{ color: 'var(--color-text-faint)', fontSize: '13px' }}>

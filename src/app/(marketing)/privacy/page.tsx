@@ -423,8 +423,8 @@ export default function PrivacyPage() {
         <strong style={{ color: 'var(--color-text-primary)' }}>Orbis Solutions</strong><br />
         Kelowna, British Columbia, Canada<br />
         Email:{' '}
-        <a href="mailto:info@orbissolutions.ca" style={{ color: 'var(--color-brand)', textDecoration: 'underline' }}>
-          info@orbissolutions.ca
+        <a href="mailto:orbissolutions.ai@gmail.com" style={{ color: 'var(--color-brand)', textDecoration: 'underline' }}>
+          orbissolutions.ai@gmail.com
         </a>
       </div>
       <p style={s.p}>

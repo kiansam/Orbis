@@ -4,7 +4,7 @@ import { useState, Suspense } from 'react'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { CheckCircle, GitFork } from 'lucide-react'
+import { CheckCircle } from 'lucide-react'
 import { signupSchema, SignupFormData } from '@/lib/validations'
 import { createClient } from '@/lib/supabase/client'
 import { useToast } from '@/hooks/use-toast'
@@ -38,11 +38,14 @@ function SignupContent() {
     setSubmitted(true)
   }
 
-  const handleOAuth = async (provider: 'google' | 'github') => {
+  const handleOAuth = async (provider: 'google' | 'azure') => {
     setOauthLoading(provider)
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+        scopes: provider === 'azure' ? 'email openid profile' : undefined,
+      },
     })
     if (error) {
       toast({ title: 'OAuth error', description: error.message, variant: 'destructive' })
@@ -149,9 +152,16 @@ function SignupContent() {
             ),
           },
           {
-            provider: 'github' as const,
-            label: 'GitHub',
-            icon: <GitFork style={{ width: '16px', height: '16px' }} />,
+            provider: 'azure' as const,
+            label: 'Microsoft',
+            icon: (
+              <svg style={{ width: '16px', height: '16px' }} viewBox="0 0 23 23">
+                <path fill="#f35325" d="M1 1h10v10H1z" />
+                <path fill="#81bc06" d="M12 1h10v10H12z" />
+                <path fill="#05a6f0" d="M1 12h10v10H1z" />
+                <path fill="#ffba08" d="M12 12h10v10H12z" />
+              </svg>
+            ),
           },
         ].map(({ provider, label, icon }) => (
           <button

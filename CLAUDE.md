@@ -20,7 +20,9 @@ stripe listen --forward-to localhost:3000/api/webhooks/stripe
 
 ### Database
 ```bash
-supabase db push   # Run pending migrations (migrations live in /supabase/migrations/)
+supabase db push        # Run pending migrations (migrations live in /supabase/migrations/)
+supabase db diff        # Preview SQL diff between local schema and remote
+supabase db reset       # Reset local DB and re-run all migrations (destructive)
 ```
 
 ### Firebase App Hosting (production deployment)
@@ -35,7 +37,7 @@ Orbis Solutions is a Next.js 16 App Router SaaS platform with Supabase (auth + P
 
 ### Route Groups
 - `(marketing)/` — public pages; layout has Navbar + Footer + ParticleBackground (tsparticles); content sits at `z-index: 1` above the particle canvas
-- `(auth)/` — login, signup, forgot/reset password; layout is a sticky BrandPanel (left half, desktop only) + centered form area (right half); BrandPanel hidden on mobile
+- `(auth)/` — login, signup, forgot/reset password; layout is a sticky BrandPanel (left half, desktop only) + centered form area (right half); BrandPanel hidden on mobile via inline `<style>` tag in the layout
 - `app/auth/callback/` — OAuth callback route (not inside the `(auth)` group); exchanges code for session and redirects to `/dashboard`
 - `dashboard/` — protected user portal; async layout fetches profile + subscription server-side; redirects to `/login` if unauthenticated
 - `admin/` — admin-only (requires `role = 'admin'` on the `profiles` row); layout re-checks admin role server-side; redirects non-admins to `/dashboard`
@@ -43,13 +45,22 @@ Orbis Solutions is a Next.js 16 App Router SaaS platform with Supabase (auth + P
 ### Middleware & Route Protection
 `src/middleware.ts` delegates to `src/proxy.ts`. The proxy skips Supabase entirely for public routes (`/`, `/about`, `/blog`, `/contact`, `/api/contact`, static assets) to avoid cold-start latency on Firebase Cloud Run. Protected routes (`/dashboard/*`, `/admin/*`) require authentication; `/admin/*` additionally requires `profiles.role = 'admin'`. Auth routes (`/login`, `/signup`, `/forgot-password`, `/reset-password`) redirect already-logged-in users to `/dashboard`.
 
+The admin role check is intentionally duplicated: once in `proxy.ts` (middleware) and once in `app/admin/layout.tsx` (server component). Both must remain — the layout is a defense-in-depth fallback.
+
 ### Supabase Client Usage
 Three separate clients must be used in the correct context:
 - `lib/supabase/client.ts` — browser (Client Components); `createBrowserClient()`
 - `lib/supabase/server.ts` — server (Server Components, API routes); `createServerClient()` with cookies; uses `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `lib/supabase/middleware.ts` — middleware only; refreshes session tokens; uses `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY` (different env var from anon key, though same value in production)
 
-Webhook handlers create an inline admin client using the **service role key** to bypass RLS when writing subscription data.
+Webhook handlers and privileged API routes create an **inline admin client** using `createServerClient` with `SUPABASE_SERVICE_ROLE_KEY` and no-op cookie handlers — this bypasses RLS. Do not use the shared server client for writes that need elevated privileges.
+
+### Dashboard Server vs Client Components
+The `dashboard/layout.tsx` is a Server Component that fetches auth + profile data and passes it down to the sidebar. Individual dashboard pages may be Server or Client Components:
+- Server pages (default): receive no props from the layout; fetch their own data with the server Supabase client
+- Client pages (marked `'use client'`): fetch their own data on mount via `useEffect` using the browser Supabase client (e.g., `settings/page.tsx`)
+
+The layout only passes `user`, `profile`, and `plan` to `DashboardSidebar` — inner pages must fetch their own data independently.
 
 ### Database Schema (Supabase PostgreSQL with RLS)
 - **profiles** — extends `auth.users`: `full_name`, `avatar_url`, `role` (user|admin), `is_suspended`
@@ -70,6 +81,8 @@ A public Supabase Storage bucket named `avatars` must exist for avatar uploads.
 
 Plan definitions and feature lists live in `lib/plans.ts`. `lib/stripe.ts` re-exports `PLANS` from `lib/plans.ts`, so you can import `PLANS` from either. Price IDs come from `STRIPE_STARTER_PRICE_ID` / `STRIPE_PRO_PRICE_ID`.
 
+`lib/stripe.ts` exports a lazy `stripe` singleton via ES `Proxy` — this defers instantiation to first use at request time so importing the module at build time doesn't crash. Always use `stripe` (server-side proxy) or `getStripe()` (client-side Stripe.js loader), never instantiate `new Stripe()` directly.
+
 ### Contact Form & Email
 POST `/api/contact` validates with Zod, inserts into `contact_submissions`, then fires two Resend emails (admin notification + user confirmation). Email failure is non-fatal and does not fail the request.
 
@@ -81,18 +94,27 @@ Blog posts are stored in the `posts` table and rendered server-side with `next-m
 - `lib/validations.ts` — Zod schemas for every form (login, signup, contact, profile, blog post, password change)
 - `lib/utils.ts` — `cn()`, `formatDate()`, `formatPrice()`
 - `lib/plans.ts` — client-safe plan definitions (names, prices, features); no Stripe SDK import
-- `lib/stripe.ts` — lazy Stripe singleton via ES `Proxy`; the proxy defers instantiation so importing this module at build time doesn't crash (Stripe requires a secret key at init); use `stripe` (server-side) or `getStripe()` (client-side); also re-exports `PLANS` from `lib/plans.ts`
 - `components/ui/` — shadcn/ui primitives; regenerate via `shadcn` CLI, do not edit directly
+
+### Animation System (Marketing Pages)
+`components/marketing/motion.tsx` exports reusable Framer Motion primitives — use these instead of writing raw `motion.*` components on marketing pages:
+- `<FadeUp>` — scroll-triggered fade + slide-up wrapper
+- `<Stagger>` / `<StaggerItem>` — staggered reveal for grids and lists
+- `useCountUp(target, duration)` — animates a number from 0 to `target` when scrolled into view
+- `staggerParent` / `childVariants` — raw variant objects for when you need a custom `motion.*` element inside a stagger container
+- `EASE` — shared cubic bezier `[0.25, 0.1, 0.25, 1]` used across all transitions
 
 ### Forms
 All forms use **React Hook Form + Zod**: `useForm` with `zodResolver(schema)`. Errors surface via shadcn `toast` from `hooks/use-toast.ts`.
 
 ### Styling & Design Tokens
 The design system uses CSS custom properties defined in `globals.css`. There are two layers:
-- **New tokens** (`--color-*`, `--radius-*`) — canonical design values
+- **New tokens** (`--color-*`, `--radius-*`) — canonical design values; used in marketing pages
 - **Legacy aliases** (`--bg-*`, `--text-*`, `--border-*`, `--accent-*`, `--r-*`, `--t-*`) — used throughout dashboard and auth components
 
-Brand color: `#4169FF` (`--color-brand`). Font: Plus Jakarta Sans via `--font-sans`. Do not mix Tailwind color utilities with these CSS var tokens on the same element.
+Marketing pages predominantly use **inline `style={{}}` with CSS var references** (e.g., `style={{ color: 'var(--color-brand)' }}`), not Tailwind utility classes. Dashboard and admin pages use the legacy CSS class aliases (e.g., `className="bg-background-card border-border"`). Do not mix Tailwind color utilities with CSS var tokens on the same element.
+
+Brand color: `#4169FF` (`--color-brand`). Font: Plus Jakarta Sans via `--font-sans`.
 
 ### OAuth Setup
 Enable Google and GitHub OAuth providers in Supabase dashboard → Authentication → Providers. Set Site URL to `http://localhost:3000` and add `http://localhost:3000/auth/callback` to Redirect URLs.

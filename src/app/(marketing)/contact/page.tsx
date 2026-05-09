@@ -8,7 +8,7 @@ import { contactSchema, ContactFormData } from '@/lib/validations'
 import { useToast } from '@/hooks/use-toast'
 
 const contactInfo = [
-  { icon: Mail, title: 'Email Us', value: 'hello@orbissolutions.ca', sub: 'We respond within 24 hours' },
+  { icon: Mail, title: 'Email Us', value: 'orbissolutions.ai@gmail.com', sub: 'We respond within 24 hours' },
   { icon: Clock, title: 'Business Hours', value: 'Mon–Fri, 9am–6pm PST', sub: 'We will follow up the same day' },
 ]
 

@@ -56,6 +56,7 @@ export default async function BlogPage() {
               {typedPosts.map((post) => (
                 <Link key={post.id} href={`/blog/${post.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
                   <article
+                    className="blog-card"
                     style={{
                       padding: '28px',
                       background: 'var(--bg-surface)',
@@ -63,8 +64,6 @@ export default async function BlogPage() {
                       borderRadius: 'var(--r-lg)',
                       transition: 'border-color var(--t-base)',
                     }}
-                    onMouseEnter={e => ((e.currentTarget as HTMLElement).style.borderColor = 'var(--border-bright)')}
-                    onMouseLeave={e => ((e.currentTarget as HTMLElement).style.borderColor = 'var(--border-base)')}
                   >
                     {post.tags && post.tags.length > 0 && (
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '16px' }}>
@@ -117,6 +116,7 @@ export default async function BlogPage() {
           )}
         </div>
       </section>
+      <style>{`.blog-card:hover { border-color: var(--border-bright) !important; }`}</style>
     </div>
   )
 }

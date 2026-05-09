@@ -108,6 +108,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               {/* Back */}
               <Link
                 href="/blog"
+                className="blog-back-link"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -118,8 +119,6 @@ export default async function BlogPostPage({ params }: PageProps) {
                   textDecoration: 'none',
                   transition: 'color var(--t-fast)',
                 }}
-                onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.color = 'var(--accent-hex)')}
-                onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-secondary)')}
               >
                 <ArrowLeft style={{ width: '16px', height: '16px' }} />
                 Back to Blog
@@ -230,6 +229,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               {relatedPosts.map((related) => (
                 <Link key={related.id} href={`/blog/${related.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
                   <div
+                    className="blog-card"
                     style={{
                       padding: '20px',
                       height: '100%',
@@ -238,8 +238,6 @@ export default async function BlogPostPage({ params }: PageProps) {
                       borderRadius: 'var(--r-lg)',
                       transition: 'border-color var(--t-base)',
                     }}
-                    onMouseEnter={e => ((e.currentTarget as HTMLElement).style.borderColor = 'var(--border-bright)')}
-                    onMouseLeave={e => ((e.currentTarget as HTMLElement).style.borderColor = 'var(--border-base)')}
                   >
                     {related.tags && related.tags.length > 0 && (
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '12px' }}>
@@ -300,6 +298,8 @@ export default async function BlogPostPage({ params }: PageProps) {
         @media (max-width: 600px) {
           .related-grid { grid-template-columns: 1fr !important; }
         }
+        .blog-card:hover { border-color: var(--border-bright) !important; }
+        .blog-back-link:hover { color: var(--accent-hex) !important; }
       `}</style>
     </div>
   )
