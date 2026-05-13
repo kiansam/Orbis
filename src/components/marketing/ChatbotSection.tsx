@@ -2,22 +2,14 @@
 
 import { useEffect } from 'react'
 
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'n8nchatui-inpage': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
-    }
-  }
-}
-
-export function ChatbotSection() {
+export function FloatingChatbot() {
   useEffect(() => {
     const script = document.createElement('script')
     script.type = 'module'
     script.defer = true
     script.innerHTML = `
       import Chatbot from "https://cdn.n8nchatui.com/v1/embed.js";
-      Chatbot.initFull({
+      Chatbot.init({
         "n8nChatUrl": "https://n8n.orbissolutions.ca/webhook/5ba0f854-d981-41b3-a37f-4b7ab3530a1d/chat",
         "metadata": {},
         "theme": {
@@ -34,7 +26,7 @@ export function ChatbotSection() {
             "titleAvatarSrc": "https://cdn.corenexis.com/files/c/8289462720.png",
             "avatarSize": 43,
             "welcomeMessage": "Hi there! I can get you booked in for a free demo, or answer any questions you have about what we do. What can I help you with?",
-            "errorMessage": "Sorry! Running into some technical issues.  Please feel free to reach out to us directly at orbissolutions.ai@gmail.com.",
+            "errorMessage": "Sorry! Running into some technical issues. Please feel free to reach out to us directly at orbissolutions.ai@gmail.com.",
             "backgroundColor": "#ffffff",
             "height": 0,
             "width": 0,
@@ -81,15 +73,5 @@ export function ChatbotSection() {
     }
   }, [])
 
-  return (
-    <section className="orbis-chat-page">
-      <div className="orbis-left-half" />
-      <div className="orbis-right-half">
-        <div className="orbis-chat-wrapper">
-          <n8nchatui-inpage />
-          <div className="orbis-footer-cover-bar" aria-hidden="true" />
-        </div>
-      </div>
-    </section>
-  )
+  return null
 }

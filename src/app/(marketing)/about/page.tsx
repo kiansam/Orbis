@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Target, Lightbulb, Heart, Shield, Zap, Globe, Brain, Wrench, Rocket } from "lucide-react";
 import { FadeUp, Stagger, StaggerItem } from "@/components/marketing/motion";
-import { ChatbotSection } from "@/components/marketing/ChatbotSection";
 
 export const metadata: Metadata = {
   title: "About Orbis Solutions",
@@ -68,7 +67,6 @@ const values = [
 
 export default function AboutPage() {
   return (
-    <>
     <div>
       {/* Hero */}
       <section style={{ padding: "120px 0 80px", background: "var(--color-bg)" }}>
@@ -389,7 +387,5 @@ export default function AboutPage() {
         }
       `}</style>
     </div>
-    <ChatbotSection />
-  </>
   );
 }
