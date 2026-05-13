@@ -2,44 +2,32 @@
 
 import { useEffect } from 'react'
 
+function hideEl(el: Element | null) {
+  if (!el) return
+  const target = el.closest('span') ?? el
+  ;(target as HTMLElement).style.setProperty('display', 'none', 'important')
+  ;(target as HTMLElement).style.setProperty('height', '0', 'important')
+  ;(target as HTMLElement).style.setProperty('overflow', 'hidden', 'important')
+}
+
 function hideBranding() {
-  document.querySelectorAll<HTMLElement>('*').forEach(el => {
-    const text = el.textContent?.trim() ?? ''
-    if (text.includes('n8nchatui') || text.includes('n8nChatUI')) {
-      // Walk up to hide the nearest block-level ancestor
-      let target: HTMLElement = el
-      while (
-        target.parentElement &&
-        target.parentElement !== document.body &&
-        (target.parentElement.textContent?.trim() ?? '').includes('n8nchatui')
-      ) {
-        target = target.parentElement
-      }
-      target.style.setProperty('display', 'none', 'important')
-    }
-  })
+  const host = document.querySelector('n8nchatui-popup')
+  const root = host?.shadowRoot
+
+  if (root) {
+    hideEl(root.getElementById('lite-badge'))
+    hideEl(root.querySelector('a[href*="n8nchatui"]'))
+  } else {
+    hideEl(document.getElementById('lite-badge'))
+    hideEl(document.querySelector('a[href*="n8nchatui"]'))
+  }
 }
 
 export function FloatingChatbot() {
   useEffect(() => {
-    const style = document.createElement('style')
-    style.innerHTML = `
-      [class*="n8n-chat-footer"],
-      [class*="chat-footer"],
-      [class*="powered-by"],
-      [class*="poweredBy"],
-      [class*="branding"],
-      [class*="footer-link"],
-      [class*="footerLink"] {
-        display: none !important;
-      }
-    `
-    document.head.appendChild(style)
-
     const observer = new MutationObserver(hideBranding)
     observer.observe(document.body, { childList: true, subtree: true })
 
-    // Sweep a few times after the widget finishes loading
     const t1 = setTimeout(hideBranding, 500)
     const t2 = setTimeout(hideBranding, 1500)
     const t3 = setTimeout(hideBranding, 3000)
@@ -114,7 +102,6 @@ export function FloatingChatbot() {
       clearTimeout(t2)
       clearTimeout(t3)
       observer.disconnect()
-      if (document.head.contains(style)) document.head.removeChild(style)
       if (document.body.contains(script)) document.body.removeChild(script)
     }
   }, [])
