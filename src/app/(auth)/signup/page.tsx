@@ -28,7 +28,7 @@ function SignupContent() {
       password: data.password,
       options: {
         data: { full_name: data.full_name },
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/auth/callback`,
       },
     })
     if (error) {
@@ -43,7 +43,7 @@ function SignupContent() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/auth/callback`,
         scopes: provider === 'azure' ? 'email openid profile' : undefined,
       },
     })

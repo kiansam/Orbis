@@ -42,7 +42,7 @@ function LoginContent() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=${redirectTo}`,
+        redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/auth/callback?next=${redirectTo}`,
         scopes: provider === 'azure' ? 'email openid profile' : undefined,
       },
     })

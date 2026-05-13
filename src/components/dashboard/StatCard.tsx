@@ -1,14 +1,16 @@
-import { LucideIcon } from 'lucide-react'
+'use client'
+
+import { ReactNode } from 'react'
 
 interface StatCardProps {
-  icon: LucideIcon
+  icon: ReactNode
   label: string
   value: string | number
   change?: number
   changeLabel?: string
 }
 
-export function StatCard({ icon: Icon, label, value, change, changeLabel }: StatCardProps) {
+export function StatCard({ icon, label, value, change, changeLabel }: StatCardProps) {
   const isPositive = (change ?? 0) >= 0
 
   return (
@@ -29,7 +31,7 @@ export function StatCard({ icon: Icon, label, value, change, changeLabel }: Stat
     >
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '16px' }}>
         <div className="icon-box">
-          <Icon style={{ width: '18px', height: '18px' }} />
+          {icon}
         </div>
         {change !== undefined && (
           <span

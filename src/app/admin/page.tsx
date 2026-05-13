@@ -31,35 +31,35 @@ export default async function AdminPage() {
 
   const stats = [
     {
-      icon: Users,
+      icon: <Users style={{ width: '18px', height: '18px' }} />,
       label: 'Total Users',
       value: totalUsers || 0,
       change: 12,
       changeLabel: 'vs last month',
     },
     {
-      icon: CreditCard,
+      icon: <CreditCard style={{ width: '18px', height: '18px' }} />,
       label: 'Active Subscriptions',
       value: activeSubscriptions || 0,
       change: 8,
       changeLabel: 'vs last month',
     },
     {
-      icon: DollarSign,
+      icon: <DollarSign style={{ width: '18px', height: '18px' }} />,
       label: 'MRR (Mock)',
       value: '$4,280',
       change: 15,
       changeLabel: 'vs last month',
     },
     {
-      icon: FileText,
+      icon: <FileText style={{ width: '18px', height: '18px' }} />,
       label: 'Published Posts',
       value: publishedPosts || 0,
       change: 33,
       changeLabel: 'vs last month',
     },
     {
-      icon: Activity,
+      icon: <Activity style={{ width: '18px', height: '18px' }} />,
       label: 'Contact Submissions',
       value: contactSubmissions || 0,
       change: 5,

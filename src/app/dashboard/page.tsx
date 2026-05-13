@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { StatCard } from '@/components/dashboard/StatCard'
+import { QuickActions } from '@/components/dashboard/QuickActions'
 import {
   FolderKanban,
   Zap,
@@ -10,15 +11,14 @@ import {
   Clock,
   Star,
   FileText,
-  ArrowUpRight,
 } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
 
 const mockStats = [
-  { icon: FolderKanban, label: 'Active Projects', value: '3', change: 50, changeLabel: 'vs last month' },
-  { icon: Zap, label: 'API Calls (30d)', value: '12,847', change: 23, changeLabel: 'vs last month' },
-  { icon: HardDrive, label: 'Storage Used', value: '2.4 GB', change: -8, changeLabel: 'of 10 GB' },
-  { icon: Users, label: 'Team Members', value: '5', change: 25, changeLabel: 'vs last month' },
+  { icon: <FolderKanban style={{ width: '18px', height: '18px' }} />, label: 'Active Projects', value: '3', change: 50, changeLabel: 'vs last month' },
+  { icon: <Zap style={{ width: '18px', height: '18px' }} />, label: 'API Calls (30d)', value: '12,847', change: 23, changeLabel: 'vs last month' },
+  { icon: <HardDrive style={{ width: '18px', height: '18px' }} />, label: 'Storage Used', value: '2.4 GB', change: -8, changeLabel: 'of 10 GB' },
+  { icon: <Users style={{ width: '18px', height: '18px' }} />, label: 'Team Members', value: '5', change: 25, changeLabel: 'vs last month' },
 ]
 
 const mockActivities = [
@@ -60,9 +60,9 @@ const mockActivities = [
 ]
 
 const quickActions = [
-  { title: 'Create New Project', description: 'Start a new AI consulting project', icon: FolderKanban, href: '/dashboard/projects' },
-  { title: 'View Analytics', description: 'See insights and performance metrics', icon: Zap, href: '/dashboard/analytics' },
-  { title: 'Invite Team', description: 'Collaborate with your colleagues', icon: Users, href: '/dashboard/settings' },
+  { title: 'Create New Project', description: 'Start a new AI consulting project', icon: <FolderKanban style={{ width: '18px', height: '18px' }} />, href: '/dashboard/projects' },
+  { title: 'View Analytics', description: 'See insights and performance metrics', icon: <Zap style={{ width: '18px', height: '18px' }} />, href: '/dashboard/analytics' },
+  { title: 'Invite Team', description: 'Collaborate with your colleagues', icon: <Users style={{ width: '18px', height: '18px' }} />, href: '/dashboard/settings' },
 ]
 
 export default async function DashboardPage() {
@@ -161,48 +161,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Quick Actions */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <h2 style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text-primary)' }}>Quick Actions</h2>
-          {quickActions.map((action, i) => (
-            <a
-              key={i}
-              href={action.href}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '14px',
-                background: 'var(--bg-surface)',
-                border: '1px solid var(--border-base)',
-                borderRadius: 'var(--r-lg)',
-                padding: '18px 20px',
-                textDecoration: 'none',
-                transition: 'border-color var(--t-base), background var(--t-base), transform var(--t-fast)',
-                cursor: 'pointer',
-              }}
-              onMouseEnter={e => {
-                const el = e.currentTarget as HTMLAnchorElement
-                el.style.borderColor = 'var(--accent-border)'
-                el.style.background = 'var(--bg-elevated)'
-                el.style.transform = 'translateY(-1px)'
-              }}
-              onMouseLeave={e => {
-                const el = e.currentTarget as HTMLAnchorElement
-                el.style.borderColor = 'var(--border-base)'
-                el.style.background = 'var(--bg-surface)'
-                el.style.transform = 'translateY(0)'
-              }}
-            >
-              <div className="icon-box" style={{ flexShrink: 0 }}>
-                <action.icon style={{ width: '18px', height: '18px' }} />
-              </div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)' }}>{action.title}</div>
-                <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>{action.description}</div>
-              </div>
-              <ArrowUpRight style={{ width: '14px', height: '14px', color: 'var(--text-muted)' }} />
-            </a>
-          ))}
-        </div>
+        <QuickActions actions={quickActions} />
       </div>
 
       <style>{`
