@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { formatDate } from '@/lib/utils'
 import { Post } from '@/lib/types'
+import { ChatbotSection } from '@/components/marketing/ChatbotSection'
 import { Calendar, Clock, Tag } from 'lucide-react'
 
 export const metadata: Metadata = {
@@ -27,6 +28,7 @@ export default async function BlogPage() {
   }
 
   return (
+    <>
     <div style={{ background: 'var(--bg-base)', paddingTop: '64px' }}>
 
       {/* Hero */}
@@ -118,5 +120,7 @@ export default async function BlogPage() {
       </section>
       <style>{`.blog-card:hover { border-color: var(--border-bright) !important; }`}</style>
     </div>
+    <ChatbotSection />
+    </>
   )
 }

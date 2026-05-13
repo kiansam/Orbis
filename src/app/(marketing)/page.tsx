@@ -4,6 +4,7 @@ import { HowItWorksSection } from '@/components/marketing/HowItWorksSection'
 import { WhyOrbisSection } from '@/components/marketing/WhyOrbisSection'
 import { FAQSection } from '@/components/marketing/FAQSection'
 import { FinalCTASection } from '@/components/marketing/FinalCTASection'
+import { ChatbotSection } from '@/components/marketing/ChatbotSection'
 
 export default function HomePage() {
   return (
@@ -14,6 +15,7 @@ export default function HomePage() {
       <WhyOrbisSection />
       <FAQSection />
       <FinalCTASection />
+      <ChatbotSection />
     </>
   )
 }
