@@ -2,35 +2,47 @@
 
 import { useEffect } from 'react'
 
+function hideBranding() {
+  document.querySelectorAll<HTMLElement>('*').forEach(el => {
+    const text = el.textContent?.trim() ?? ''
+    if (text.includes('n8nchatui') || text.includes('n8nChatUI')) {
+      // Walk up to hide the nearest block-level ancestor
+      let target: HTMLElement = el
+      while (
+        target.parentElement &&
+        target.parentElement !== document.body &&
+        (target.parentElement.textContent?.trim() ?? '').includes('n8nchatui')
+      ) {
+        target = target.parentElement
+      }
+      target.style.setProperty('display', 'none', 'important')
+    }
+  })
+}
+
 export function FloatingChatbot() {
   useEffect(() => {
-    // Inject CSS to hide n8n branding — targets common class patterns and
-    // falls back to a text-content match via MutationObserver
     const style = document.createElement('style')
     style.innerHTML = `
       [class*="n8n-chat-footer"],
       [class*="chat-footer"],
       [class*="powered-by"],
       [class*="poweredBy"],
-      [class*="branding"] {
+      [class*="branding"],
+      [class*="footer-link"],
+      [class*="footerLink"] {
         display: none !important;
       }
     `
     document.head.appendChild(style)
 
-    // MutationObserver catches any branding element the CSS selectors miss
-    const observer = new MutationObserver(() => {
-      document.querySelectorAll('*').forEach(el => {
-        if (
-          el.children.length === 0 &&
-          el.textContent &&
-          (el.textContent.includes('n8nchatui') || el.textContent.includes('n8n'))
-        ) {
-          (el as HTMLElement).style.display = 'none'
-        }
-      })
-    })
+    const observer = new MutationObserver(hideBranding)
     observer.observe(document.body, { childList: true, subtree: true })
+
+    // Sweep a few times after the widget finishes loading
+    const t1 = setTimeout(hideBranding, 500)
+    const t2 = setTimeout(hideBranding, 1500)
+    const t3 = setTimeout(hideBranding, 3000)
 
     const script = document.createElement('script')
     script.type = 'module'
@@ -98,6 +110,9 @@ export function FloatingChatbot() {
     document.body.appendChild(script)
 
     return () => {
+      clearTimeout(t1)
+      clearTimeout(t2)
+      clearTimeout(t3)
       observer.disconnect()
       if (document.head.contains(style)) document.head.removeChild(style)
       if (document.body.contains(script)) document.body.removeChild(script)
