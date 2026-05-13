@@ -4,6 +4,34 @@ import { useEffect } from 'react'
 
 export function FloatingChatbot() {
   useEffect(() => {
+    // Inject CSS to hide n8n branding — targets common class patterns and
+    // falls back to a text-content match via MutationObserver
+    const style = document.createElement('style')
+    style.innerHTML = `
+      [class*="n8n-chat-footer"],
+      [class*="chat-footer"],
+      [class*="powered-by"],
+      [class*="poweredBy"],
+      [class*="branding"] {
+        display: none !important;
+      }
+    `
+    document.head.appendChild(style)
+
+    // MutationObserver catches any branding element the CSS selectors miss
+    const observer = new MutationObserver(() => {
+      document.querySelectorAll('*').forEach(el => {
+        if (
+          el.children.length === 0 &&
+          el.textContent &&
+          (el.textContent.includes('n8nchatui') || el.textContent.includes('n8n'))
+        ) {
+          (el as HTMLElement).style.display = 'none'
+        }
+      })
+    })
+    observer.observe(document.body, { childList: true, subtree: true })
+
     const script = document.createElement('script')
     script.type = 'module'
     script.defer = true
@@ -68,7 +96,10 @@ export function FloatingChatbot() {
       });
     `
     document.body.appendChild(script)
+
     return () => {
+      observer.disconnect()
+      if (document.head.contains(style)) document.head.removeChild(style)
       if (document.body.contains(script)) document.body.removeChild(script)
     }
   }, [])
