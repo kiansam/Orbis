@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Send, Mail, Clock, CheckCircle, MessageSquare, FileText } from 'lucide-react'
@@ -14,14 +14,77 @@ const contactInfo = [
 
 type Tab = 'chat' | 'form'
 
-// Module-level: persists across client-side navigations so initFull is only called once.
-let persistedChatEl: HTMLElement | null = null
+// Runs inside the iframe's own JS context — completely isolated from FloatingChatbot.
+const CHATBOT_HTML = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>html,body{margin:0;padding:0;height:100%;overflow:hidden;}</style>
+</head>
+<body>
+  <n8nchatui-inpage></n8nchatui-inpage>
+  <div style="position:absolute;left:0;right:0;bottom:0;height:34px;background:#ffffff;z-index:2147483647;pointer-events:none;"></div>
+  <script type="module">
+    import Chatbot from "https://cdn.n8nchatui.com/v1/embed.js";
+    Chatbot.initFull({
+      "n8nChatUrl": "https://n8n.orbissolutions.ca/webhook/5ba0f854-d981-41b3-a37f-4b7ab3530a1d/chat",
+      "metadata": {},
+      "theme": {
+        "button": { "iconColor": "#fff9f6", "backgroundColor": "#4169FF" },
+        "chatWindow": {
+          "borderRadiusStyle": "rounded",
+          "avatarBorderRadius": 50,
+          "messageBorderRadius": 6,
+          "showTitle": true,
+          "title": "Orbis Solutions ChatBot",
+          "titleAvatarSrc": "https://cdn.corenexis.com/files/c/8289462720.png",
+          "avatarSize": 43,
+          "welcomeMessage": "Hi there! I can get you booked in for a free demo, or answer any questions you have about what we do. What can I help you with?",
+          "errorMessage": "Sorry! Running into some technical issues. Please feel free to reach out to us directly at orbissolutions.ai@gmail.com.",
+          "backgroundColor": "#ffffff",
+          "height": 0,
+          "width": 0,
+          "fontSize": 18,
+          "starterPrompts": ["I'd like to book a free live demo", "I have questions about Orbis' services"],
+          "starterPromptFontSize": 18,
+          "renderHTML": false,
+          "clearChatOnReload": true,
+          "showScrollbar": true,
+          "botMessage": {
+            "backgroundColor": "#4169FF",
+            "textColor": "#fafafa",
+            "showAvatar": true,
+            "avatarSrc": "https://cdn.corenexis.com/files/c/1119434720.png",
+            "showCopyToClipboardIcon": false
+          },
+          "userMessage": {
+            "backgroundColor": "#fff6f3",
+            "textColor": "#050505",
+            "showAvatar": false,
+            "avatarSrc": "https://www.svgrepo.com/show/532363/user-alt-1.svg"
+          },
+          "textInput": {
+            "placeholder": "Type your query",
+            "backgroundColor": "#ffffff",
+            "textColor": "#1e1e1f",
+            "sendButtonColor": "#4169FF",
+            "maxChars": 300,
+            "maxCharsWarningMessage": "You exceeded the characters limit. Please input less than 300 characters.",
+            "autoFocus": false,
+            "borderRadius": 6,
+            "sendButtonBorderRadius": 50
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>`
 
 export default function ContactPage() {
   const [tab, setTab] = useState<Tab>('chat')
   const [submitted, setSubmitted] = useState(false)
   const { toast } = useToast()
-  const chatContainerRef = useRef<HTMLDivElement>(null)
 
   const {
     register,
@@ -29,89 +92,6 @@ export default function ContactPage() {
     formState: { errors, isSubmitting },
     reset,
   } = useForm<ContactFormData>({ resolver: zodResolver(contactSchema) })
-
-  useEffect(() => {
-    const container = chatContainerRef.current
-    if (!container) return
-
-    if (!persistedChatEl) {
-      // First ever visit: create the element and call initFull once.
-      persistedChatEl = document.createElement('n8nchatui-inpage')
-      persistedChatEl.style.cssText = 'width:100%;height:100%;display:block;'
-      container.appendChild(persistedChatEl)
-
-      const script = document.createElement('script')
-      script.type = 'module'
-      script.innerHTML = `
-        import Chatbot from "https://cdn.n8nchatui.com/v1/embed.js";
-        Chatbot.initFull({
-          "n8nChatUrl": "https://n8n.orbissolutions.ca/webhook/5ba0f854-d981-41b3-a37f-4b7ab3530a1d/chat",
-          "metadata": {},
-          "theme": {
-            "button": { "iconColor": "#fff9f6", "backgroundColor": "#4169FF" },
-            "chatWindow": {
-              "borderRadiusStyle": "rounded",
-              "avatarBorderRadius": 50,
-              "messageBorderRadius": 6,
-              "showTitle": true,
-              "title": "Orbis Solutions ChatBot",
-              "titleAvatarSrc": "https://cdn.corenexis.com/files/c/8289462720.png",
-              "avatarSize": 43,
-              "welcomeMessage": "Hi there! I can get you booked in for a free demo, or answer any questions you have about what we do. What can I help you with?",
-              "errorMessage": "Sorry! Running into some technical issues. Please feel free to reach out to us directly at orbissolutions.ai@gmail.com.",
-              "backgroundColor": "#ffffff",
-              "height": 0,
-              "width": 0,
-              "fontSize": 18,
-              "starterPrompts": ["I'd like to book a free live demo", "I have questions about Orbis' services"],
-              "starterPromptFontSize": 18,
-              "renderHTML": false,
-              "clearChatOnReload": true,
-              "showScrollbar": true,
-              "botMessage": {
-                "backgroundColor": "#4169FF",
-                "textColor": "#fafafa",
-                "showAvatar": true,
-                "avatarSrc": "https://cdn.corenexis.com/files/c/1119434720.png",
-                "showCopyToClipboardIcon": false
-              },
-              "userMessage": {
-                "backgroundColor": "#fff6f3",
-                "textColor": "#050505",
-                "showAvatar": false,
-                "avatarSrc": "https://www.svgrepo.com/show/532363/user-alt-1.svg"
-              },
-              "textInput": {
-                "placeholder": "Type your query",
-                "backgroundColor": "#ffffff",
-                "textColor": "#1e1e1f",
-                "sendButtonColor": "#4169FF",
-                "maxChars": 300,
-                "maxCharsWarningMessage": "You exceeded the characters limit. Please input less than 300 characters.",
-                "autoFocus": false,
-                "borderRadius": 6,
-                "sendButtonBorderRadius": 50
-              }
-            }
-          }
-        });
-      `
-      document.body.appendChild(script)
-    } else {
-      // Returning via client-side nav: reattach the already-initialized element.
-      persistedChatEl.style.display = 'block'
-      container.appendChild(persistedChatEl)
-    }
-
-    return () => {
-      // On unmount, move the element to body (hidden) so the chatbot stays
-      // alive and initFull doesn't need to be called again on return.
-      if (persistedChatEl && container.contains(persistedChatEl)) {
-        persistedChatEl.style.display = 'none'
-        document.body.appendChild(persistedChatEl)
-      }
-    }
-  }, [])
 
   const onSubmit = async (data: ContactFormData) => {
     try {
@@ -210,35 +190,22 @@ export default function ContactPage() {
       {/* Tab content */}
       <section style={{ padding: '0 24px 96px' }}>
 
-        {/* Chatbot tab — always mounted (display:none when inactive) so initFull doesn't re-run */}
+        {/* Chatbot tab */}
         <div style={{ display: tab === 'chat' ? 'flex' : 'none', justifyContent: 'center' }}>
           <div
             style={{
               width: '100%',
               maxWidth: '860px',
               height: '750px',
-              position: 'relative',
-              background: '#ffffff',
-              overflow: 'hidden',
               borderRadius: '12px',
               border: '1px solid var(--border-base)',
+              overflow: 'hidden',
             }}
           >
-            {/* n8nchatui-inpage is inserted here programmatically in useEffect */}
-            <div ref={chatContainerRef} style={{ width: '100%', height: '100%' }} />
-            {/* Covers the n8n branding footer */}
-            <div
-              aria-hidden="true"
-              style={{
-                position: 'absolute',
-                left: 0,
-                right: 0,
-                bottom: 0,
-                height: '34px',
-                background: '#ffffff',
-                zIndex: 2147483647,
-                pointerEvents: 'none',
-              }}
+            <iframe
+              srcDoc={CHATBOT_HTML}
+              style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
+              title="Orbis Solutions ChatBot"
             />
           </div>
         </div>
