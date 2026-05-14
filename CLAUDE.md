@@ -36,7 +36,7 @@ Secrets managed via Firebase: `SUPABASE_SERVICE_ROLE_KEY`, `STRIPE_SECRET_KEY`, 
 Orbis Solutions is a Next.js 16 App Router SaaS platform with Supabase (auth + PostgreSQL) and Stripe subscriptions. It is deployed on Firebase App Hosting (see `apphosting.yaml`).
 
 ### Route Groups
-- `(marketing)/` — public pages; layout has Navbar + Footer + ParticleBackground (tsparticles); content sits at `z-index: 1` above the particle canvas
+- `(marketing)/` — public pages; layout has Navbar + Footer + ParticleBackground (tsparticles) + FloatingChatbot; content sits at `z-index: 1` above the particle canvas
 - `(auth)/` — login, signup, forgot/reset password; layout is a sticky BrandPanel (left half, desktop only) + centered form area (right half); BrandPanel hidden on mobile via inline `<style>` tag in the layout
 - `app/auth/callback/` — OAuth callback route (not inside the `(auth)` group); exchanges code for session and redirects to `/dashboard`
 - `dashboard/` — protected user portal; async layout fetches profile + subscription server-side; redirects to `/login` if unauthenticated
@@ -53,7 +53,7 @@ Three separate clients must be used in the correct context:
 - `lib/supabase/server.ts` — server (Server Components, API routes); `createServerClient()` with cookies; uses `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `lib/supabase/middleware.ts` — middleware only; refreshes session tokens; uses `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY` (different env var from anon key, though same value in production)
 
-Webhook handlers and privileged API routes create an **inline admin client** using `createServerClient` with `SUPABASE_SERVICE_ROLE_KEY` and no-op cookie handlers — this bypasses RLS. Do not use the shared server client for writes that need elevated privileges.
+Webhook handlers and privileged API routes create an **inline admin client** using `createServerClient` with `SUPABASE_SERVICE_ROLE_KEY` and no-op cookie handlers — this bypasses RLS. Do not use the shared server client for writes that need elevated privileges. Admin pages follow this same pattern with a local `getAdminClient()` helper.
 
 ### Dashboard Server vs Client Components
 The `dashboard/layout.tsx` is a Server Component that fetches auth + profile data and passes it down to the sidebar. Individual dashboard pages may be Server or Client Components:
@@ -62,10 +62,12 @@ The `dashboard/layout.tsx` is a Server Component that fetches auth + profile dat
 
 The layout only passes `user`, `profile`, and `plan` to `DashboardSidebar` — inner pages must fetch their own data independently.
 
+Server pages use `Promise.all()` for parallel queries. Client pages (e.g. settings) manage multiple forms with isolated `useState`/`useEffect` and `Promise.all()` for parallel initial fetches. Both rely on toast for error feedback.
+
 ### Database Schema (Supabase PostgreSQL with RLS)
 - **profiles** — extends `auth.users`: `full_name`, `avatar_url`, `role` (user|admin), `is_suspended`
 - **subscriptions** — Stripe plan tracking: `plan` (free|starter|pro|enterprise), `status`, `stripe_customer_id`, `stripe_subscription_id`, `current_period_end`
-- **posts** — blog CMS: `title`, `slug` (unique), `content`, `excerpt`, `cover_image`, `tags[]`, `is_published`
+- **posts** — blog CMS: `title`, `slug` (unique), `content`, `excerpt`, `cover_image`, `tags[]`, `is_published`, `published_at`
 - **contact_submissions** — contact form inbox
 - **notification_preferences** — per-user email opt-ins
 
@@ -81,17 +83,23 @@ A public Supabase Storage bucket named `avatars` must exist for avatar uploads.
 
 Plan definitions and feature lists live in `lib/plans.ts`. `lib/stripe.ts` re-exports `PLANS` from `lib/plans.ts`, so you can import `PLANS` from either. Price IDs come from `STRIPE_STARTER_PRICE_ID` / `STRIPE_PRO_PRICE_ID`.
 
-`lib/stripe.ts` exports a lazy `stripe` singleton via ES `Proxy` — this defers instantiation to first use at request time so importing the module at build time doesn't crash. Always use `stripe` (server-side proxy) or `getStripe()` (client-side Stripe.js loader), never instantiate `new Stripe()` directly.
+`lib/stripe.ts` exports a lazy `stripe` singleton via ES `Proxy` — this defers instantiation to first use at request time so importing the module at build time doesn't crash on Firebase App Hosting. Always use `stripe` (server-side proxy) or `getStripe()` (client-side Stripe.js loader), never instantiate `new Stripe()` directly.
 
 ### Contact Form & Email
 POST `/api/contact` validates with Zod, inserts into `contact_submissions`, then fires two Resend emails (admin notification + user confirmation). Email failure is non-fatal and does not fail the request.
 
 ### Blog (MDX)
-Blog posts are stored in the `posts` table and rendered server-side with `next-mdx-remote`. The blog post page uses ISR (`export const revalidate = 60`). The admin CMS at `/admin/blog` handles create/edit/publish.
+Blog posts are stored in the `posts` table and rendered server-side with `next-mdx-remote`. The blog post page uses ISR (`export const revalidate = 60`). The admin CMS at `/admin/blog` handles create/edit/publish with `@uiw/react-md-editor` (dynamically imported with `ssr: false` to avoid hydration issues). Slugs are auto-generated from the title on the create page. Publishing sets `is_published = true` and stamps `published_at`.
+
+### Admin Panel
+The admin section covers: user management (role toggle, suspend/reinstate via `/api/admin/users/suspend`), subscriptions dashboard, blog CMS, contact inbox, and a mock analytics chart (Recharts area chart with 30-day mock data). All admin pages create their own `getAdminClient()` that bypasses RLS via the service role key — this is the same pattern as webhook handlers but scoped locally per file.
+
+### Floating Chatbot
+`components/marketing/FloatingChatbot` (rendered in the marketing layout) injects the n8n chat widget script at runtime and hides n8n branding via a `MutationObserver` that watches the shadow DOM of the `<n8n-chat>` element. The chatbot connects to `n8n.orbissolutions.ca`. Configuration (theme, welcome message, starter prompts) lives in `ChatbotSection.tsx`. Do not remove the MutationObserver logic — without it, n8n branding reappears on dynamic DOM updates.
 
 ### Key Shared Code
 - `lib/types.ts` — TypeScript interfaces: `Profile`, `Subscription`, `Post`, `ContactSubmission`, `NotificationPreferences`
-- `lib/validations.ts` — Zod schemas for every form (login, signup, contact, profile, blog post, password change)
+- `lib/validations.ts` — Zod schemas for all forms; includes auth flows (login, signup, forgot/reset password), account changes (email, password), contact, profile, blog post; each schema exports its inferred type (e.g. `LoginFormData`)
 - `lib/utils.ts` — `cn()`, `formatDate()`, `formatPrice()`
 - `lib/plans.ts` — client-safe plan definitions (names, prices, features); no Stripe SDK import
 - `components/ui/` — shadcn/ui primitives; regenerate via `shadcn` CLI, do not edit directly
@@ -116,11 +124,17 @@ Marketing pages predominantly use **inline `style={{}}` with CSS var references*
 
 Brand color: `#4169FF` (`--color-brand`). Font: Plus Jakarta Sans via `--font-sans`.
 
+### Images
+`next.config.mjs` whitelists remote image hostnames: `avatars.githubusercontent.com` (GitHub OAuth), `lh3.googleusercontent.com` (Google OAuth), `ui-avatars.com` (fallback), and the project's Supabase storage URL. Add new external image sources here.
+
 ### OAuth Setup
 Enable Google and GitHub OAuth providers in Supabase dashboard → Authentication → Providers. Set Site URL to `http://localhost:3000` and add `http://localhost:3000/auth/callback` to Redirect URLs.
 
 ### Dashboard Data
 The dashboard home page (`/dashboard`) currently renders **mock statistics and activity data** hardcoded in the component. Real data is fetched only for the user's profile name and subscription plan/renewal date.
+
+### Error & Loading Boundaries
+`error.tsx` and `loading.tsx` exist for both `dashboard/` and `admin/` route segments. These are the standard Next.js App Router boundaries — add per-page variants only when the segment-level ones are insufficient.
 
 ### Seeding an Admin User
 Sign up normally → verify email → set `role = 'admin'` directly in the Supabase dashboard on the `profiles` table.
@@ -132,5 +146,7 @@ Copy `.env.example` to `.env.local`. Required variables:
 - `NEXT_PUBLIC_APP_URL`
 - `RESEND_API_KEY`
 
+`NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY` is required locally (used by the middleware client); in production it equals `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+
 ## Tech Stack
-Next.js 16, React 18, TypeScript, Tailwind CSS, shadcn/ui + Radix UI, Framer Motion, Supabase (Auth + PostgreSQL), Stripe, Resend, React Hook Form + Zod, Recharts, next-mdx-remote. Deployed on Firebase App Hosting.
+Next.js 16, React 18, TypeScript, Tailwind CSS, shadcn/ui + Radix UI, Framer Motion, Supabase (Auth + PostgreSQL), Stripe, Resend, React Hook Form + Zod, Recharts, next-mdx-remote, @uiw/react-md-editor. Deployed on Firebase App Hosting.

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 
 function hideEl(el: Element | null) {
   if (!el) return
@@ -24,7 +25,11 @@ function hideBranding() {
 }
 
 export function FloatingChatbot() {
+  const pathname = usePathname()
+
   useEffect(() => {
+    // Contact page runs initFull (in-page mode) — both modes can't coexist on the same page.
+    if (pathname === '/contact') return
     const observer = new MutationObserver(hideBranding)
     observer.observe(document.body, { childList: true, subtree: true })
 
