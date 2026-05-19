@@ -43,8 +43,8 @@ export function Navbar() {
               xmlns="http://www.w3.org/2000/svg"
               viewBox="711 891 18458 18458"
               fill="none"
-              width="34"
-              height="34"
+              width="44"
+              height="44"
             >
               <defs>
                 <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">

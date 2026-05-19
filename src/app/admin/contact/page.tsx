@@ -1,25 +1,25 @@
-import { createServerClient } from '@supabase/ssr'
-import { Mail, Building, Clock } from 'lucide-react'
-import { formatDate } from '@/lib/utils'
-import { ContactSubmission } from '@/lib/types'
+import { createServerClient } from "@supabase/ssr";
+import { Mail, Building, Clock } from "lucide-react";
+import { formatDate } from "@/lib/utils";
+import { ContactSubmission } from "@/lib/types";
 
 function getAdminClient() {
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    { cookies: { getAll: () => [], setAll: () => {} } }
-  )
+    { cookies: { getAll: () => [], setAll: () => {} } },
+  );
 }
 
 export default async function AdminContactPage() {
-  const supabase = getAdminClient()
+  const supabase = getAdminClient();
 
   const { data: submissions } = await supabase
-    .from('contact_submissions')
-    .select('*')
-    .order('created_at', { ascending: false })
+    .from("contact_submissions")
+    .select("*")
+    .order("created_at", { ascending: false });
 
-  const typedSubmissions = (submissions || []) as ContactSubmission[]
+  const typedSubmissions = (submissions || []) as ContactSubmission[];
 
   return (
     <div className="space-y-6">
@@ -51,7 +51,9 @@ export default async function AdminContactPage() {
                       </span>
                     </div>
                     <div>
-                      <div className="text-foreground font-semibold">{submission.name}</div>
+                      <div className="text-foreground font-semibold">
+                        {submission.name}
+                      </div>
                       <div className="flex items-center gap-3 text-foreground-muted text-xs">
                         <span className="flex items-center gap-1">
                           <Mail className="w-3 h-3" />
@@ -91,5 +93,5 @@ export default async function AdminContactPage() {
         </div>
       )}
     </div>
-  )
+  );
 }

@@ -20,9 +20,7 @@ interface Particle {
 const PARTICLE_COUNT = 90;
 const LINK_DISTANCE = 130;
 const COLOR = "65, 105, 255";
-const MOUSE_GRAB_RADIUS = 180;
-const MOUSE_REPEL_RADIUS = 80;
-const MOUSE_REPEL_STRENGTH = 0.012;
+const FOCAL_RADIUS = 220;
 
 export default function ParticleBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -34,11 +32,26 @@ export default function ParticleBackground() {
     const ctx = canvas.getContext("2d")!;
     let animId: number;
     let particles: Particle[] = [];
-    const mouse = { x: -9999, y: -9999 };
+
+    // Focal point: virtual light source driven by scroll
+    const focal = { x: 0, y: 0 };
+    const focalTarget = { x: 0, y: 0 };
+    let scrollRatio = 0;
+
+    function updateFocalTarget() {
+      const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      scrollRatio = Math.min(window.scrollY / maxScroll, 1);
+      // Traces a gentle arc across the canvas as user scrolls
+      focalTarget.x = canvas.width * (0.25 + 0.5 * Math.sin(scrollRatio * Math.PI));
+      focalTarget.y = canvas.height * (0.15 + 0.7 * scrollRatio);
+    }
 
     function resize() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      updateFocalTarget();
+      focal.x = focalTarget.x;
+      focal.y = focalTarget.y;
       init();
     }
 
@@ -63,6 +76,10 @@ export default function ParticleBackground() {
     }
 
     function draw() {
+      // Smoothly lerp focal toward target
+      focal.x += (focalTarget.x - focal.x) * 0.04;
+      focal.y += (focalTarget.y - focal.y) * 0.04;
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       for (const p of particles) {
@@ -71,23 +88,11 @@ export default function ParticleBackground() {
           p.x = p.cx + Math.cos(p.angle) * p.orbitRadius;
           p.y = p.cy + Math.sin(p.angle) * p.orbitRadius;
         } else {
-          // Soft repulsion away from cursor
-          const mdx = p.x - mouse.x;
-          const mdy = p.y - mouse.y;
-          const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
-          if (mdist < MOUSE_REPEL_RADIUS && mdist > 0) {
-            const force = (1 - mdist / MOUSE_REPEL_RADIUS) * MOUSE_REPEL_STRENGTH;
-            p.vx += (mdx / mdist) * force;
-            p.vy += (mdy / mdist) * force;
-          }
-
-          // Speed cap so repulsion doesn't send particles flying
           const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
-          if (speed > 1.8) {
-            p.vx = (p.vx / speed) * 1.8;
-            p.vy = (p.vy / speed) * 1.8;
+          if (speed > 1.2) {
+            p.vx = (p.vx / speed) * 1.2;
+            p.vy = (p.vy / speed) * 1.2;
           }
-
           p.x += p.vx;
           p.y += p.vy;
           if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
@@ -95,7 +100,7 @@ export default function ParticleBackground() {
         }
       }
 
-      // Links — boosted opacity near cursor
+      // Links — boosted opacity near focal point
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
@@ -104,16 +109,13 @@ export default function ParticleBackground() {
           if (dist < LINK_DISTANCE) {
             const baseLine = (1 - dist / LINK_DISTANCE) * 0.08;
 
-            // Proximity of either endpoint to the mouse
-            const mi = Math.sqrt((particles[i].x - mouse.x) ** 2 + (particles[i].y - mouse.y) ** 2);
-            const mj = Math.sqrt((particles[j].x - mouse.x) ** 2 + (particles[j].y - mouse.y) ** 2);
-            const closest = Math.min(mi, mj);
-            const boost = closest < MOUSE_GRAB_RADIUS
-              ? (1 - closest / MOUSE_GRAB_RADIUS) * 0.35
-              : 0;
+            const fi = Math.sqrt((particles[i].x - focal.x) ** 2 + (particles[i].y - focal.y) ** 2);
+            const fj = Math.sqrt((particles[j].x - focal.x) ** 2 + (particles[j].y - focal.y) ** 2);
+            const closest = Math.min(fi, fj);
+            const boost = closest < FOCAL_RADIUS ? (1 - closest / FOCAL_RADIUS) * 0.3 : 0;
 
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(${COLOR}, ${Math.min(baseLine + boost, 0.45)})`;
+            ctx.strokeStyle = `rgba(${COLOR}, ${Math.min(baseLine + boost, 0.4)})`;
             ctx.lineWidth = boost > 0 ? 1.2 : 0.8;
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
@@ -122,14 +124,14 @@ export default function ParticleBackground() {
         }
       }
 
-      // Particles — glow near cursor
+      // Particles — glow near focal point
       for (const p of particles) {
-        const mdx = p.x - mouse.x;
-        const mdy = p.y - mouse.y;
-        const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
-        const proximity = mdist < MOUSE_GRAB_RADIUS ? 1 - mdist / MOUSE_GRAB_RADIUS : 0;
-        const r = p.radius + proximity * 1.5;
-        const op = Math.min(p.opacity + proximity * 0.4, 0.65);
+        const fdx = p.x - focal.x;
+        const fdy = p.y - focal.y;
+        const fdist = Math.sqrt(fdx * fdx + fdy * fdy);
+        const proximity = fdist < FOCAL_RADIUS ? 1 - fdist / FOCAL_RADIUS : 0;
+        const r = p.radius + proximity * 1.2;
+        const op = Math.min(p.opacity + proximity * 0.35, 0.6);
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
@@ -140,14 +142,8 @@ export default function ParticleBackground() {
       animId = requestAnimationFrame(draw);
     }
 
-    const handleMouse = (e: MouseEvent) => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
-    };
-
-    const handleMouseLeave = () => {
-      mouse.x = -9999;
-      mouse.y = -9999;
+    const handleScroll = () => {
+      updateFocalTarget();
     };
 
     const handleVisibility = () => {
@@ -156,8 +152,7 @@ export default function ParticleBackground() {
     };
 
     window.addEventListener("resize", resize);
-    window.addEventListener("mousemove", handleMouse);
-    window.addEventListener("mouseleave", handleMouseLeave);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     document.addEventListener("visibilitychange", handleVisibility);
     resize();
     draw();
@@ -165,8 +160,7 @@ export default function ParticleBackground() {
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener("resize", resize);
-      window.removeEventListener("mousemove", handleMouse);
-      window.removeEventListener("mouseleave", handleMouseLeave);
+      window.removeEventListener("scroll", handleScroll);
       document.removeEventListener("visibilitychange", handleVisibility);
     };
   }, []);
