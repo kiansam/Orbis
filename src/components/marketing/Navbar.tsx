@@ -137,7 +137,7 @@ export function Navbar() {
                   color:
                     pathname === "/"
                       ? "var(--color-text-primary)"
-                      : "var(--color-text-muted)",
+                      : "var(--color-text-body)",
                 }}
               >
                 Home
@@ -179,7 +179,7 @@ export function Navbar() {
                   color:
                     pathname === link.href
                       ? "var(--color-text-primary)"
-                      : "var(--color-text-muted)",
+                      : "var(--color-text-body)",
                 }}
               >
                 {link.label}
@@ -284,7 +284,7 @@ export function Navbar() {
         .nav-link:hover { color: var(--color-text-primary) !important; }
         .nav-home { display: inline-flex; align-items: center; }
         .nav-actions { display: flex; align-items: center; gap: 8px; }
-        .nav-signin { font-size: 14px; font-weight: 500; color: var(--color-text-muted); text-decoration: none; padding: 8px 14px; transition: color 150ms ease; }
+        .nav-signin { font-size: 14px; font-weight: 500; color: var(--color-text-body); text-decoration: none; padding: 8px 14px; transition: color 150ms ease; }
         .nav-signin:hover { color: var(--color-text-primary); }
         .nav-hamburger { display: none; width: 36px; height: 36px; align-items: center; justify-content: center; background: transparent; border: 1px solid var(--color-border); border-radius: var(--radius-md); cursor: pointer; color: var(--color-text-muted); }
 

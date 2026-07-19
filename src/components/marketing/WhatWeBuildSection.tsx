@@ -1,8 +1,8 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Stagger, StaggerItem, FadeUp, staggerParent, childVariants, EASE } from './motion'
-import { Phone, Globe, Sparkles } from 'lucide-react'
+import { FadeUp, staggerParent, childVariants, EASE } from './motion'
+import { Phone, Globe, Sparkles, Mic, PhoneCall } from 'lucide-react'
 
 /* ─────────────────────────────────────────────────────────────
    Product previews — polished, screenshot-style mocks
@@ -10,7 +10,7 @@ import { Phone, Globe, Sparkles } from 'lucide-react'
 
 function ChatVoicePreview() {
   return (
-    <div className="wwb-mock wwb-mock-chat">
+    <div className="wwb-mock wwb-mock-voice">
       <div className="wwb-mock-topbar">
         <div className="wwb-mock-dots">
           <span /><span /><span />
@@ -18,46 +18,53 @@ function ChatVoicePreview() {
         <div className="wwb-mock-title">Incoming call · 8:47 PM</div>
       </div>
       <div className="wwb-mock-body" style={{ padding: '20px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '18px' }}>
-          <div
-            style={{
-              width: '38px',
-              height: '38px',
-              borderRadius: '50%',
-              background: 'var(--color-brand)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#fff',
-              fontWeight: 700,
-              fontSize: '14px',
-            }}
-          >
-            O
+        {/* Header — flat phone-call icon (no border), name, live handling status with waveform */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+          <div className="wwb-voice-callicon" aria-hidden="true">
+            <PhoneCall style={{ width: '20px', height: '20px', color: 'var(--color-brand)' }} />
           </div>
-          <div>
-            <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-text-primary)' }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-text-primary)', lineHeight: 1.2 }}>
               Orbis Voice Agent
             </div>
-            <div style={{ fontSize: '11px', color: 'var(--color-positive)' }}>
-              <span style={{ display: 'inline-block', width: '5px', height: '5px', borderRadius: '50%', background: 'var(--color-positive)', marginRight: '5px', verticalAlign: 'middle' }} />
-              Handling call — 00:42
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '3px' }}>
+              <span style={{ fontSize: '11px', color: 'var(--color-positive)', display: 'inline-flex', alignItems: 'center' }}>
+                <span
+                  style={{
+                    display: 'inline-block',
+                    width: '5px',
+                    height: '5px',
+                    borderRadius: '50%',
+                    background: 'var(--color-positive)',
+                    marginRight: '5px',
+                  }}
+                />
+                Handling call — 00:42
+              </span>
+              <span className="wwb-voice-wave" aria-hidden="true">
+                <span /><span /><span /><span /><span />
+              </span>
             </div>
           </div>
         </div>
-        <div className="wwb-transcript">
-          <div className="wwb-t-line wwb-t-them">
-            &ldquo;Hi, I need someone to come look at my furnace. Do you do same-day?&rdquo;
+
+        {/* Transcript — no bubbles, no blue fill, same background throughout */}
+        <div className="wwb-voice-transcript">
+          <div className="wwb-voice-line wwb-voice-caller">
+            <Phone style={{ width: '14px', height: '14px', color: 'var(--color-text-muted)', flexShrink: 0, marginTop: '3px' }} />
+            <span>&ldquo;Hi&hellip; I need someone to come take a look at my furnace. Do you do same-day?&rdquo;</span>
           </div>
-          <div className="wwb-t-line wwb-t-us">
-            &ldquo;Yes — we have two openings tomorrow morning. Would 9 AM or 11 AM work better?&rdquo;
+          <div className="wwb-voice-line wwb-voice-agent">
+            <span>&ldquo;We can definitely help with that&hellip; I&rsquo;ve actually got two openings tomorrow morning — would ten or twelve work better for you?&rdquo;</span>
+            <Mic style={{ width: '14px', height: '14px', color: 'var(--color-brand)', flexShrink: 0, marginTop: '3px' }} />
           </div>
-          <div className="wwb-t-line wwb-t-them">
-            &ldquo;Eleven works.&rdquo;
+          <div className="wwb-voice-line wwb-voice-caller">
+            <Phone style={{ width: '14px', height: '14px', color: 'var(--color-text-muted)', flexShrink: 0, marginTop: '3px' }} />
+            <span>&ldquo;Uh&hellip; ten is good.&rdquo;</span>
           </div>
-          <div className="wwb-t-line wwb-t-us wwb-t-live">
-            &ldquo;Great, I&apos;ve booked you in for 11 AM tomorrow…&rdquo;
-            <span className="wwb-t-caret" />
+          <div className="wwb-voice-line wwb-voice-agent">
+            <span>&ldquo;Perfect&hellip; you&rsquo;re all booked in for ten AM tomorrow. You&rsquo;ll get a confirmation shortly.&rdquo;</span>
+            <Mic style={{ width: '14px', height: '14px', color: 'var(--color-brand)', flexShrink: 0, marginTop: '3px' }} />
           </div>
         </div>
       </div>
@@ -67,33 +74,41 @@ function ChatVoicePreview() {
 
 function WebsiteChatbotPreview() {
   return (
-    <div className="wwb-mock wwb-mock-web">
+    <div className="wwb-mock wwb-mock-webchat">
       <div className="wwb-mock-browser">
         <div className="wwb-mock-dots">
           <span /><span /><span />
         </div>
         <div className="wwb-mock-url">yourbusiness.com</div>
       </div>
-      <div className="wwb-mock-body" style={{ padding: '0' }}>
-        <div className="wwb-web-hero">
-          <div className="wwb-web-line wwb-web-line-lg" />
-          <div className="wwb-web-line wwb-web-line-md" />
-          <div className="wwb-web-line wwb-web-line-sm" />
-          <div className="wwb-web-cta" />
-        </div>
-        <div className="wwb-web-widget">
-          <div className="wwb-web-widget-header">
-            <div className="wwb-web-widget-avatar">O</div>
-            <div>
-              <div style={{ fontSize: '12px', fontWeight: 600 }}>Ask us anything</div>
-              <div style={{ fontSize: '10px', opacity: 0.8 }}>Trained on your business</div>
+      <div className="wwb-mock-body" style={{ padding: 0 }}>
+        <div className="wwb-webchat-header">
+          <div className="wwb-webchat-avatar">O</div>
+          <div style={{ minWidth: 0 }}>
+            <div style={{ fontSize: '13px', fontWeight: 600, color: '#ffffff', lineHeight: 1.2 }}>
+              Ask us anything
+            </div>
+            <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.85)', marginTop: '3px' }}>
+              Trained on your business
             </div>
           </div>
-          <div className="wwb-web-widget-msg">
-            What&apos;s your service area?
+        </div>
+
+        <div className="wwb-webchat-body">
+          <div className="wwb-webchat-bubble wwb-webchat-them">
+            What are your flat rates, and do you cover Richmond?
           </div>
-          <div className="wwb-web-widget-input">
-            <span>Type a message…</span>
+          <div className="wwb-webchat-bubble wwb-webchat-us">
+            Our standard service call is a flat $300, plus any materials needed. And yes — Richmond&rsquo;s well within our service area.
+          </div>
+        </div>
+
+        <div className="wwb-webchat-input">
+          <span>Type a message…</span>
+          <div className="wwb-webchat-send" aria-hidden="true">
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+              <path d="M2 7L12 2L7 12L6 8L2 7Z" fill="#ffffff" />
+            </svg>
           </div>
         </div>
       </div>
@@ -352,42 +367,65 @@ export function WhatWeBuildSection() {
         }
         .wwb-mock-body { background: #ffffff; }
 
-        /* Chat / voice transcript */
-        .wwb-transcript {
-          display: flex; flex-direction: column; gap: 10px;
-          background: linear-gradient(180deg, #f7f9fd 0%, #eef2fb 100%);
-          padding: 14px;
-          border-radius: 12px;
-          border: 1px solid var(--color-border-subtle);
+        /* Voice call transcript — no bubbles, uniform background, icon-differentiated */
+        .wwb-voice-callicon {
+          width: 34px; height: 34px;
+          display: flex; align-items: center; justify-content: center;
+          flex-shrink: 0;
+          animation: wwbCallPulse 1.6s ease-in-out infinite;
         }
-        .wwb-t-line {
-          font-size: 13px;
-          padding: 9px 13px;
-          border-radius: 10px;
-          max-width: 88%;
-          line-height: 1.45;
+        @keyframes wwbCallPulse {
+          0%, 100% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.08); opacity: 0.78; }
         }
-        .wwb-t-them {
-          background: #ffffff;
-          border: 1px solid var(--color-border);
-          color: var(--color-text-primary);
-          align-self: flex-start;
+        .wwb-voice-wave {
+          display: inline-flex; align-items: center; gap: 2px; height: 12px;
         }
-        .wwb-t-us {
-          background: var(--color-brand);
-          color: #ffffff;
-          align-self: flex-end;
-        }
-        .wwb-t-live { display: flex; align-items: center; gap: 4px; }
-        .wwb-t-caret {
-          width: 8px; height: 14px;
-          background: rgba(255,255,255,0.85);
+        .wwb-voice-wave span {
           display: inline-block;
-          animation: wwbBlink 1s infinite steps(1);
+          width: 2px;
+          background: var(--color-positive);
+          border-radius: 1px;
+          animation: wwbWave 1.1s ease-in-out infinite;
         }
-        @keyframes wwbBlink { 50% { opacity: 0; } }
+        .wwb-voice-wave span:nth-child(1) { height: 5px; animation-delay: 0s; }
+        .wwb-voice-wave span:nth-child(2) { height: 9px; animation-delay: 0.12s; }
+        .wwb-voice-wave span:nth-child(3) { height: 12px; animation-delay: 0.24s; }
+        .wwb-voice-wave span:nth-child(4) { height: 7px; animation-delay: 0.36s; }
+        .wwb-voice-wave span:nth-child(5) { height: 4px; animation-delay: 0.48s; }
+        @keyframes wwbWave {
+          0%, 100% { transform: scaleY(0.4); }
+          50% { transform: scaleY(1); }
+        }
 
-        /* Website mock */
+        .wwb-voice-transcript {
+          background: #f7f9fd;
+          border-radius: 12px;
+          padding: 16px 14px;
+          display: flex;
+          flex-direction: column;
+          gap: 14px;
+        }
+        .wwb-voice-line {
+          display: flex;
+          gap: 10px;
+          font-size: 13px;
+          line-height: 1.55;
+          color: var(--color-text-primary);
+          max-width: 92%;
+        }
+        .wwb-voice-caller {
+          align-self: flex-start;
+          text-align: left;
+        }
+        .wwb-voice-agent {
+          align-self: flex-end;
+          text-align: right;
+          flex-direction: row-reverse;
+        }
+        .wwb-voice-line span { display: inline-block; }
+
+        /* Website chat widget — real chat with blue bubbles */
         .wwb-mock-browser {
           display: flex; align-items: center; gap: 12px;
           padding: 10px 16px;
@@ -404,65 +442,65 @@ export function WhatWeBuildSection() {
           color: var(--color-text-muted);
           text-align: center;
         }
-        .wwb-web-hero {
-          padding: 40px 32px 48px;
-          background: linear-gradient(180deg, #ffffff 0%, #f6f8fd 100%);
-          border-bottom: 1px solid var(--color-border-subtle);
-          position: relative;
-        }
-        .wwb-web-line {
-          height: 14px;
-          background: var(--color-border);
-          border-radius: 4px;
-          margin-bottom: 10px;
-        }
-        .wwb-web-line-lg { width: 82%; height: 22px; background: var(--color-text-primary); opacity: 0.14; }
-        .wwb-web-line-md { width: 68%; height: 22px; background: var(--color-text-primary); opacity: 0.14; }
-        .wwb-web-line-sm { width: 54%; height: 10px; background: var(--color-border); opacity: 0.8; margin-top: 14px; }
-        .wwb-web-cta {
-          width: 100px; height: 32px;
+        .wwb-webchat-header {
+          display: flex; align-items: center; gap: 12px;
+          padding: 16px 18px;
           background: var(--color-brand);
-          border-radius: 999px;
-          margin-top: 20px;
-          box-shadow: 0 4px 12px rgba(65, 105, 255, 0.25);
         }
-        .wwb-web-widget {
-          position: absolute;
-          right: 22px;
-          bottom: -60px;
-          width: 240px;
-          background: #ffffff;
-          border: 1px solid var(--color-border);
-          border-radius: 14px;
-          box-shadow: 0 14px 40px rgba(15, 23, 41, 0.10);
-          overflow: hidden;
-        }
-        .wwb-web-widget-header {
-          display: flex; align-items: center; gap: 10px;
-          padding: 12px 14px;
-          background: var(--color-brand);
-          color: #ffffff;
-        }
-        .wwb-web-widget-avatar {
-          width: 26px; height: 26px; border-radius: 50%;
+        .wwb-webchat-avatar {
+          width: 32px; height: 32px;
+          border-radius: 50%;
           background: rgba(255,255,255,0.22);
           display: flex; align-items: center; justify-content: center;
-          font-size: 12px; font-weight: 700;
+          color: #ffffff;
+          font-size: 13px; font-weight: 700;
+          flex-shrink: 0;
         }
-        .wwb-web-widget-msg {
-          padding: 12px 14px;
-          font-size: 12px;
-          color: var(--color-text-primary);
-          background: #ffffff;
-          border-bottom: 1px solid var(--color-border-subtle);
+        .wwb-webchat-body {
+          padding: 22px 18px;
+          background: linear-gradient(180deg, #f7f9fd 0%, #eef2fb 100%);
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
         }
-        .wwb-web-widget-input {
+        .wwb-webchat-bubble {
+          font-size: 13px;
+          line-height: 1.5;
           padding: 10px 14px;
-          font-size: 11px;
-          color: var(--color-text-faint);
-          background: #f7f9fd;
+          max-width: 82%;
         }
-        .wwb-mock-web { position: relative; padding-bottom: 76px; }
+        .wwb-webchat-them {
+          align-self: flex-end;
+          background: #ffffff;
+          color: var(--color-text-primary);
+          border: 1px solid var(--color-border);
+          border-radius: 14px 14px 4px 14px;
+          box-shadow: 0 1px 2px rgba(15, 23, 41, 0.03);
+        }
+        .wwb-webchat-us {
+          align-self: flex-start;
+          background: var(--color-brand);
+          color: #ffffff;
+          border-radius: 14px 14px 14px 4px;
+          box-shadow: 0 4px 14px rgba(65, 105, 255, 0.20);
+        }
+        .wwb-webchat-input {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 12px 14px;
+          background: #ffffff;
+          border-top: 1px solid var(--color-border-subtle);
+          font-size: 12px;
+          color: var(--color-text-faint);
+        }
+        .wwb-webchat-send {
+          width: 26px; height: 26px;
+          border-radius: 50%;
+          background: var(--color-brand);
+          display: flex; align-items: center; justify-content: center;
+          box-shadow: 0 2px 6px rgba(65, 105, 255, 0.30);
+        }
 
         /* Admin automations */
         .wwb-admin-row {
