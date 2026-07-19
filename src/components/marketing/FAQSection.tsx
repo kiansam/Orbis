@@ -42,7 +42,16 @@ export function FAQSection() {
   const [open, setOpen] = useState<number | null>(null)
 
   return (
-    <section style={{ background: '#ffffff', padding: '96px 0' }}>
+    <section
+      id="faq"
+      style={{
+        background: 'var(--color-bg-subtle)',
+        padding: '112px 0',
+        scrollMarginTop: '80px',
+        borderTop: '1px solid var(--color-border-subtle)',
+        borderBottom: '1px solid var(--color-border-subtle)',
+      }}
+    >
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px' }}>
 
         {/* Header */}
@@ -58,7 +67,7 @@ export function FAQSection() {
           </motion.p>
           <motion.h2
             variants={childVariants}
-            style={{ fontSize: 'clamp(26px, 3vw, 40px)', fontWeight: 700, color: 'var(--color-text-primary)', letterSpacing: '-0.02em', lineHeight: 1.14 }}
+            style={{ fontSize: 'clamp(28px, 3.2vw, 42px)', fontWeight: 700, color: 'var(--color-text-primary)', letterSpacing: '-0.02em', lineHeight: 1.14 }}
           >
             Everything you probably want to know.
           </motion.h2>
@@ -67,19 +76,44 @@ export function FAQSection() {
         {/* FAQ items */}
         <Stagger staggerChildren={0.07}>
           {faqs.map((faq, i) => (
-            <StaggerItem key={i} style={{ borderBottom: '1px solid var(--color-border)' }}>
+            <StaggerItem
+              key={i}
+              className="faq-item"
+              style={{ background: open === i ? '#ffffff' : 'transparent' }}
+            >
               <button
                 onClick={() => setOpen(open === i ? null : i)}
-                style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', padding: '20px 0', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '16px',
+                  padding: '22px 24px',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  textAlign: 'left',
+                  fontFamily: 'inherit',
+                }}
               >
-                <span style={{ fontSize: '16px', fontWeight: 500, color: 'var(--color-text-primary)', lineHeight: 1.4 }}>
+                <span style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-text-primary)', lineHeight: 1.4 }}>
                   {faq.q}
                 </span>
-                <ChevronDown style={{ width: '18px', height: '18px', color: 'var(--color-brand)', flexShrink: 0, transition: 'transform 300ms ease', transform: open === i ? 'rotate(180deg)' : 'rotate(0)' }} />
+                <ChevronDown
+                  style={{
+                    width: '18px',
+                    height: '18px',
+                    color: 'var(--color-brand)',
+                    flexShrink: 0,
+                    transition: 'transform 300ms ease',
+                    transform: open === i ? 'rotate(180deg)' : 'rotate(0)',
+                  }}
+                />
               </button>
 
               {open === i && (
-                <div style={{ paddingBottom: '20px', fontSize: '15px', color: 'var(--color-text-body)', lineHeight: 1.7 }}>
+                <div style={{ padding: '0 24px 22px', fontSize: '15px', color: 'var(--color-text-body)', lineHeight: 1.7 }}>
                   <p style={{ margin: 0 }}>{faq.a}</p>
                   {faq.icons && (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '14px' }}>
@@ -89,7 +123,12 @@ export function FAQSection() {
                     </div>
                   )}
                   {faq.link && (
-                    <span> <Link href="/contact" style={{ color: 'var(--color-brand)', textDecoration: 'none', fontWeight: 500 }}>Get in touch →</Link></span>
+                    <span>
+                      {' '}
+                      <Link href="/contact" style={{ color: 'var(--color-brand)', textDecoration: 'none', fontWeight: 600 }}>
+                        Get in touch →
+                      </Link>
+                    </span>
                   )}
                 </div>
               )}
@@ -99,6 +138,15 @@ export function FAQSection() {
       </div>
 
       <style>{`
+        .faq-item {
+          border: 1px solid var(--color-border);
+          border-radius: 12px;
+          margin-bottom: 10px;
+          transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+        }
+        .faq-item:hover {
+          border-color: var(--color-brand-border);
+        }
         @media (max-width: 640px) {
           section > div { padding: 0 24px !important; }
         }

@@ -1,28 +1,41 @@
 import type { Metadata } from "next";
-import { Target, Lightbulb, Heart, Shield, Zap, Globe, Brain, Wrench, Rocket } from "lucide-react";
+import Link from "next/link";
+import {
+  Target,
+  Lightbulb,
+  Heart,
+  Shield,
+  Brain,
+  Wrench,
+  Rocket,
+  MapPin,
+} from "lucide-react";
 import { FadeUp, Stagger, StaggerItem } from "@/components/marketing/motion";
 
 export const metadata: Metadata = {
   title: "About Orbis Solutions",
   description:
-    "Learn about Orbis Solutions — done-for-you AI agents for service businesses.",
+    "Orbis Solutions is a British Columbia team building done-for-you AI agents for service businesses.",
 };
 
 const teamAttributes = [
   {
     icon: Brain,
     title: "AI & Automation",
-    description: "Deep expertise in language models, integrations, and workflow design that actually holds up in production.",
+    description:
+      "Deep expertise in language models, integrations, and workflow design that holds up in production, not just demos.",
   },
   {
     icon: Wrench,
     title: "Built for Service Businesses",
-    description: "Every system we ship is tailored to trades, contractors, and field services — not generic SaaS demos.",
+    description:
+      "Every system we ship is tailored to trades, contractors, and field services — not generic SaaS templates.",
   },
   {
     icon: Rocket,
     title: "End-to-End Delivery",
-    description: "We handle the full build — from discovery to launch to ongoing management. You don't need to coordinate anyone.",
+    description:
+      "We handle the full build — from discovery to launch to ongoing management. You don't coordinate anyone.",
   },
 ];
 
@@ -31,7 +44,7 @@ const values = [
     icon: Target,
     title: "Results First",
     description:
-      "We measure success by the tangible business outcomes we deliver, not by the sophistication of our models.",
+      "We measure success by tangible business outcomes — booked jobs, captured leads, hours reclaimed — not model sophistication.",
   },
   {
     icon: Lightbulb,
@@ -43,36 +56,41 @@ const values = [
     icon: Heart,
     title: "Client Partnership",
     description:
-      "We build long-term partnerships, not transactional engagements. Your success is our success.",
+      "We build long-term partnerships, not transactional engagements. When your business does better, we do better.",
   },
   {
     icon: Shield,
     title: "Responsible AI",
     description:
-      "We champion ethical AI development — transparent, fair, auditable, and aligned with human values.",
-  },
-  {
-    icon: Zap,
-    title: "Speed to Value",
-    description:
-      "We move with urgency. Rapid iteration and quick wins build confidence while larger transformations take shape.",
-  },
-  {
-    icon: Globe,
-    title: "Global Perspective",
-    description:
-      "AI opportunities are global. Our team brings diverse expertise across geographies, industries, and cultures.",
+      "We build systems that are transparent, auditable, and aligned with your business — not black boxes you have to trust blindly.",
   },
 ];
 
 export default function AboutPage() {
   return (
-    <div>
+    <div style={{ background: "var(--color-bg)" }}>
       {/* Hero */}
-      <section style={{ padding: "120px 0 80px", background: "var(--color-bg)" }}>
+      <section
+        style={{
+          position: "relative",
+          padding: "96px 0 72px",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "radial-gradient(60% 55% at 50% 0%, rgba(65, 105, 255, 0.06) 0%, rgba(65, 105, 255, 0) 70%)",
+            pointerEvents: "none",
+          }}
+        />
         <Stagger
           style={{
-            maxWidth: "800px",
+            position: "relative",
+            maxWidth: "820px",
             margin: "0 auto",
             padding: "0 24px",
             textAlign: "center",
@@ -80,27 +98,65 @@ export default function AboutPage() {
         >
           <StaggerItem>
             <span
-              className="badge-accent"
-              style={{ display: "inline-flex", marginBottom: "20px" }}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                background: "var(--color-brand-muted)",
+                color: "var(--color-brand)",
+                border: "1px solid var(--color-brand-border)",
+                borderRadius: "var(--radius-pill)",
+                fontSize: "12px",
+                fontWeight: 600,
+                padding: "4px 14px",
+                letterSpacing: "0.04em",
+                marginBottom: "20px",
+              }}
             >
-              About Orbis Solutions
+              <MapPin style={{ width: "12px", height: "12px" }} />
+              Based in British Columbia, Canada
             </span>
           </StaggerItem>
           <StaggerItem>
             <h1
-              className="t-h1"
-              style={{ color: "var(--text-primary)", marginBottom: "20px" }}
+              style={{
+                fontSize: "clamp(34px, 4.4vw, 52px)",
+                fontWeight: 700,
+                color: "var(--color-text-primary)",
+                letterSpacing: "-0.028em",
+                lineHeight: 1.08,
+                marginBottom: "20px",
+              }}
             >
-              We exist to make AI work for every{" "}
-              <span className="text-gradient">service business</span>
+              We build AI that actually works for{" "}
+              <span
+                style={{
+                  background:
+                    "linear-gradient(135deg, #4169ff 0%, #6b8eff 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
+                service businesses
+              </span>
             </h1>
           </StaggerItem>
           <StaggerItem>
-            <p className="t-body-lg" style={{ color: "var(--text-secondary)" }}>
-              Founded in Canada, Orbis Solutions emerged from a simple
-              observation: small service businesses were losing jobs every night
-              to unanswered calls and slow follow-up. We built Orbis to close that
-              gap — done-for-you AI agents that never sleep.
+            <p
+              style={{
+                fontSize: "17px",
+                color: "var(--color-text-muted)",
+                lineHeight: 1.65,
+                maxWidth: "620px",
+                margin: "0 auto",
+              }}
+            >
+              Orbis Solutions was started with a simple observation: service
+              businesses were losing jobs every night to unanswered calls and
+              slow follow-up. We built Orbis to close that gap — done-for-you AI
+              agents that never sleep, tailored to how your business actually
+              operates.
             </p>
           </StaggerItem>
         </Stagger>
@@ -109,9 +165,10 @@ export default function AboutPage() {
       {/* Mission */}
       <section
         style={{
-          padding: "80px 0",
-          borderTop: "1px solid var(--border-subtle)",
-          borderBottom: "1px solid var(--border-subtle)",
+          padding: "88px 0",
+          background: "var(--color-bg-subtle)",
+          borderTop: "1px solid var(--color-border-subtle)",
+          borderBottom: "1px solid var(--color-border-subtle)",
         }}
       >
         <div
@@ -121,48 +178,50 @@ export default function AboutPage() {
             style={{
               display: "grid",
               gridTemplateColumns: "1fr 1fr",
-              gap: "64px",
+              gap: "72px",
               alignItems: "center",
             }}
             className="about-grid"
           >
             <FadeUp>
-              <span
-                className="badge-accent"
-                style={{ display: "inline-flex", marginBottom: "16px" }}
+              <p
+                className="eyebrow"
+                style={{ marginBottom: "14px", color: "var(--color-brand)" }}
               >
                 Our Mission
-              </span>
+              </p>
               <h2
-                className="t-h2"
                 style={{
-                  color: "var(--text-primary)",
+                  fontSize: "clamp(28px, 3.2vw, 40px)",
+                  fontWeight: 700,
+                  color: "var(--color-text-primary)",
+                  letterSpacing: "-0.02em",
+                  lineHeight: 1.14,
                   marginBottom: "20px",
-                  marginTop: "16px",
                 }}
               >
                 Giving service businesses an edge they could only get by hiring
-                someone
+                someone.
               </h2>
               <div
                 style={{
                   display: "flex",
                   flexDirection: "column",
                   gap: "16px",
-                  color: "var(--text-secondary)",
+                  color: "var(--color-text-body)",
                   fontSize: "16px",
                   lineHeight: 1.7,
                 }}
               >
                 <p>
                   For too long, the transformative power of AI has been
-                  accessible only to large technology companies with massive
-                  engineering teams. Orbis Solutions is changing that.
+                  accessible only to large companies with dedicated engineering
+                  teams. Orbis Solutions exists to change that.
                 </p>
                 <p>
                   Our mission is to give every service business — regardless of
                   size — a fully managed AI agent that handles the customer
-                  interactions that fall through the cracks after hours.
+                  interactions falling through the cracks after hours.
                 </p>
                 <p>
                   We believe AI should feel like a trusted team member, not a
@@ -181,27 +240,29 @@ export default function AboutPage() {
               {[
                 { value: "24/7", label: "Always-on availability" },
                 { value: "2–4 wks", label: "Average time to launch" },
-                { value: "62%", label: "Calls unanswered after hours" },
-                { value: "3×", label: "More leads closed with fast response" },
+                { value: "100%", label: "Built and managed by our team" },
+                { value: "BC", label: "Canadian-owned and operated" },
               ].map((stat, i) => (
                 <StaggerItem key={i}>
                   <div
                     style={{
-                      background: "var(--color-bg)",
-                      border: "1px solid var(--border-base)",
-                      borderRadius: "var(--r-lg)",
-                      padding: "24px",
+                      background: "#ffffff",
+                      border: "1px solid var(--color-border)",
+                      borderRadius: "14px",
+                      padding: "26px 20px",
                       textAlign: "center",
                       height: "100%",
+                      boxShadow: "0 1px 3px rgba(15, 23, 41, 0.03)",
                     }}
                   >
                     <div
                       style={{
-                        fontSize: "28px",
+                        fontSize: "30px",
                         fontWeight: 700,
                         color: "var(--color-brand)",
                         fontVariantNumeric: "tabular-nums",
-                        marginBottom: "6px",
+                        marginBottom: "8px",
+                        letterSpacing: "-0.02em",
                       }}
                     >
                       {stat.value}
@@ -209,7 +270,7 @@ export default function AboutPage() {
                     <div
                       style={{
                         fontSize: "13px",
-                        color: "var(--text-secondary)",
+                        color: "var(--color-text-muted)",
                         lineHeight: 1.4,
                       }}
                     >
@@ -221,84 +282,109 @@ export default function AboutPage() {
             </Stagger>
           </div>
         </div>
-        <style>{`.about-grid { @media (max-width: 768px) { grid-template-columns: 1fr !important; } }`}</style>
       </section>
 
       {/* Team */}
       <section
         id="team"
         style={{
-          padding: "96px 0",
-          background: "var(--color-bg)",
-          borderBottom: "1px solid var(--border-subtle)",
+          padding: "104px 0",
+          background: "#ffffff",
         }}
       >
         <div
           style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px" }}
         >
           <FadeUp style={{ textAlign: "center", marginBottom: "56px" }}>
-            <span
-              className="badge-accent"
-              style={{ display: "inline-flex", marginBottom: "16px" }}
+            <p
+              className="eyebrow"
+              style={{ marginBottom: "12px", color: "var(--color-brand)" }}
             >
               Our Team
-            </span>
+            </p>
             <h2
-              className="t-h2"
-              style={{ color: "var(--text-primary)", marginTop: "16px", marginBottom: "20px" }}
+              style={{
+                fontSize: "clamp(28px, 3.2vw, 40px)",
+                fontWeight: 700,
+                color: "var(--color-text-primary)",
+                letterSpacing: "-0.02em",
+                lineHeight: 1.14,
+                marginBottom: "18px",
+              }}
             >
-              Built by people who know what they're doing
+              Built by people who know what they&apos;re doing.
             </h2>
             <p
               style={{
-                color: "var(--text-secondary)",
-                fontSize: "17px",
-                lineHeight: 1.7,
-                maxWidth: "640px",
+                color: "var(--color-text-muted)",
+                fontSize: "16px",
+                lineHeight: 1.65,
+                maxWidth: "620px",
                 margin: "0 auto",
               }}
             >
-              Orbis is a small, focused team with deep experience in AI engineering, workflow
-              automation, and building tools that service businesses actually use. We don't do
-              org charts — we do the work.
+              Orbis is a small, focused team with deep experience in AI
+              engineering, workflow automation, and building tools that service
+              businesses actually use. We don&apos;t do org charts — we do the
+              work.
             </p>
           </FadeUp>
           <Stagger
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(3, 1fr)",
-              gap: "12px",
+              gap: "16px",
             }}
-            className="values-grid"
+            className="about-cards-grid"
           >
             {teamAttributes.map((attr, i) => (
               <StaggerItem key={i}>
                 <div
                   style={{
-                    background: "var(--color-bg)",
-                    border: "1px solid var(--border-base)",
-                    borderRadius: "var(--r-lg)",
+                    background: "#ffffff",
+                    border: "1px solid var(--color-border)",
+                    borderRadius: "16px",
                     padding: "28px",
                     height: "100%",
+                    boxShadow: "0 1px 3px rgba(15, 23, 41, 0.03)",
                   }}
                 >
-                  <div className="icon-box" style={{ marginBottom: "16px" }}>
-                    <attr.icon style={{ width: "20px", height: "20px" }} />
+                  <div
+                    style={{
+                      width: "44px",
+                      height: "44px",
+                      borderRadius: "12px",
+                      background: "var(--color-brand-muted)",
+                      border: "1px solid var(--color-brand-border)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginBottom: "18px",
+                    }}
+                  >
+                    <attr.icon
+                      style={{
+                        width: "20px",
+                        height: "20px",
+                        color: "var(--color-brand)",
+                      }}
+                    />
                   </div>
                   <h3
                     style={{
                       fontWeight: 600,
-                      color: "var(--text-primary)",
-                      fontSize: "15px",
+                      color: "var(--color-text-primary)",
+                      fontSize: "16px",
                       marginBottom: "8px",
+                      letterSpacing: "-0.01em",
                     }}
                   >
                     {attr.title}
                   </h3>
                   <p
                     style={{
-                      fontSize: "14px",
-                      color: "var(--text-secondary)",
+                      fontSize: "14.5px",
+                      color: "var(--color-text-body)",
                       lineHeight: 1.6,
                     }}
                   >
@@ -314,57 +400,91 @@ export default function AboutPage() {
       {/* Values */}
       <section
         id="values"
-        style={{ padding: "96px 0", borderTop: "1px solid var(--border-subtle)" }}
+        style={{
+          padding: "104px 0",
+          background: "var(--color-bg-subtle)",
+          borderTop: "1px solid var(--color-border-subtle)",
+          borderBottom: "1px solid var(--color-border-subtle)",
+        }}
       >
         <div
           style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px" }}
         >
           <FadeUp style={{ textAlign: "center", marginBottom: "56px" }}>
-            <span
-              className="badge-accent"
-              style={{ display: "inline-flex", marginBottom: "16px" }}
+            <p
+              className="eyebrow"
+              style={{ marginBottom: "12px", color: "var(--color-brand)" }}
             >
               Values
-            </span>
+            </p>
             <h2
-              className="t-h2"
-              style={{ color: "var(--text-primary)", marginTop: "16px" }}
+              style={{
+                fontSize: "clamp(28px, 3.2vw, 40px)",
+                fontWeight: 700,
+                color: "var(--color-text-primary)",
+                letterSpacing: "-0.02em",
+                lineHeight: 1.14,
+              }}
             >
-              What we stand for
+              What we stand for.
             </h2>
           </FadeUp>
           <Stagger
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: "12px",
+              gridTemplateColumns: "repeat(2, 1fr)",
+              gap: "16px",
             }}
-            className="values-grid"
+            className="about-values-grid"
           >
             {values.map((value, i) => (
               <StaggerItem key={i}>
                 <div
                   style={{
-                    background: "var(--color-bg)",
-                    border: "1px solid var(--border-base)",
-                    borderRadius: "var(--r-lg)",
+                    background: "#ffffff",
+                    border: "1px solid var(--color-border)",
+                    borderRadius: "16px",
                     padding: "28px",
                     height: "100%",
+                    boxShadow: "0 1px 3px rgba(15, 23, 41, 0.03)",
                   }}
                 >
-                  <div className="icon-box" style={{ marginBottom: "16px" }}>
-                    <value.icon style={{ width: "20px", height: "20px" }} />
+                  <div
+                    style={{
+                      width: "44px",
+                      height: "44px",
+                      borderRadius: "12px",
+                      background: "var(--color-brand-muted)",
+                      border: "1px solid var(--color-brand-border)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginBottom: "18px",
+                    }}
+                  >
+                    <value.icon
+                      style={{
+                        width: "20px",
+                        height: "20px",
+                        color: "var(--color-brand)",
+                      }}
+                    />
                   </div>
                   <h3
-                    className="t-h4"
-                    style={{ color: "var(--text-primary)", marginBottom: "8px" }}
+                    style={{
+                      fontSize: "17px",
+                      fontWeight: 600,
+                      color: "var(--color-text-primary)",
+                      marginBottom: "10px",
+                      letterSpacing: "-0.01em",
+                    }}
                   >
                     {value.title}
                   </h3>
                   <p
                     style={{
-                      fontSize: "14px",
-                      color: "var(--text-secondary)",
+                      fontSize: "14.5px",
+                      color: "var(--color-text-body)",
                       lineHeight: 1.6,
                     }}
                   >
@@ -377,13 +497,59 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* CTA strip */}
+      <section
+        style={{
+          padding: "96px 0",
+          background: "#ffffff",
+          textAlign: "center",
+        }}
+      >
+        <FadeUp>
+          <div style={{ maxWidth: "640px", margin: "0 auto", padding: "0 24px" }}>
+            <h2
+              style={{
+                fontSize: "clamp(26px, 3vw, 36px)",
+                fontWeight: 700,
+                color: "var(--color-text-primary)",
+                letterSpacing: "-0.02em",
+                marginBottom: "16px",
+                lineHeight: 1.15,
+              }}
+            >
+              Want to see what we&apos;d build for you?
+            </h2>
+            <p
+              style={{
+                fontSize: "16px",
+                color: "var(--color-text-muted)",
+                marginBottom: "28px",
+                lineHeight: 1.6,
+              }}
+            >
+              A 30-minute call is enough to know if it&apos;s a fit.
+            </p>
+            <Link
+              href="/contact"
+              className="btn-primary"
+              style={{ padding: "13px 30px", fontSize: "15px" }}
+            >
+              Book a Demo
+            </Link>
+          </div>
+        </FadeUp>
+      </section>
+
       <style>{`
-        .values-grid {
+        .about-grid {
+          @media (max-width: 900px) { grid-template-columns: 1fr !important; gap: 40px !important; }
+        }
+        .about-cards-grid {
           @media (max-width: 900px) { grid-template-columns: repeat(2, 1fr) !important; }
           @media (max-width: 600px) { grid-template-columns: 1fr !important; }
         }
-        .about-grid {
-          @media (max-width: 768px) { grid-template-columns: 1fr !important; }
+        .about-values-grid {
+          @media (max-width: 640px) { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </div>

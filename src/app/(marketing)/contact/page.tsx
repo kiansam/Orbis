@@ -137,51 +137,101 @@ export default function ContactPage() {
 
   const inputStyle = {
     width: "100%",
-    background: "var(--bg-elevated)",
-    border: "1px solid var(--border-base)",
-    borderRadius: "var(--r-md)",
-    color: "var(--text-primary)",
+    background: "#ffffff",
+    border: "1px solid var(--color-border)",
+    borderRadius: "10px",
+    color: "var(--color-text-primary)",
     fontSize: "14px",
-    padding: "10px 14px",
+    padding: "11px 14px",
     outline: "none",
     boxSizing: "border-box" as const,
-    transition: "border-color var(--t-fast)",
+    transition: "border-color 150ms ease, box-shadow 150ms ease",
+    fontFamily: "inherit",
   };
 
   return (
-    <div style={{ background: "var(--bg-base)", paddingTop: "1px" }}>
+    <div style={{ background: "var(--color-bg)", position: "relative" }}>
+      {/* Subtle top wash */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "420px",
+          background:
+            "radial-gradient(60% 60% at 50% 0%, rgba(65, 105, 255, 0.06) 0%, rgba(65, 105, 255, 0) 70%)",
+          pointerEvents: "none",
+        }}
+      />
+
       {/* Hero */}
       <section
         style={{
-          padding: "20px 0 36px",
+          position: "relative",
+          padding: "56px 0 32px",
           textAlign: "center",
         }}
       >
         <div style={{ maxWidth: "800px", margin: "0 auto", padding: "0 24px" }}>
           <span
-            className="badge-accent"
-            style={{ display: "inline-flex", marginBottom: "20px" }}
+            style={{
+              display: "inline-flex",
+              background: "var(--color-brand-muted)",
+              color: "var(--color-brand)",
+              border: "1px solid var(--color-brand-border)",
+              borderRadius: "var(--radius-pill)",
+              fontSize: "12px",
+              fontWeight: 600,
+              padding: "4px 14px",
+              letterSpacing: "0.04em",
+              marginBottom: "20px",
+            }}
           >
             Contact
           </span>
           <h1
-            className="t-h1"
-            style={{ color: "var(--text-primary)", marginBottom: "16px" }}
+            style={{
+              fontSize: "clamp(30px, 4vw, 44px)",
+              fontWeight: 700,
+              color: "var(--color-text-primary)",
+              letterSpacing: "-0.025em",
+              lineHeight: 1.1,
+              marginBottom: "14px",
+            }}
           >
             Let&apos;s start a{" "}
-            <span className="text-gradient">conversation</span>
+            <span
+              style={{
+                background: "linear-gradient(135deg, #4169ff 0%, #6b8eff 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
+              conversation
+            </span>
           </h1>
-          {/* <p className="t-body-lg" style={{ color: "var(--text-secondary)" }}>
-            Tell us about your business and we&apos;ll show you what an Orbis
-            agent could do for you.
-          </p> */}
+          <p
+            style={{
+              fontSize: "16px",
+              color: "var(--color-text-muted)",
+              lineHeight: 1.6,
+              maxWidth: "520px",
+              margin: "0 auto",
+            }}
+          >
+            Chat with our AI agent live, or send us a message. Either way, we&apos;ll get back to you fast.
+          </p>
         </div>
       </section>
 
       {/* Tab switcher */}
       <section
         style={{
-          padding: "0 24px 20px",
+          position: "relative",
+          padding: "0 24px 22px",
           display: "flex",
           justifyContent: "center",
         }}
@@ -189,11 +239,12 @@ export default function ContactPage() {
         <div
           style={{
             display: "inline-flex",
-            background: "var(--bg-surface)",
-            border: "1px solid var(--border-base)",
+            background: "#ffffff",
+            border: "1px solid var(--color-border)",
             borderRadius: "100px",
             padding: "4px",
             gap: "2px",
+            boxShadow: "0 1px 3px rgba(15, 23, 41, 0.04)",
           }}
         >
           {[
@@ -206,19 +257,19 @@ export default function ContactPage() {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "7px",
-                padding: "9px 22px",
+                gap: "8px",
+                padding: "10px 22px",
                 borderRadius: "100px",
                 border: "none",
                 cursor: "pointer",
                 fontSize: "14px",
                 fontWeight: 600,
                 fontFamily: "inherit",
-                transition: "all 0.2s ease",
-                background: tab === id ? "var(--bg-base)" : "transparent",
-                color:
-                  tab === id ? "var(--color-brand)" : "var(--text-secondary)",
-                boxShadow: tab === id ? "0 1px 4px rgba(0,0,0,0.08)" : "none",
+                transition: "all 200ms ease",
+                background: tab === id ? "var(--color-brand)" : "transparent",
+                color: tab === id ? "#ffffff" : "var(--color-text-muted)",
+                boxShadow:
+                  tab === id ? "0 4px 12px rgba(65, 105, 255, 0.22)" : "none",
               }}
             >
               <Icon style={{ width: "15px", height: "15px" }} />
@@ -229,7 +280,7 @@ export default function ContactPage() {
       </section>
 
       {/* Tab content */}
-      <section style={{ padding: "0 24px 96px" }}>
+      <section style={{ position: "relative", padding: "0 24px 112px" }}>
         {/* Chatbot tab */}
         <div
           style={{
@@ -240,11 +291,14 @@ export default function ContactPage() {
           <div
             style={{
               width: "100%",
-              maxWidth: "860px",
-              height: "750px",
-              borderRadius: "12px",
-              border: "1px solid var(--border-base)",
+              maxWidth: "880px",
+              height: "760px",
+              borderRadius: "16px",
+              border: "1px solid var(--color-border)",
               overflow: "hidden",
+              background: "#ffffff",
+              boxShadow:
+                "0 20px 60px rgba(15, 23, 41, 0.08), 0 4px 12px rgba(15, 23, 41, 0.04)",
             }}
           >
             <iframe
@@ -264,7 +318,7 @@ export default function ContactPage() {
         {tab === "form" && (
           <div
             style={{
-              maxWidth: "640px",
+              maxWidth: "680px",
               margin: "0 auto",
               display: "flex",
               flexDirection: "column",
@@ -284,20 +338,39 @@ export default function ContactPage() {
                 <div
                   key={i}
                   style={{
-                    background: "var(--bg-surface)",
-                    border: "1px solid var(--border-base)",
-                    borderRadius: "var(--r-lg)",
+                    background: "#ffffff",
+                    border: "1px solid var(--color-border)",
+                    borderRadius: "14px",
                     padding: "20px",
+                    boxShadow: "0 1px 3px rgba(15, 23, 41, 0.03)",
                   }}
                 >
-                  <div className="icon-box" style={{ marginBottom: "12px" }}>
-                    <item.icon style={{ width: "18px", height: "18px" }} />
+                  <div
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: "10px",
+                      background: "var(--color-brand-muted)",
+                      border: "1px solid var(--color-brand-border)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginBottom: "14px",
+                    }}
+                  >
+                    <item.icon
+                      style={{
+                        width: "18px",
+                        height: "18px",
+                        color: "var(--color-brand)",
+                      }}
+                    />
                   </div>
                   <div
                     style={{
                       fontWeight: 600,
-                      color: "var(--text-primary)",
-                      fontSize: "13px",
+                      color: "var(--color-text-primary)",
+                      fontSize: "14px",
                       marginBottom: "4px",
                     }}
                   >
@@ -305,14 +378,19 @@ export default function ContactPage() {
                   </div>
                   <div
                     style={{
-                      color: "var(--text-secondary)",
+                      color: "var(--color-text-body)",
                       fontSize: "13px",
-                      marginBottom: "2px",
+                      marginBottom: "3px",
                     }}
                   >
                     {item.value}
                   </div>
-                  <div style={{ color: "var(--text-muted)", fontSize: "12px" }}>
+                  <div
+                    style={{
+                      color: "var(--color-text-faint)",
+                      fontSize: "12px",
+                    }}
+                  >
                     {item.sub}
                   </div>
                 </div>
@@ -323,9 +401,9 @@ export default function ContactPage() {
             {submitted ? (
               <div
                 style={{
-                  background: "var(--bg-surface)",
-                  border: "1px solid var(--border-base)",
-                  borderRadius: "var(--r-xl)",
+                  background: "#ffffff",
+                  border: "1px solid var(--color-border)",
+                  borderRadius: "16px",
                   padding: "48px",
                   display: "flex",
                   flexDirection: "column",
@@ -334,6 +412,7 @@ export default function ContactPage() {
                   textAlign: "center",
                   gap: "20px",
                   minHeight: "320px",
+                  boxShadow: "0 1px 3px rgba(15, 23, 41, 0.03)",
                 }}
               >
                 <div
@@ -341,7 +420,7 @@ export default function ContactPage() {
                     width: "64px",
                     height: "64px",
                     borderRadius: "50%",
-                    background: "var(--success-bg)",
+                    background: "rgba(0, 200, 150, 0.12)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -351,7 +430,7 @@ export default function ContactPage() {
                     style={{
                       width: "28px",
                       height: "28px",
-                      color: "var(--success)",
+                      color: "var(--color-positive)",
                     }}
                   />
                 </div>
@@ -360,17 +439,19 @@ export default function ContactPage() {
                     style={{
                       fontSize: "20px",
                       fontWeight: 700,
-                      color: "var(--text-primary)",
+                      color: "var(--color-text-primary)",
                       marginBottom: "8px",
                     }}
                   >
-                    Message Sent!
+                    Message Sent
                   </h3>
                   <p
-                    style={{ color: "var(--text-secondary)", fontSize: "15px" }}
+                    style={{
+                      color: "var(--color-text-muted)",
+                      fontSize: "15px",
+                    }}
                   >
-                    Thank you for reaching out. We&apos;ll get back to you
-                    within 24 hours.
+                    Thanks for reaching out. We&apos;ll get back to you within 24 hours.
                   </p>
                 </div>
                 <button
@@ -383,18 +464,20 @@ export default function ContactPage() {
             ) : (
               <div
                 style={{
-                  background: "var(--bg-surface)",
-                  border: "1px solid var(--border-base)",
-                  borderRadius: "var(--r-xl)",
+                  background: "#ffffff",
+                  border: "1px solid var(--color-border)",
+                  borderRadius: "16px",
                   padding: "32px",
+                  boxShadow: "0 1px 3px rgba(15, 23, 41, 0.03)",
                 }}
               >
                 <h2
                   style={{
                     fontSize: "18px",
                     fontWeight: 700,
-                    color: "var(--text-primary)",
+                    color: "var(--color-text-primary)",
                     marginBottom: "24px",
+                    letterSpacing: "-0.01em",
                   }}
                 >
                   Send us a message
@@ -421,7 +504,7 @@ export default function ContactPage() {
                           display: "block",
                           fontSize: "13px",
                           fontWeight: 600,
-                          color: "var(--text-secondary)",
+                          color: "var(--color-text-body)",
                           marginBottom: "6px",
                         }}
                       >
@@ -435,7 +518,7 @@ export default function ContactPage() {
                       {errors.name && (
                         <p
                           style={{
-                            color: "var(--error)",
+                            color: "#ef4444",
                             fontSize: "12px",
                             marginTop: "4px",
                           }}
@@ -450,7 +533,7 @@ export default function ContactPage() {
                           display: "block",
                           fontSize: "13px",
                           fontWeight: 600,
-                          color: "var(--text-secondary)",
+                          color: "var(--color-text-body)",
                           marginBottom: "6px",
                         }}
                       >
@@ -465,7 +548,7 @@ export default function ContactPage() {
                       {errors.email && (
                         <p
                           style={{
-                            color: "var(--error)",
+                            color: "#ef4444",
                             fontSize: "12px",
                             marginTop: "4px",
                           }}
@@ -482,7 +565,7 @@ export default function ContactPage() {
                         display: "block",
                         fontSize: "13px",
                         fontWeight: 600,
-                        color: "var(--text-secondary)",
+                        color: "var(--color-text-body)",
                         marginBottom: "6px",
                       }}
                     >
@@ -501,7 +584,7 @@ export default function ContactPage() {
                         display: "block",
                         fontSize: "13px",
                         fontWeight: 600,
-                        color: "var(--text-secondary)",
+                        color: "var(--color-text-body)",
                         marginBottom: "6px",
                       }}
                     >
@@ -516,7 +599,7 @@ export default function ContactPage() {
                     {errors.message && (
                       <p
                         style={{
-                          color: "var(--error)",
+                          color: "#ef4444",
                           fontSize: "12px",
                           marginTop: "4px",
                         }}
@@ -533,7 +616,7 @@ export default function ContactPage() {
                     style={{
                       justifyContent: "center",
                       width: "100%",
-                      padding: "13px",
+                      padding: "14px",
                       fontSize: "15px",
                       gap: "8px",
                     }}

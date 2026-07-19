@@ -1,11 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { useState, useEffect, useRef } from "react";
+import { Menu, X, ChevronDown } from "lucide-react";
 
-const links = [
+const homeAnchors = [
+  { hash: "#our-process", label: "Our Process" },
+  { hash: "#what-we-build", label: "What We Build For You" },
+  { hash: "#why-orbis", label: "Why Orbis" },
+  { hash: "#faq", label: "FAQ" },
+];
+
+const topLinks = [
   { href: "/about", label: "About" },
   { href: "/blog", label: "Blog" },
   { href: "/contact", label: "Contact" },
@@ -13,14 +20,39 @@ const links = [
 
 export function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [homeOpen, setHomeOpen] = useState(false);
+  const homeMenuRef = useRef<HTMLDivElement>(null);
+  const closeTimer = useRef<number | null>(null);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 8);
+    handler();
     window.addEventListener("scroll", handler, { passive: true });
     return () => window.removeEventListener("scroll", handler);
   }, []);
+
+  const openHome = () => {
+    if (closeTimer.current) window.clearTimeout(closeTimer.current);
+    setHomeOpen(true);
+  };
+  const scheduleClose = () => {
+    if (closeTimer.current) window.clearTimeout(closeTimer.current);
+    closeTimer.current = window.setTimeout(() => setHomeOpen(false), 120);
+  };
+
+  const jumpToAnchor = (hash: string) => {
+    setHomeOpen(false);
+    setMobileOpen(false);
+    if (pathname === "/") {
+      const el = document.querySelector(hash);
+      el?.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      router.push(`/${hash}`);
+    }
+  };
 
   return (
     <>
@@ -29,16 +61,24 @@ export function Navbar() {
           position: "sticky",
           top: 0,
           zIndex: 1000,
-          height: "64px",
-          background: scrolled ? "rgba(255,255,255,0.85)" : "#ffffff",
-          backdropFilter: scrolled ? "blur(16px)" : "none",
-          WebkitBackdropFilter: scrolled ? "blur(16px)" : "none",
-          borderBottom: "1px solid var(--color-border-subtle)",
-          transition: "background 150ms ease",
+          height: "68px",
+          background: scrolled ? "rgba(255,255,255,0.82)" : "#ffffff",
+          backdropFilter: scrolled ? "blur(18px)" : "none",
+          WebkitBackdropFilter: scrolled ? "blur(18px)" : "none",
+          borderBottom: scrolled
+            ? "1px solid var(--color-border)"
+            : "1px solid var(--color-border-subtle)",
+          transition: "background 200ms ease, border-color 200ms ease",
         }}
       >
         <div className="nav-inner">
-          <Link href="/" className="nav-logo">
+          <Link
+            href="/"
+            className="nav-logo"
+            onClick={() => {
+              if (pathname === "/") window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="711 891 18458 18458"
@@ -77,7 +117,60 @@ export function Navbar() {
           </Link>
 
           <nav className="nav-links">
-            {links.map((link) => (
+            {/* Home + dropdown */}
+            <div
+              ref={homeMenuRef}
+              onMouseEnter={openHome}
+              onMouseLeave={scheduleClose}
+              style={{ position: "relative" }}
+            >
+              <button
+                onClick={() => {
+                  if (pathname === "/") {
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  } else {
+                    router.push("/");
+                  }
+                }}
+                className="nav-link nav-home"
+                style={{
+                  color:
+                    pathname === "/"
+                      ? "var(--color-text-primary)"
+                      : "var(--color-text-muted)",
+                }}
+              >
+                Home
+                <ChevronDown
+                  style={{
+                    width: "13px",
+                    height: "13px",
+                    marginLeft: "3px",
+                    transition: "transform 180ms ease",
+                    transform: homeOpen ? "rotate(180deg)" : "rotate(0)",
+                  }}
+                />
+              </button>
+              {homeOpen && (
+                <div
+                  className="home-dropdown"
+                  onMouseEnter={openHome}
+                  onMouseLeave={scheduleClose}
+                >
+                  {homeAnchors.map((a) => (
+                    <button
+                      key={a.hash}
+                      onClick={() => jumpToAnchor(a.hash)}
+                      className="home-dropdown-item"
+                    >
+                      {a.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {topLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -103,7 +196,7 @@ export function Navbar() {
               className="btn-primary"
               style={{ padding: "9px 20px", fontSize: "14px" }}
             >
-              Get a Demo
+              Book a Demo
             </Link>
           </div>
 
@@ -123,7 +216,29 @@ export function Navbar() {
 
       {mobileOpen && (
         <div className="nav-drawer">
-          {links.map((link) => (
+          <button
+            onClick={() => {
+              setMobileOpen(false);
+              if (pathname === "/") window.scrollTo({ top: 0, behavior: "smooth" });
+              else router.push("/");
+            }}
+            className="nav-drawer-link"
+            style={{ textAlign: "left" }}
+          >
+            Home
+          </button>
+          <div className="nav-drawer-anchors">
+            {homeAnchors.map((a) => (
+              <button
+                key={a.hash}
+                onClick={() => jumpToAnchor(a.hash)}
+                className="nav-drawer-anchor"
+              >
+                {a.label}
+              </button>
+            ))}
+          </div>
+          {topLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -155,25 +270,69 @@ export function Navbar() {
               className="btn-primary"
               style={{ justifyContent: "center" }}
             >
-              Get a Demo
+              Book a Demo
             </Link>
           </div>
         </div>
       )}
 
       <style>{`
-        .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 48px; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+        .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 48px; height: 68px; display: flex; align-items: center; justify-content: space-between; }
         .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
-        .nav-links { display: flex; align-items: center; gap: 32px; }
-        .nav-link { font-size: 14px; font-weight: 500; text-decoration: none; transition: color 150ms ease; }
+        .nav-links { display: flex; align-items: center; gap: 28px; }
+        .nav-link { font-size: 14px; font-weight: 500; text-decoration: none; transition: color 150ms ease; background: none; border: none; cursor: pointer; font-family: inherit; padding: 0; }
         .nav-link:hover { color: var(--color-text-primary) !important; }
+        .nav-home { display: inline-flex; align-items: center; }
         .nav-actions { display: flex; align-items: center; gap: 8px; }
         .nav-signin { font-size: 14px; font-weight: 500; color: var(--color-text-muted); text-decoration: none; padding: 8px 14px; transition: color 150ms ease; }
         .nav-signin:hover { color: var(--color-text-primary); }
         .nav-hamburger { display: none; width: 36px; height: 36px; align-items: center; justify-content: center; background: transparent; border: 1px solid var(--color-border); border-radius: var(--radius-md); cursor: pointer; color: var(--color-text-muted); }
-        .nav-drawer { position: fixed; top: 64px; left: 0; right: 0; bottom: 0; background: #fff; z-index: 999; padding: 24px; display: flex; flex-direction: column; gap: 4px; }
-        .nav-drawer-link { display: block; padding: 14px 16px; font-size: 16px; font-weight: 500; color: var(--color-text-primary); text-decoration: none; border-bottom: 1px solid var(--color-border-subtle); }
-        @media (max-width: 768px) {
+
+        .home-dropdown {
+          position: absolute;
+          top: calc(100% + 14px);
+          left: -12px;
+          min-width: 240px;
+          background: rgba(255,255,255,0.96);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid var(--color-border);
+          border-radius: var(--radius-lg);
+          padding: 6px;
+          box-shadow: 0 12px 40px rgba(15, 23, 41, 0.10), 0 2px 6px rgba(15, 23, 41, 0.04);
+          display: flex;
+          flex-direction: column;
+          animation: dropdownIn 180ms cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes dropdownIn {
+          from { opacity: 0; transform: translateY(-4px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .home-dropdown-item {
+          background: none;
+          border: none;
+          text-align: left;
+          padding: 10px 14px;
+          font-size: 14px;
+          font-weight: 500;
+          color: var(--color-text-body);
+          border-radius: var(--radius-md);
+          cursor: pointer;
+          font-family: inherit;
+          transition: background 140ms ease, color 140ms ease;
+        }
+        .home-dropdown-item:hover {
+          background: var(--color-brand-muted);
+          color: var(--color-brand);
+        }
+
+        .nav-drawer { position: fixed; top: 68px; left: 0; right: 0; bottom: 0; background: #fff; z-index: 999; padding: 24px; display: flex; flex-direction: column; gap: 4px; overflow-y: auto; }
+        .nav-drawer-link { display: block; padding: 14px 16px; font-size: 16px; font-weight: 500; color: var(--color-text-primary); text-decoration: none; border-bottom: 1px solid var(--color-border-subtle); background: none; border-left: none; border-right: none; border-top: none; cursor: pointer; font-family: inherit; width: 100%; }
+        .nav-drawer-anchors { display: flex; flex-direction: column; padding: 4px 0 12px 12px; border-bottom: 1px solid var(--color-border-subtle); }
+        .nav-drawer-anchor { text-align: left; padding: 10px 14px; font-size: 14px; color: var(--color-text-body); background: none; border: none; cursor: pointer; font-family: inherit; }
+        .nav-drawer-anchor:hover { color: var(--color-brand); }
+
+        @media (max-width: 900px) {
           .nav-inner { padding: 0 24px; }
           .nav-links, .nav-actions { display: none; }
           .nav-hamburger { display: flex; }

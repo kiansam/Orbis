@@ -62,7 +62,14 @@ export function WhyOrbisSection() {
   const [active, setActive] = useState<Node | null>(null)
 
   return (
-    <section style={{ background: 'transparent', padding: '96px 0' }}>
+    <section
+      id="why-orbis"
+      style={{
+        background: '#ffffff',
+        padding: '112px 0',
+        scrollMarginTop: '80px',
+      }}
+    >
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 48px' }}>
 
         {/* Header */}
@@ -74,11 +81,11 @@ export function WhyOrbisSection() {
           style={{ textAlign: 'center', marginBottom: '64px' }}
         >
           <motion.p className="eyebrow" style={{ marginBottom: '12px' }} variants={childVariants}>
-            Why Orbis?
+            Why Orbis
           </motion.p>
           <motion.h2
             variants={childVariants}
-            style={{ fontSize: 'clamp(26px, 3vw, 40px)', fontWeight: 700, color: 'var(--color-text-primary)', letterSpacing: '-0.02em', maxWidth: '640px', margin: '0 auto', lineHeight: 1.14 }}
+            style={{ fontSize: 'clamp(28px, 3.2vw, 42px)', fontWeight: 700, color: 'var(--color-text-primary)', letterSpacing: '-0.02em', maxWidth: '640px', margin: '0 auto', lineHeight: 1.14 }}
           >
             Everything your business needs to run smarter — built and managed for you.
           </motion.h2>
@@ -89,13 +96,13 @@ export function WhyOrbisSection() {
           {nodes.map((node, i) => {
             const Icon = node.Icon
             return (
-              <StaggerItem key={i} style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--color-brand-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <Icon style={{ width: '20px', height: '20px', color: 'var(--color-brand)' }} />
+              <StaggerItem key={i} className="why-card">
+                <div className="why-card-icon">
+                  <Icon style={{ width: '22px', height: '22px', color: 'var(--color-brand)' }} />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: '17px', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '8px', lineHeight: 1.3 }}>{node.title}</h3>
-                  <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', lineHeight: 1.6, marginBottom: '10px' }}>{node.description}</p>
+                  <h3 style={{ fontSize: '17px', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '10px', lineHeight: 1.3, letterSpacing: '-0.01em' }}>{node.title}</h3>
+                  <p style={{ fontSize: '14.5px', color: 'var(--color-text-body)', lineHeight: 1.62, marginBottom: '12px' }}>{node.description}</p>
                   <button onClick={() => setActive(node)} className="why-link">
                     {node.linkText}
                   </button>
@@ -125,13 +132,58 @@ export function WhyOrbisSection() {
       )}
 
       <style>{`
-        .why-grid { display: grid; grid-template-columns: 1fr 1fr; row-gap: 48px; column-gap: 64px; }
-        .why-link { background: none; border: none; padding: 0; font-size: 13px; color: var(--color-brand); font-weight: 500; cursor: pointer; transition: opacity 150ms ease; }
+        .why-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr;
+          gap: 20px;
+        }
+        .why-card {
+          background: #ffffff;
+          border: 1px solid var(--color-border);
+          border-radius: 16px;
+          padding: 28px;
+          transition: border-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+        }
+        .why-card:hover {
+          border-color: var(--color-brand-border);
+          transform: translateY(-2px);
+          box-shadow: 0 12px 32px rgba(15, 23, 41, 0.06);
+        }
+        .why-card-icon {
+          width: 44px; height: 44px;
+          border-radius: 12px;
+          background: var(--color-brand-muted);
+          border: 1px solid var(--color-brand-border);
+          display: flex; align-items: center; justify-content: center;
+          margin-bottom: 20px;
+        }
+        .why-link {
+          background: none;
+          border: none;
+          padding: 0;
+          font-size: 13px;
+          color: var(--color-brand);
+          font-weight: 600;
+          cursor: pointer;
+          transition: opacity 150ms ease;
+        }
         .why-link:hover { opacity: 0.7; }
-        .why-panel { position: fixed; top: 0; right: 0; bottom: 0; width: 480px; max-width: 100vw; background: #ffffff; z-index: 1002; padding: 40px; border-left: 1px solid var(--color-border); overflow-y: auto; animation: slideIn 300ms ease forwards; }
+        .why-panel {
+          position: fixed; top: 0; right: 0; bottom: 0;
+          width: 480px; max-width: 100vw;
+          background: #ffffff;
+          z-index: 1002;
+          padding: 40px;
+          border-left: 1px solid var(--color-border);
+          overflow-y: auto;
+          animation: slideIn 300ms ease forwards;
+        }
         @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
-        @media (max-width: 768px) {
-          .why-grid { grid-template-columns: 1fr; row-gap: 36px; }
+        @media (max-width: 960px) {
+          .why-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 640px) {
+          .why-grid { grid-template-columns: 1fr; }
           section > div { padding: 0 24px !important; }
         }
       `}</style>

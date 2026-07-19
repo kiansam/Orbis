@@ -68,11 +68,12 @@ export function Footer() {
               style={{
                 fontSize: "14px",
                 color: "var(--color-text-muted)",
-                lineHeight: 1.5,
-                maxWidth: "260px",
+                lineHeight: 1.55,
+                maxWidth: "280px",
               }}
             >
-              AI-powered automation for modern businesses.
+              Done-for-you AI agents for service businesses. Built and managed
+              by our team in British Columbia, Canada.
             </p>
           </div>
 
