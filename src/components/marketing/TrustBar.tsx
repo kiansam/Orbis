@@ -12,9 +12,9 @@ function IllusionLogoMark() {
   return (
     <div
       style={{
-        width: '42px',
-        height: '42px',
-        borderRadius: '10px',
+        width: '48px',
+        height: '48px',
+        borderRadius: '12px',
         background: 'linear-gradient(135deg, #253055 0%, #4169FF 100%)',
         display: 'flex',
         alignItems: 'center',
@@ -26,7 +26,7 @@ function IllusionLogoMark() {
       <span
         style={{
           color: '#ffffff',
-          fontSize: '20px',
+          fontSize: '23px',
           fontWeight: 800,
           letterSpacing: '-0.02em',
           lineHeight: 1,
@@ -98,13 +98,13 @@ export function TrustBar() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '18px 28px',
+              padding: '21px 32px',
               background: '#ffffff',
               border: '1px solid var(--color-border)',
               borderRadius: 'var(--radius-lg)',
               boxShadow: '0 1px 2px rgba(15, 23, 41, 0.04)',
               flexShrink: 0,
-              height: '100px',
+              height: '115px',
             }}
           >
             <Image
@@ -113,36 +113,37 @@ export function TrustBar() {
               width={600}
               height={245}
               style={{
-                height: '58px',
+                height: '67px',
                 width: 'auto',
                 display: 'block',
               }}
             />
           </div>
 
-          {/* Real client — Dat-Track (logo enlarged ~30% within tag) */}
+          {/* Real client — Dat-Track — tag width matches VGE tag */}
           <div
-            className="trust-chip"
+            className="trust-chip trust-chip-dattrack"
             style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '18px 28px',
+              padding: '21px 7px',
               background: '#ffffff',
               border: '1px solid var(--color-border)',
               borderRadius: 'var(--radius-lg)',
               boxShadow: '0 1px 2px rgba(15, 23, 41, 0.04)',
               flexShrink: 0,
-              height: '100px',
+              height: '115px',
+              overflow: 'hidden',
             }}
           >
             <Image
               src="/images/dattrack-logo.png"
               alt="Dat-Track"
-              width={600}
-              height={220}
+              width={3202}
+              height={1280}
               style={{
-                height: '76px',
+                height: '87px',
                 width: 'auto',
                 display: 'block',
               }}
@@ -156,22 +157,22 @@ export function TrustBar() {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '12px',
-              padding: '18px 28px',
+              gap: '14px',
+              padding: '21px 32px',
               background: '#ffffff',
               border: '1px solid var(--color-border)',
               borderRadius: 'var(--radius-lg)',
               boxShadow: '0 1px 2px rgba(15, 23, 41, 0.04)',
               flexShrink: 0,
-              height: '100px',
-              width: '270px',
+              height: '115px',
+              width: '310px',
               overflow: 'hidden',
             }}
           >
             <IllusionLogoMark />
             <span
               style={{
-                fontSize: '19px',
+                fontSize: '22px',
                 fontWeight: 700,
                 color: 'var(--color-text-primary)',
                 letterSpacing: '-0.01em',

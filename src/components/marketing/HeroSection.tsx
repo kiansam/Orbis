@@ -38,7 +38,7 @@ export function HeroSection() {
         <h1
           style={{
             fontSize: 'clamp(34px, 4.2vw, 52px)',
-            fontWeight: 500,
+            fontWeight: 700,
             color: 'var(--color-text-primary)',
             lineHeight: 1.25,
             letterSpacing: '-0.028em',
@@ -93,15 +93,13 @@ export function HeroSection() {
         >
           <Link
             href="/contact"
-            className="btn-ghost hero-book-demo"
+            className="btn-primary hero-book-demo"
             style={{
               padding: '12px 26px',
               fontSize: '15px',
               display: 'inline-flex',
               alignItems: 'center',
               gap: '8px',
-              color: 'var(--color-brand)',
-              borderColor: 'var(--color-brand-border)',
             }}
           >
             Book a Demo
@@ -154,14 +152,12 @@ export function HeroSection() {
                   <Image
                     src="/images/hero-calendar.png"
                     alt="Google Calendar booking"
-                    width={820}
-                    height={700}
+                    width={814}
+                    height={685}
                     sizes="(max-width: 900px) 100vw, 400px"
                     style={{
                       width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      objectPosition: 'center top',
+                      height: 'auto',
                       display: 'block',
                     }}
                   />
@@ -181,10 +177,10 @@ export function HeroSection() {
                 </div>
                 <div className="hero-notif-body">
                   <Image
-                    src="/images/hero-notification.jpeg"
+                    src="/images/hero-notification.png"
                     alt="iOS appointment confirmation notification"
-                    width={1024}
-                    height={200}
+                    width={2520}
+                    height={953}
                     sizes="(max-width: 900px) 100vw, 400px"
                     style={{
                       width: '100%',
@@ -215,20 +211,16 @@ export function HeroSection() {
         .hero-book-demo {
           transition: background 180ms ease, transform 180ms ease, box-shadow 180ms ease;
         }
-        .hero-book-demo:hover {
-          background: rgba(65, 105, 255, 0.06);
-          transform: translateY(-1px);
-        }
         .hero-book-demo:hover svg { transform: translateX(2px); }
         .hero-book-demo svg { transition: transform 180ms ease; }
 
         .hero-showcase {
           display: grid;
-          grid-template-columns: 1.15fr 0.85fr;
+          grid-template-columns: 1.3fr 0.7fr;
           gap: 18px;
-          max-width: 980px;
+          max-width: 1020px;
           margin: 0 auto;
-          align-items: stretch;
+          align-items: start;
         }
         .hero-window {
           background: #ffffff;
@@ -240,31 +232,22 @@ export function HeroSection() {
             0 4px 12px rgba(15, 23, 41, 0.04);
           text-align: left;
         }
-        .hero-window-left {
-          align-self: stretch;
-        }
         .hero-side-stack {
           display: flex;
           flex-direction: column;
           gap: 18px;
-          height: 100%;
         }
         .hero-window-calendar {
-          flex: 1;
-          min-height: 0;
           border-radius: 16px;
           background: #ffffff;
           display: flex;
           flex-direction: column;
         }
         .hero-calendar-body {
-          flex: 1;
-          min-height: 0;
           overflow: hidden;
         }
         .hero-window-notif {
           border-radius: 16px;
-          flex-shrink: 0;
         }
         .hero-window-header {
           padding: 12px 18px;
@@ -281,10 +264,6 @@ export function HeroSection() {
         }
         @media (max-width: 900px) {
           .hero-showcase { grid-template-columns: 1fr; max-width: 560px; }
-          .hero-side-stack { height: auto; }
-          .hero-window-calendar { flex: none; min-height: unset; }
-          .hero-calendar-body { height: auto; }
-          .hero-window-calendar img { height: auto !important; object-fit: contain !important; }
         }
         @media (max-width: 640px) {
           section { padding: 36px 0 72px !important; }

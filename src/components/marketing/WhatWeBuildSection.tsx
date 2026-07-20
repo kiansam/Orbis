@@ -382,18 +382,22 @@ export function WhatWeBuildSection() {
         .wwb-voice-wave span {
           display: inline-block;
           width: 2px;
+          height: 12px;
           background: var(--color-positive);
           border-radius: 1px;
-          animation: wwbWave 1.1s ease-in-out infinite;
+          transform-origin: 50% 50%;
+          will-change: transform;
+          animation: wwbWave 900ms ease-in-out infinite;
         }
-        .wwb-voice-wave span:nth-child(1) { height: 5px; animation-delay: 0s; }
-        .wwb-voice-wave span:nth-child(2) { height: 9px; animation-delay: 0.12s; }
-        .wwb-voice-wave span:nth-child(3) { height: 12px; animation-delay: 0.24s; }
-        .wwb-voice-wave span:nth-child(4) { height: 7px; animation-delay: 0.36s; }
-        .wwb-voice-wave span:nth-child(5) { height: 4px; animation-delay: 0.48s; }
+        .wwb-voice-wave span:nth-child(1) { animation-delay: -750ms; }
+        .wwb-voice-wave span:nth-child(2) { animation-delay: -300ms; }
+        .wwb-voice-wave span:nth-child(3) { animation-delay: -150ms; }
+        .wwb-voice-wave span:nth-child(4) { animation-delay: -450ms; }
+        .wwb-voice-wave span:nth-child(5) { animation-delay: -600ms; }
         @keyframes wwbWave {
-          0%, 100% { transform: scaleY(0.4); }
-          50% { transform: scaleY(1); }
+          0%   { transform: scaleY(0.25); }
+          50%  { transform: scaleY(1); }
+          100% { transform: scaleY(0.25); }
         }
 
         .wwb-voice-transcript {
