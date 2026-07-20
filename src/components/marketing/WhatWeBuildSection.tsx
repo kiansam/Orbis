@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { FadeUp, staggerParent, childVariants, EASE } from './motion'
-import { Phone, Globe, Sparkles, Mic, PhoneCall } from 'lucide-react'
+import { Phone, MessageCircleMore, Sparkles, Mic, PhoneCall } from 'lucide-react'
 
 /* ─────────────────────────────────────────────────────────────
    Product previews — polished, screenshot-style mocks
@@ -15,7 +15,7 @@ function ChatVoicePreview() {
         <div className="wwb-mock-dots">
           <span /><span /><span />
         </div>
-        <div className="wwb-mock-title">Incoming call · 8:47 PM</div>
+        <div className="wwb-mock-title">Incoming call · 11:47 PM</div>
       </div>
       <div className="wwb-mock-body" style={{ padding: '20px' }}>
         {/* Header — flat phone-call icon (no border), name, live handling status with waveform */}
@@ -170,7 +170,7 @@ const products = [
     Preview: ChatVoicePreview,
   },
   {
-    Icon: Globe,
+    Icon: MessageCircleMore,
     tag: 'Custom website chatbots',
     title: 'A chatbot on your site trained on your business',
     body:
@@ -192,11 +192,9 @@ export function WhatWeBuildSection() {
     <section
       id="what-we-build"
       style={{
-        background: 'var(--color-bg-subtle)',
+        background: '#ffffff',
         padding: '112px 0',
         scrollMarginTop: '80px',
-        borderTop: '1px solid var(--color-border-subtle)',
-        borderBottom: '1px solid var(--color-border-subtle)',
       }}
     >
       <div className="wwb-container">
@@ -404,15 +402,17 @@ export function WhatWeBuildSection() {
           padding: 16px 14px;
           display: flex;
           flex-direction: column;
+          align-items: stretch;
           gap: 14px;
         }
         .wwb-voice-line {
           display: flex;
-          gap: 10px;
+          gap: 8px;
           font-size: 13px;
           line-height: 1.55;
           color: var(--color-text-primary);
           max-width: 92%;
+          width: fit-content;
         }
         .wwb-voice-caller {
           align-self: flex-start;
@@ -421,7 +421,6 @@ export function WhatWeBuildSection() {
         .wwb-voice-agent {
           align-self: flex-end;
           text-align: right;
-          flex-direction: row-reverse;
         }
         .wwb-voice-line span { display: inline-block; }
 
@@ -468,6 +467,7 @@ export function WhatWeBuildSection() {
           line-height: 1.5;
           padding: 10px 14px;
           max-width: 82%;
+          width: fit-content;
         }
         .wwb-webchat-them {
           align-self: flex-end;
@@ -476,6 +476,7 @@ export function WhatWeBuildSection() {
           border: 1px solid var(--color-border);
           border-radius: 14px 14px 4px 14px;
           box-shadow: 0 1px 2px rgba(15, 23, 41, 0.03);
+          max-width: 72%;
         }
         .wwb-webchat-us {
           align-self: flex-start;

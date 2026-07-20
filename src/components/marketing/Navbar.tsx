@@ -13,7 +13,6 @@ const homeAnchors = [
 ];
 
 const topLinks = [
-  { href: "/about", label: "About" },
   { href: "/blog", label: "Blog" },
   { href: "/contact", label: "Contact" },
 ];
@@ -188,9 +187,6 @@ export function Navbar() {
           </nav>
 
           <div className="nav-actions">
-            <Link href="/login" className="nav-signin">
-              Sign In
-            </Link>
             <Link
               href="/contact"
               className="btn-primary"
@@ -256,14 +252,6 @@ export function Navbar() {
               gap: "10px",
             }}
           >
-            <Link
-              href="/login"
-              onClick={() => setMobileOpen(false)}
-              className="btn-ghost"
-              style={{ justifyContent: "center" }}
-            >
-              Sign In
-            </Link>
             <Link
               href="/contact"
               onClick={() => setMobileOpen(false)}

@@ -12,9 +12,9 @@ function IllusionLogoMark() {
   return (
     <div
       style={{
-        width: '32px',
-        height: '32px',
-        borderRadius: '8px',
+        width: '42px',
+        height: '42px',
+        borderRadius: '10px',
         background: 'linear-gradient(135deg, #253055 0%, #4169FF 100%)',
         display: 'flex',
         alignItems: 'center',
@@ -26,7 +26,7 @@ function IllusionLogoMark() {
       <span
         style={{
           color: '#ffffff',
-          fontSize: '15px',
+          fontSize: '20px',
           fontWeight: 800,
           letterSpacing: '-0.02em',
           lineHeight: 1,
@@ -62,17 +62,17 @@ export function TrustBar() {
           }}
           className="trust-inner"
         >
-          {/* Trusted by label — larger, single line, shifted left */}
+          {/* Trusted by label — larger, single line, shifted further left */}
           <span
             className="trust-label"
             style={{
-              fontSize: '15px',
+              fontSize: '19px',
               fontWeight: 600,
               letterSpacing: '0.14em',
               textTransform: 'uppercase',
               color: 'var(--color-text-muted)',
               flexShrink: 0,
-              marginLeft: '-56px',
+              marginLeft: '-88px',
               whiteSpace: 'nowrap',
             }}
           >
@@ -87,7 +87,7 @@ export function TrustBar() {
               alignSelf: 'stretch',
               background: 'var(--color-border)',
               flexShrink: 0,
-              minHeight: '48px',
+              minHeight: '60px',
             }}
           />
 
@@ -98,13 +98,13 @@ export function TrustBar() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '14px 22px',
+              padding: '18px 28px',
               background: '#ffffff',
               border: '1px solid var(--color-border)',
               borderRadius: 'var(--radius-lg)',
               boxShadow: '0 1px 2px rgba(15, 23, 41, 0.04)',
               flexShrink: 0,
-              height: '78px',
+              height: '100px',
             }}
           >
             <Image
@@ -113,27 +113,27 @@ export function TrustBar() {
               width={600}
               height={245}
               style={{
-                height: '46px',
+                height: '58px',
                 width: 'auto',
                 display: 'block',
               }}
             />
           </div>
 
-          {/* Real client — Dat-Track */}
+          {/* Real client — Dat-Track (logo enlarged ~30% within tag) */}
           <div
             className="trust-chip"
             style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '14px 22px',
+              padding: '18px 28px',
               background: '#ffffff',
               border: '1px solid var(--color-border)',
               borderRadius: 'var(--radius-lg)',
               boxShadow: '0 1px 2px rgba(15, 23, 41, 0.04)',
               flexShrink: 0,
-              height: '78px',
+              height: '100px',
             }}
           >
             <Image
@@ -142,7 +142,7 @@ export function TrustBar() {
               width={600}
               height={220}
               style={{
-                height: '46px',
+                height: '76px',
                 width: 'auto',
                 display: 'block',
               }}
@@ -156,22 +156,22 @@ export function TrustBar() {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '10px',
-              padding: '14px 22px',
+              gap: '12px',
+              padding: '18px 28px',
               background: '#ffffff',
               border: '1px solid var(--color-border)',
               borderRadius: 'var(--radius-lg)',
               boxShadow: '0 1px 2px rgba(15, 23, 41, 0.04)',
               flexShrink: 0,
-              height: '78px',
-              width: '210px',
+              height: '100px',
+              width: '270px',
               overflow: 'hidden',
             }}
           >
             <IllusionLogoMark />
             <span
               style={{
-                fontSize: '15px',
+                fontSize: '19px',
                 fontWeight: 700,
                 color: 'var(--color-text-primary)',
                 letterSpacing: '-0.01em',
@@ -208,8 +208,8 @@ export function TrustBar() {
         }
 
         .trust-arrow {
-          width: 40px;
-          height: 40px;
+          width: 42px;
+          height: 42px;
           border-radius: 50%;
           border: 1px solid var(--color-border);
           background: transparent;
@@ -219,7 +219,7 @@ export function TrustBar() {
           color: var(--color-text-muted);
           flex-shrink: 0;
           cursor: pointer;
-          margin-left: -12px;
+          margin-left: -150px;
           padding: 0;
           transition:
             transform 180ms ease,

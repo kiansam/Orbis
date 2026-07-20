@@ -18,7 +18,7 @@ const contactInfo = [
   {
     icon: Mail,
     title: "Email Us",
-    value: "orbissolutions.ai@gmail.com",
+    value: "admin@orbissolutions.ca",
     sub: "We respond within 24 hours",
   },
   {
@@ -99,7 +99,7 @@ const CHATBOT_HTML = `<!DOCTYPE html>
 </html>`;
 
 export default function ContactPage() {
-  const [tab, setTab] = useState<Tab>("chat");
+  const [tab, setTab] = useState<Tab>("form");
   const [submitted, setSubmitted] = useState(false);
   const { toast } = useToast();
 
@@ -170,27 +170,11 @@ export default function ContactPage() {
       <section
         style={{
           position: "relative",
-          padding: "56px 0 32px",
+          padding: "32px 0 24px",
           textAlign: "center",
         }}
       >
         <div style={{ maxWidth: "800px", margin: "0 auto", padding: "0 24px" }}>
-          <span
-            style={{
-              display: "inline-flex",
-              background: "var(--color-brand-muted)",
-              color: "var(--color-brand)",
-              border: "1px solid var(--color-brand-border)",
-              borderRadius: "var(--radius-pill)",
-              fontSize: "12px",
-              fontWeight: 600,
-              padding: "4px 14px",
-              letterSpacing: "0.04em",
-              marginBottom: "20px",
-            }}
-          >
-            Contact
-          </span>
           <h1
             style={{
               fontSize: "clamp(30px, 4vw, 44px)",
@@ -248,8 +232,8 @@ export default function ContactPage() {
           }}
         >
           {[
-            { id: "chat" as Tab, label: "Chat with Us", Icon: MessageSquare },
             { id: "form" as Tab, label: "Send a Message", Icon: FileText },
+            { id: "chat" as Tab, label: "Chat with Us", Icon: MessageSquare },
           ].map(({ id, label, Icon }) => (
             <button
               key={id}

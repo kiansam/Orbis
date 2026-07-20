@@ -11,8 +11,8 @@ export default function HomePage() {
     <>
       <HeroSection />
       <TrustBar />
-      <OurProcessSection />
       <WhatWeBuildSection />
+      <OurProcessSection />
       <WhyOrbisSection />
       <FAQSection />
       <FinalCTASection />

@@ -16,9 +16,11 @@ export function OurProcessSection() {
     <section
       id="our-process"
       style={{
-        background: '#ffffff',
+        background: 'var(--color-bg-subtle)',
         padding: '112px 0',
         scrollMarginTop: '80px',
+        borderTop: '1px solid var(--color-border-subtle)',
+        borderBottom: '1px solid var(--color-border-subtle)',
       }}
     >
       <div className="process-container">
