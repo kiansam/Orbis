@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     try {
       await getResend().emails.send({
         from: 'Orbis Solutions <noreply@orbissolutions.ca>',
-        to: ['orbissolutions.ai@gmail.com'],
+        to: ['admin@orbissolutions.ca'],
         subject: `New contact from ${name}${company ? ` (${company})` : ''}`,
         html: `
           <h2>New Contact Submission</h2>
