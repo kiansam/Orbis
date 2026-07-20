@@ -1,7 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createServerClient } from '@supabase/ssr'
 import { contactSchema } from '@/lib/validations'
 import { Resend } from 'resend'
+
+function getAdminClient() {
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { cookies: { getAll: () => [], setAll: () => {} } },
+  )
+}
 
 let _resend: Resend | null = null
 function getResend(): Resend {
@@ -26,15 +34,14 @@ export async function POST(request: NextRequest) {
     }
 
     const { name, email, company, message } = validated.data
-    const supabase = await createClient()
+    const supabase = getAdminClient()
 
-    // Insert into database
     const { error: dbError } = await supabase
       .from('contact_submissions')
       .insert({ name, email, company, message })
 
     if (dbError) {
-      console.error('Database error:', dbError)
+      console.error('Contact insert failed:', { code: dbError.code, message: dbError.message, details: dbError.details, hint: dbError.hint })
       return NextResponse.json({ error: 'Failed to save submission' }, { status: 500 })
     }
 
