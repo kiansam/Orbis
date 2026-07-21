@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "orbissolutions-f4142"
-  }
+    "default": "orbissolutions-f4142",
+    "no alias": "orbissolutions-f4142"
+  },
+  "targets": {},
+  "etags": {}
 }
