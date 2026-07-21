@@ -68,8 +68,7 @@ export async function POST(request: NextRequest) {
         subject: 'We received your message — Orbis Solutions',
         html: `
           <h2>Thanks for reaching out, ${name}!</h2>
-          <p>We've received your message and will get back to you within 24 hours.</p>
-          <p>In the meantime, explore our <a href="${process.env.NEXT_PUBLIC_APP_URL}/blog">blog</a> for AI insights and strategies.</p>
+          <p>We've received your message and will be in touch within 24 hours.</p>
           <br>
           <p>Best,<br>The Orbis Solutions Team</p>
         `,

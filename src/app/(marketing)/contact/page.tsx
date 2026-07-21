@@ -54,7 +54,7 @@ const CHATBOT_HTML = `<!DOCTYPE html>
           "messageBorderRadius": 6,
           "showTitle": true,
           "title": "Orbis Solutions ChatBot",
-          "titleAvatarSrc": "https://cdn.corenexis.com/files/c/8289462720.png",
+          "titleAvatarSrc": "https://storage.googleapis.com/orbis-solutions-assets/Orbis%20Chatbot%20Icon%20(Zoomed).png",
           "avatarSize": 43,
           "welcomeMessage": "Hi there! I can get you booked in for a free demo, or answer any questions you have about what we do. What can I help you with?",
           "errorMessage": "Sorry! Running into some technical issues. Please feel free to reach out to us directly at orbissolutions.ai@gmail.com.",
@@ -71,7 +71,7 @@ const CHATBOT_HTML = `<!DOCTYPE html>
             "backgroundColor": "#4169FF",
             "textColor": "#fafafa",
             "showAvatar": true,
-            "avatarSrc": "https://cdn.corenexis.com/files/c/1119434720.png",
+            "avatarSrc": "https://storage.googleapis.com/orbis-solutions-assets/Orbis%20Chatbot%20Icon%20(Zoomed).png",
             "showCopyToClipboardIcon": false
           },
           "userMessage": {
